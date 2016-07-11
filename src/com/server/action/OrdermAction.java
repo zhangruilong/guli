@@ -5,24 +5,17 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.server.dao.OrdermDao;
-import com.server.dao.mapper.OrderdMapper;
+import com.server.poco.OrdermPoco;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
-import com.server.poco.OrderdPoco;
-import com.server.poco.OrdermPoco;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseAction;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
+import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
-import com.system.tools.util.TypeUtil;
-import com.system.tools.pojo.Pageinfo;
 
 /**
  * 订单 逻辑层
@@ -33,8 +26,6 @@ public class OrdermAction extends BaseActionDao {
 	public ArrayList<Orderm> cuss = null;
 	public java.lang.reflect.Type TYPE = new com.google.gson.reflect.TypeToken<ArrayList<Orderm>>() {}.getType();
 	
-	@Autowired
-	private OrderdMapper orderdMapper;
 
 	/**
     * 模糊查询语句

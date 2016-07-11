@@ -5,19 +5,16 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.server.dao.GoodsDao;
-import com.server.pojo.Goods;
-import com.server.poco.GivegoodsPoco;
 import com.server.poco.GoodsPoco;
+import com.server.pojo.Goods;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseAction;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
+import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
-import com.system.tools.pojo.Pageinfo;
 
 /**
  * 商品 逻辑层

@@ -5,18 +5,16 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.server.dao.CollectDao;
-import com.server.pojo.Collect;
-import com.server.poco.CityPoco;
 import com.server.poco.CollectPoco;
+import com.server.pojo.Collect;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
+import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
-import com.system.tools.pojo.Pageinfo;
 
 /**
  * 收藏 逻辑层

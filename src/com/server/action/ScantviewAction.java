@@ -5,18 +5,14 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.server.dao.ScantviewDao;
-import com.server.pojo.Scantview;
-import com.server.poco.ScantPoco;
 import com.server.poco.ScantviewPoco;
+import com.server.pojo.Scantview;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseAction;
 import com.system.tools.base.BaseActionDao;
-import com.system.tools.pojo.Fileinfo;
+import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.FileUtil;
-import com.system.tools.pojo.Pageinfo;
 
 /**
  * 标品库 逻辑层
