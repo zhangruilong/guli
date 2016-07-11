@@ -1,5 +1,8 @@
 package com.server.action;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +15,7 @@ import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
+import com.system.tools.pojo.Treeinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.FileUtil;
 
@@ -119,4 +123,36 @@ public class CityAction extends BaseActionDao {
 		}
 		responsePW(response, result);
 	}
+	public ArrayList<Treeinfo> selTree(String wheresql) {
+		String sql = null;
+		Treeinfo temp = null;
+		ArrayList<Treeinfo> temps = new ArrayList<Treeinfo>();
+		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			sql = "select * from "+CityPoco.TABLE+" where 1=1 ";
+			if(CommonUtil.isNotEmpty(wheresql)){
+				sql = sql + " and (" + wheresql + ") ";
+			}
+			sql += " order by " + CityPoco.ORDER; 
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				String leaf = "true";
+				String selchildwheresql = "cityparent='" + rs.getString("cityid") + "'";
+				if(selTree(selchildwheresql).size()!=0){
+					leaf = null;
+				}
+				temp = new Treeinfo(rs.getString("cityid"), rs.getString("citycode"), rs.getString("cityname"), rs.getString("citydetail"),
+						null, null, null,leaf, rs.getString("cityparent"));
+				temps.add(temp);
+			}
+		} catch (Exception e) {
+			System.out.println("Exception:" + e.getMessage());
+		} finally{
+			connectionMan.freeConnection(CommonConst.DSNAME,conn,stmt,rs);
+			return temps;
+		}
+	};
 }
