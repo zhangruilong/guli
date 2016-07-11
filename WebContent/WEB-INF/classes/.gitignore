@@ -1,1 +1,12 @@
+/.svn/
+/GeoTrustGlobalCA.crt
+/SqlMapConfig.xml
+/applicationContext-dao.xml
+/applicationContext-transaction.xml
 /com/
+/db.properties
+/ds.config.xml
+/log4j.properties
+/springmvc.xml
+/wxcp.properties
+/wxpay.properties

@@ -9,7 +9,7 @@
 		<type>oracle</type>
 		<name>oracle</name>
 		<driver>oracle.jdbc.driver.OracleDriver</driver>
-		<url>jdbc:oracle:thin:@115.159.25.173:1521:WIGDBRD</url>
+		<url>jdbc:oracle:thin:@127.0.0.1:1521:WIGDBRD</url>
 		<username>guli</username>
 		<password>guli</password>
 		<maxconn>10</maxconn>
