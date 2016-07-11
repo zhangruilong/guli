@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.server.pojo.Customer;
-import com.server.pojo.Emp;
 import com.system.dao.System_menuDao;
 import com.system.dao.System_power_quickDao;
 import com.system.dao.System_roleuserDao;

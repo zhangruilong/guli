@@ -11,9 +11,11 @@ import com.server.dao.OrdermDao;
 import com.server.dao.mapper.OrderdMapper;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
+import com.server.poco.OrderdPoco;
 import com.server.poco.OrdermPoco;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseAction;
+import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
@@ -26,15 +28,28 @@ import com.system.tools.pojo.Pageinfo;
  * 订单 逻辑层
  *@author ZhangRuiLong
  */
-public class OrdermAction extends BaseAction {
+public class OrdermAction extends BaseActionDao {
 	public String result = CommonConst.FAILURE;
 	public ArrayList<Orderm> cuss = null;
-	public OrdermDao DAO = new OrdermDao();
 	public java.lang.reflect.Type TYPE = new com.google.gson.reflect.TypeToken<ArrayList<Orderm>>() {}.getType();
 	
 	@Autowired
 	private OrderdMapper orderdMapper;
-	
+
+	/**
+    * 模糊查询语句
+    * @param query
+    * @return "filedname like '%query%' or ..."
+    */
+    public String getQuerysql(String query) {
+    	if(CommonUtil.isEmpty(query)) return null;
+    	String querysql = "";
+    	String queryfieldname[] = OrdermPoco.QUERYFIELDNAME;
+    	for(int i=0;i<queryfieldname.length;i++){
+    		querysql += queryfieldname[i] + " like '%" + query + "%' or ";
+    	}
+		return querysql.substring(0, querysql.length() - 4);
+	};
 	//将json转换成cuss
 	public void json2cuss(HttpServletRequest request){
 		String json = request.getParameter("json");
@@ -46,7 +61,7 @@ public class OrdermAction extends BaseAction {
 		json2cuss(request);
 		for(Orderm temp:cuss){
 			temp.setOrdermid(CommonUtil.getNewId());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		}
 		responsePW(response, result);
 	}
@@ -54,7 +69,7 @@ public class OrdermAction extends BaseAction {
 	public void delAll(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		for(Orderm temp:cuss){
-			result = DAO.delSingle(temp,OrdermPoco.KEYCOLUMN);
+			result = delSingle(temp,OrdermPoco.KEYCOLUMN);
 		}
 		responsePW(response, result);
 	}
@@ -63,16 +78,16 @@ public class OrdermAction extends BaseAction {
 		json2cuss(request);
 		cuss.get(0).setUpdor(getCurrentUsername(request));
 		cuss.get(0).setUpdtime(DateUtils.getDateTime());
-		result = DAO.updSingle(cuss.get(0),OrdermPoco.KEYCOLUMN);
+		result = updSingle(cuss.get(0),OrdermPoco.KEYCOLUMN);
 		responsePW(response, result);
 	}
 	//导出
 	public void expAll(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Orderm.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(OrdermPoco.ORDER);
-		cuss = (ArrayList<Orderm>) DAO.selAll(queryinfo);
+		cuss = (ArrayList<Orderm>) selAll(queryinfo);
 		FileUtil.expExcel(response,cuss,OrdermPoco.CHINESENAME,OrdermPoco.KEYCOLUMN,OrdermPoco.NAME);
 	}
 	//导入
@@ -82,7 +97,7 @@ public class OrdermAction extends BaseAction {
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 		for(Orderm temp:cuss){
 			temp.setOrdermid(CommonUtil.getNewId());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		}
 		responsePW(response, result);
 	}
@@ -90,9 +105,9 @@ public class OrdermAction extends BaseAction {
 	public void selAll(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Orderm.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(OrdermPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(0, DAO.selAll(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -100,9 +115,9 @@ public class OrdermAction extends BaseAction {
 	public void selQuery(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Orderm.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(OrdermPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(DAO.getTotal(queryinfo), DAO.selQuery(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), selQuery(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -121,7 +136,7 @@ public class OrdermAction extends BaseAction {
 		temp.setOrdermstatue("已下单");
 		temp.setOrdermtime(DateUtils.getDateTime());
 		ArrayList<String> sqls = new ArrayList<String> ();
-		String sqlOrderm = DAO.getInsSingleSql(temp);
+		String sqlOrderm = getInsSingleSql(temp);
 		sqls.add(sqlOrderm);
 		//订单详情
 		String orderdetjson = request.getParameter("orderdetjson");
@@ -134,10 +149,10 @@ public class OrdermAction extends BaseAction {
 				mOrderd.setOrderdid(CommonUtil.getNewId());
 				mOrderd.setOrderdorderm(mOrdermid);
 				mOrderd.setOrderdrightmoney(mOrderd.getOrderdmoney());
-				String sqlOrderd = DAO.getInsSingleSql(mOrderd);
+				String sqlOrderd = getInsSingleSql(mOrderd);
 				sqls.add(sqlOrderd);
 			}
-			result = DAO.doAll(sqls);
+			result = doAll(sqls);
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'服务器异常,操作失败'}";

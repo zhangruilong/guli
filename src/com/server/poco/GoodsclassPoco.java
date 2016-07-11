@@ -22,6 +22,7 @@ public class GoodsclassPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"大小类ID",
 	 	"编码",
 	 	"名称",
 	 	"父类",
@@ -32,6 +33,7 @@ public class GoodsclassPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"goodsclassid",
 	 	"goodsclasscode",
 	 	"goodsclassname",
 	 	"goodsclassparent",
@@ -46,6 +48,7 @@ public class GoodsclassPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"goodsclassid",
 	 	"goodsclasscode",
 	 	"goodsclassname",
 	 	"goodsclassparent",

@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.server.dao.PayDao;
 import com.server.pojo.Pay;
+import com.server.poco.OrdermviewPoco;
 import com.server.poco.PayPoco;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseAction;
+import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
@@ -21,12 +23,25 @@ import com.system.tools.pojo.Pageinfo;
  * 在线支付记录 逻辑层
  *@author ZhangRuiLong
  */
-public class PayAction extends BaseAction {
+public class PayAction extends BaseActionDao {
 	public String result = CommonConst.FAILURE;
 	public ArrayList<Pay> cuss = null;
-	public PayDao DAO = new PayDao();
 	public java.lang.reflect.Type TYPE = new com.google.gson.reflect.TypeToken<ArrayList<Pay>>() {}.getType();
-	
+
+	/**
+    * 模糊查询语句
+    * @param query
+    * @return "filedname like '%query%' or ..."
+    */
+    public String getQuerysql(String query) {
+    	if(CommonUtil.isEmpty(query)) return null;
+    	String querysql = "";
+    	String queryfieldname[] = PayPoco.QUERYFIELDNAME;
+    	for(int i=0;i<queryfieldname.length;i++){
+    		querysql += queryfieldname[i] + " like '%" + query + "%' or ";
+    	}
+		return querysql.substring(0, querysql.length() - 4);
+	};
 	//将json转换成cuss
 	public void json2cuss(HttpServletRequest request){
 		String json = request.getParameter("json");
@@ -38,7 +53,7 @@ public class PayAction extends BaseAction {
 		json2cuss(request);
 		for(Pay temp:cuss){
 			temp.setPayid(CommonUtil.getNewId());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		}
 		responsePW(response, result);
 	}
@@ -46,7 +61,7 @@ public class PayAction extends BaseAction {
 	public void delAll(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		for(Pay temp:cuss){
-			result = DAO.delSingle(temp,PayPoco.KEYCOLUMN);
+			result = delSingle(temp,PayPoco.KEYCOLUMN);
 		}
 		responsePW(response, result);
 	}
@@ -55,16 +70,16 @@ public class PayAction extends BaseAction {
 		json2cuss(request);
 		cuss.get(0).setUpdor(getCurrentUsername(request));
 		cuss.get(0).setUpdtime(DateUtils.getDateTime());
-		result = DAO.updSingle(cuss.get(0),PayPoco.KEYCOLUMN);
+		result = updSingle(cuss.get(0),PayPoco.KEYCOLUMN);
 		responsePW(response, result);
 	}
 	//导出
 	public void expAll(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Pay.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(PayPoco.ORDER);
-		cuss = (ArrayList<Pay>) DAO.selAll(queryinfo);
+		cuss = (ArrayList<Pay>) selAll(queryinfo);
 		FileUtil.expExcel(response,cuss,PayPoco.CHINESENAME,PayPoco.KEYCOLUMN,PayPoco.NAME);
 	}
 	//导入
@@ -74,7 +89,7 @@ public class PayAction extends BaseAction {
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 		for(Pay temp:cuss){
 			temp.setPayid(CommonUtil.getNewId());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		}
 		responsePW(response, result);
 	}
@@ -82,9 +97,9 @@ public class PayAction extends BaseAction {
 	public void selAll(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Pay.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(PayPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(0, DAO.selAll(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -92,9 +107,9 @@ public class PayAction extends BaseAction {
 	public void selQuery(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Pay.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(PayPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(DAO.getTotal(queryinfo), DAO.selQuery(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), selQuery(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}

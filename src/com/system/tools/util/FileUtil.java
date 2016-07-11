@@ -131,10 +131,10 @@ public class FileUtil {
 	/**
 	 * 解析ArrayList<?>成excel2003，然后导出
 	 * @param response
-	 * @param temps		需要导出的数据集合
-	 * @param heads		表头
-	 * @param discard	要忽略的字段名
-	 * @param name		文件名称
+	 * @param temps
+	 * @param heads
+	 * @param discard
+	 * @param name
 	 * @throws Exception
 	 */
 	public static void expExcel(HttpServletResponse response, ArrayList<?> temps, String[] heads,
@@ -179,7 +179,7 @@ public class FileUtil {
 				if (discardflag) {
 					cell = row.createCell(iRow);
 					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-					cell.setCellValue(String.valueOf(field.get(obj)));			//
+					cell.setCellValue(TypeUtil.objToString(field.get(obj)));
 					iRow++;
 				}
 			}
@@ -192,10 +192,10 @@ public class FileUtil {
 	/**
 	 * 解析ArrayList<?>成excel2003，然后导出
 	 * @param response
-	 * @param temps		需要导出的数据集合
-	 * @param heads		表头
-	 * @param discard	要忽略的字段名
-	 * @param name		文件名称
+	 * @param temps
+	 * @param heads
+	 * @param discard
+	 * @param name
 	 * @throws Exception
 	 */
 	public static void expExcel(HttpServletResponse response, ArrayList<?> temps, String[] heads,
@@ -230,7 +230,7 @@ public class FileUtil {
 				field.setAccessible(true);// 忽略访问权限，私有的也可以访问
 				cell = row.createCell(iRow);
 				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-				cell.setCellValue(String.valueOf(field.get(obj)));			//
+				cell.setCellValue(TypeUtil.objToString(field.get(obj)));
 				iRow++;
 			}
 			iLine++;
@@ -342,7 +342,7 @@ public class FileUtil {
 					if (cellvalue == null) {
 						cell.setCellValue("");
 					} else {
-						cell.setCellValue(rs.getObject(j).toString());
+						cell.setCellValue(String.valueOf(rs.getObject(j)));
 					}
 					iRow++;
 				}

@@ -99,11 +99,12 @@ public class GoodsviewPoco
    /**
     * 实体排序
     */
-   public static final String ORDER = " goodsorder desc,goodsname,goodsclass,goodsunits ";
+   public static final String ORDER = " goodsid desc ";
    /**
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"goodsid",
 	 	"goodscompany",
 	 	"goodscode",
 	 	"goodsname",

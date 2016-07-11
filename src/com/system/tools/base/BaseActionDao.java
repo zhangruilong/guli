@@ -18,7 +18,7 @@ import com.system.tools.pojo.Treeinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.TypeUtil;
 
-public class BaseAction {
+public class BaseActionDao extends BaseDao {
 	/**
 	 * 跳转后浏览器地址栏变化。这种方式要传值出去的话，只能在url中带parameter或者放在session中，无法使用request.setAttribute来传递。
 	 * 

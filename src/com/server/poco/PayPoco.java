@@ -22,6 +22,7 @@ public class PayPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"在线支付ID",
 	 	"订单ID",
 	 	"备注",
 	 	"状态",
@@ -32,6 +33,7 @@ public class PayPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"payid",
 	 	"payorderm",
 	 	"paydetail",
 	 	"paystatue",
@@ -46,6 +48,7 @@ public class PayPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"payid",
 	 	"payorderm",
 	 	"paydetail",
 	 	"paystatue",

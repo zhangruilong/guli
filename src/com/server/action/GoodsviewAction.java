@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.server.dao.GoodsviewDao;
 import com.server.pojo.Collect;
 import com.server.pojo.Goodsview;
+import com.server.poco.GoodsclassPoco;
 import com.server.poco.GoodsviewPoco;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseAction;
+import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
@@ -21,28 +23,41 @@ import com.system.tools.pojo.Pageinfo;
  * 商品 逻辑层
  *@author ZhangRuiLong
  */
-public class GoodsviewAction extends BaseAction {
+public class GoodsviewAction extends BaseActionDao {
 	public String result = CommonConst.FAILURE;
 	public ArrayList<Goodsview> cuss = null;
-	public GoodsviewDao DAO = new GoodsviewDao();
 	public java.lang.reflect.Type TYPE = new com.google.gson.reflect.TypeToken<ArrayList<Goodsview>>() {}.getType();
-	
+
+	/**
+    * 模糊查询语句
+    * @param query
+    * @return "filedname like '%query%' or ..."
+    */
+    public String getQuerysql(String query) {
+    	if(CommonUtil.isEmpty(query)) return null;
+    	String querysql = "";
+    	String queryfieldname[] = GoodsviewPoco.QUERYFIELDNAME;
+    	for(int i=0;i<queryfieldname.length;i++){
+    		querysql += queryfieldname[i] + " like '%" + query + "%' or ";
+    	}
+		return querysql.substring(0, querysql.length() - 4);
+	};
 	//导出
 	public void expAll(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Goodsview.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(GoodsviewPoco.ORDER);
-		cuss = (ArrayList<Goodsview>) DAO.selAll(queryinfo);
+		cuss = (ArrayList<Goodsview>) selAll(queryinfo);
 		FileUtil.expExcel(response,cuss,GoodsviewPoco.CHINESENAME,GoodsviewPoco.KEYCOLUMN,GoodsviewPoco.NAME);
 	}
 	//查询所有
 	public void selAll(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Goodsview.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(GoodsviewPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(0, DAO.selAll(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -50,9 +65,9 @@ public class GoodsviewAction extends BaseAction {
 	public void selQuery(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Goodsview.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(GoodsviewPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(DAO.getTotal(queryinfo), DAO.selQuery(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), selQuery(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -61,13 +76,13 @@ public class GoodsviewAction extends BaseAction {
 		String openid = request.getParameter("openid");
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Goodsview.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(GoodsviewPoco.ORDER);
-		cuss = (ArrayList<Goodsview>) DAO.selQuery(queryinfo);
+		cuss = (ArrayList<Goodsview>) selQuery(queryinfo);
 		
 		Queryinfo collectqueryinfo = getQueryinfo();
 		collectqueryinfo.setType(Collect.class);
-		ArrayList<Collect> cussCollect = (ArrayList<Collect>) DAO.selQuery(collectqueryinfo);
+		ArrayList<Collect> cussCollect = (ArrayList<Collect>) selQuery(collectqueryinfo);
 		for(Goodsview mGoodsview:cuss){
 			for(Collect mCollect:cussCollect){
 				if(mGoodsview.getGoodsid().equals(mCollect.getCollectgoods())){
@@ -76,7 +91,7 @@ public class GoodsviewAction extends BaseAction {
 			}
 		}
 	
-		Pageinfo pageinfo = new Pageinfo(DAO.getTotal(queryinfo), cuss);
+		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), cuss);
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -99,15 +114,15 @@ public class GoodsviewAction extends BaseAction {
 		}
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Goodsview.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setWheresql(wheresql);
 		queryinfo.setOrder(GoodsviewPoco.ORDER);
-		cuss = (ArrayList<Goodsview>) DAO.selAll(queryinfo);
+		cuss = (ArrayList<Goodsview>) selAll(queryinfo);
 		
 		Queryinfo collectqueryinfo = getQueryinfo();
 		collectqueryinfo.setType(Collect.class);
 		collectqueryinfo.setWheresql("collectcustomer='"+customerid+"'");
-		ArrayList<Collect> cussCollect = (ArrayList<Collect>) DAO.selAll(collectqueryinfo);
+		ArrayList<Collect> cussCollect = (ArrayList<Collect>) selAll(collectqueryinfo);
 		for(Goodsview mGoodsview:cuss){
 			for(Collect mCollect:cussCollect){
 				if(mGoodsview.getGoodsid().equals(mCollect.getCollectgoods())){
@@ -116,7 +131,7 @@ public class GoodsviewAction extends BaseAction {
 			}
 		}
 	
-		Pageinfo pageinfo = new Pageinfo(DAO.getTotal(queryinfo), cuss);
+		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), cuss);
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}

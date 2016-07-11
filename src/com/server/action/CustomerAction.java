@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.server.dao.CustomerDao;
 import com.server.pojo.Customer;
+import com.server.poco.CompanyviewPoco;
 import com.server.poco.CustomerPoco;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseAction;
+import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
@@ -21,12 +23,25 @@ import com.system.tools.pojo.Pageinfo;
  * 客户 逻辑层
  *@author ZhangRuiLong
  */
-public class CustomerAction extends BaseAction {
+public class CustomerAction extends BaseActionDao {
 	public String result = CommonConst.FAILURE;
 	public ArrayList<Customer> cuss = null;
-	public CustomerDao DAO = new CustomerDao();
 	public java.lang.reflect.Type TYPE = new com.google.gson.reflect.TypeToken<ArrayList<Customer>>() {}.getType();
-	
+
+	/**
+    * 模糊查询语句
+    * @param query
+    * @return "filedname like '%query%' or ..."
+    */
+    public String getQuerysql(String query) {
+    	if(CommonUtil.isEmpty(query)) return null;
+    	String querysql = "";
+    	String queryfieldname[] = CustomerPoco.QUERYFIELDNAME;
+    	for(int i=0;i<queryfieldname.length;i++){
+    		querysql += queryfieldname[i] + " like '%" + query + "%' or ";
+    	}
+		return querysql.substring(0, querysql.length() - 4);
+	};
 	//将json转换成cuss
 	public void json2cuss(HttpServletRequest request){
 		String json = request.getParameter("json");
@@ -39,7 +54,7 @@ public class CustomerAction extends BaseAction {
 		for(Customer temp:cuss){
 			temp.setCreatetime(DateUtils.getDateTime());
 			temp.setCustomerid(CommonUtil.getNewId());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		}
 		responsePW(response, result);
 	}
@@ -47,7 +62,7 @@ public class CustomerAction extends BaseAction {
 	public void delAll(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		for(Customer temp:cuss){
-			result = DAO.delSingle(temp,CustomerPoco.KEYCOLUMN);
+			result = delSingle(temp,CustomerPoco.KEYCOLUMN);
 		}
 		responsePW(response, result);
 	}
@@ -55,16 +70,16 @@ public class CustomerAction extends BaseAction {
 	public void updAll(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		cuss.get(0).setUpdtime(DateUtils.getDateTime());
-		result = DAO.updSingle(cuss.get(0),CustomerPoco.KEYCOLUMN);
+		result = updSingle(cuss.get(0),CustomerPoco.KEYCOLUMN);
 		responsePW(response, result);
 	}
 	//导出
 	public void expAll(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Customer.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(CustomerPoco.ORDER);
-		cuss = (ArrayList<Customer>) DAO.selAll(queryinfo);
+		cuss = (ArrayList<Customer>) selAll(queryinfo);
 		FileUtil.expExcel(response,cuss,CustomerPoco.CHINESENAME,CustomerPoco.KEYCOLUMN,CustomerPoco.NAME);
 	}
 	//导入
@@ -74,7 +89,7 @@ public class CustomerAction extends BaseAction {
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 		for(Customer temp:cuss){
 			temp.setCustomerid(CommonUtil.getNewId());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		}
 		responsePW(response, result);
 	}
@@ -82,9 +97,9 @@ public class CustomerAction extends BaseAction {
 	public void selAll(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Customer.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(CustomerPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(0, DAO.selAll(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -92,9 +107,9 @@ public class CustomerAction extends BaseAction {
 	public void selQuery(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Customer.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(CustomerPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(DAO.getTotal(queryinfo), DAO.selQuery(queryinfo));
+		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), selQuery(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -102,9 +117,9 @@ public class CustomerAction extends BaseAction {
 	public void selCustomer(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Customer.class);
-		queryinfo.setQuery(DAO.getQuerysql(queryinfo.getQuery()));
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(CustomerPoco.ORDER);
-		cuss = (ArrayList<Customer>) DAO.selAll(queryinfo);
+		cuss = (ArrayList<Customer>) selAll(queryinfo);
 		if(cuss.size()==0){
 			Customer mCustomer = new Customer();
 			mCustomer.setCustomercity("嘉兴市");

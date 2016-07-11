@@ -22,6 +22,7 @@ public class EmpPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"业务员ID",
 	 	"经销商ID",
 	 	"编码",
 	 	"账号",
@@ -35,6 +36,7 @@ public class EmpPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"empid",
 	 	"empcompany",
 	 	"empcode",
 	 	"loginname",
@@ -52,6 +54,7 @@ public class EmpPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"empid",
 	 	"empcompany",
 	 	"empcode",
 	 	"loginname",

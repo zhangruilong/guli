@@ -22,6 +22,7 @@ public class OrdermPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"订单ID",
 	 	"客户ID",
 	 	"经销商ID",
 	 	"编码",
@@ -43,6 +44,7 @@ public class OrdermPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"ordermid",
 	 	"ordermcustomer",
 	 	"ordermcompany",
 	 	"ordermcode",
@@ -68,6 +70,7 @@ public class OrdermPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"ordermid",
 	 	"ordermcustomer",
 	 	"ordermcompany",
 	 	"ordermcode",

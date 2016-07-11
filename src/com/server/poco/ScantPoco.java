@@ -22,6 +22,7 @@ public class ScantPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"标品ID",
 	 	"编码",
 	 	"名称",
 	 	"描述",
@@ -34,6 +35,7 @@ public class ScantPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"scantid",
 	 	"scantcode",
 	 	"scantname",
 	 	"scantdetail",
@@ -50,6 +52,7 @@ public class ScantPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"scantid",
 	 	"scantcode",
 	 	"scantname",
 	 	"scantdetail",

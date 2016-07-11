@@ -73,6 +73,10 @@ public class TypeUtil {
 		  return beanToArray;
 	 }
 	
+	public static String objToString(Object value) {
+		return (value == null) ? "" : value.toString(); 
+	}
+		
 	public static int stringToInt(String intstr) {
 		Integer integer;
 		integer = Integer.valueOf(intstr);

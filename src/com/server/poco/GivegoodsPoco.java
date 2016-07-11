@@ -68,6 +68,7 @@ public class GivegoodsPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"givegoodsid",
 	 	"givegoodscompany",
 	 	"givegoodscode",
 	 	"givegoodsname",

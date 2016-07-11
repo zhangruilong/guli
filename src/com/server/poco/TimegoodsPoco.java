@@ -1,7 +1,7 @@
 package com.server.poco;
 
 /**
- * 秒杀 实体类的常量
+ * 促销品 实体类的常量
  *@author ZhangRuiLong
  */
 public class TimegoodsPoco
@@ -9,7 +9,7 @@ public class TimegoodsPoco
    /**
     * 实体中文名
     */
-   public static String NAME = "秒杀";
+   public static String NAME = "促销品";
    /**
     * 实体表名
     */
@@ -74,6 +74,7 @@ public class TimegoodsPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"timegoodsid",
 	 	"timegoodscompany",
 	 	"timegoodscode",
 	 	"timegoodsname",

@@ -22,6 +22,7 @@ public class PricesPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"价格体系ID",
 	 	"商品ID",
 	 	"分类",
 	 	"等级",
@@ -38,6 +39,7 @@ public class PricesPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"pricesid",
 	 	"pricesgoods",
 	 	"pricesclass",
 	 	"priceslevel",
@@ -58,6 +60,7 @@ public class PricesPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"pricesid",
 	 	"pricesgoods",
 	 	"pricesclass",
 	 	"priceslevel",

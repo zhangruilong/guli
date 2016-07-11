@@ -22,9 +22,10 @@ public class CcustomerPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"经销商和客户ID",
 	 	"经销商ID",
 	 	"客户ID",
-	 	"描述",
+	 	"描述(关系等级)",
 	 	"创建时间",
 	 	"创建人",
 	};
@@ -32,6 +33,7 @@ public class CcustomerPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"ccustomerid",
 	 	"ccustomercompany",
 	 	"ccustomercustomer",
 	 	"ccustomerdetail",
@@ -46,6 +48,7 @@ public class CcustomerPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"ccustomerid",
 	 	"ccustomercompany",
 	 	"ccustomercustomer",
 	 	"ccustomerdetail",

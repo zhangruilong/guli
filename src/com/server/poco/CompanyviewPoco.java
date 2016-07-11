@@ -22,6 +22,7 @@ public class CompanyviewPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"companyid",
 	 	"companycode",
 	 	"username",
 	 	"companyphone",
@@ -45,6 +46,7 @@ public class CompanyviewPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"companyid",
 	 	"companycode",
 	 	"username",
 	 	"companyphone",
@@ -72,6 +74,7 @@ public class CompanyviewPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"companyid",
 	 	"companycode",
 	 	"username",
 	 	"companyphone",

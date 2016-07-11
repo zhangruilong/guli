@@ -22,6 +22,7 @@ public class CityPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"城市ID",
 	 	"编码",
 	 	"名称",
 	 	"父类",
@@ -32,6 +33,7 @@ public class CityPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"cityid",
 	 	"citycode",
 	 	"cityname",
 	 	"cityparent",
@@ -46,6 +48,7 @@ public class CityPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"cityid",
 	 	"citycode",
 	 	"cityname",
 	 	"cityparent",

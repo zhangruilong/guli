@@ -1,7 +1,7 @@
 package com.server.poco;
 
 /**
- * ordermview 实体类的常量
+ * 订单 实体类的常量
  *@author ZhangRuiLong
  */
 public class OrdermviewPoco
@@ -9,7 +9,7 @@ public class OrdermviewPoco
    /**
     * 实体中文名
     */
-   public static String NAME = "ordermview";
+   public static String NAME = "订单";
    /**
     * 实体表名
     */
@@ -78,6 +78,7 @@ public class OrdermviewPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"ordermid",
 	 	"ordermcustomer",
 	 	"ordermcompany",
 	 	"ordermcode",

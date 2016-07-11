@@ -22,6 +22,7 @@ public class CollectPoco
     * 实体中文字段
     */
    public static String[] CHINESENAME = {
+   		"收藏ID",
 	 	"商品ID",
 	 	"客户ID",
 	 	"描述",
@@ -31,6 +32,7 @@ public class CollectPoco
 	 * 实体英文字段
 	 */
    public static final String[] FIELDNAME = {
+   		"collectid",
 	 	"collectgoods",
 	 	"collectcustomer",
 	 	"collectdetail",
@@ -44,6 +46,7 @@ public class CollectPoco
 	 * 要模糊查询字段
 	 */
    public static final String[] QUERYFIELDNAME = {
+   		"collectid",
 	 	"collectgoods",
 	 	"collectcustomer",
 	 	"collectdetail",
