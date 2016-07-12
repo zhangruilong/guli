@@ -70,24 +70,51 @@ public class BaseDao {
 		            Class  c = field[i].getType();  
 		            //得到方法  
 		            Method method= type.getMethod(methodname, c);  
-		            if(c == String.class){  
-		                method.invoke(obj, rs.getString(fieldname));  
+		            if(c == String.class){ 
+		            	try {
+		            		method.invoke(obj, rs.getString(fieldname)); 
+		            	} catch (Exception e) {
+		        		}
 		            }else if(c == int.class){  
+		            	try {
 		                method.invoke(obj, rs.getInt(fieldname));  
+		            	} catch (Exception e) {
+		        		}
 		            }else if(c == float.class){  
+		            	try {
 		                method.invoke(obj, rs.getFloat(fieldname));  
+		            } catch (Exception e) {
+	        		}
 		            }else if(c == double.class){  
+		            	try {
 		                method.invoke(obj, rs.getDouble(fieldname));  
+		            } catch (Exception e) {
+	        		}
 		            }else if(c == java.sql.Date.class){  
+		            	try {
 		                method.invoke(obj, rs.getDate(fieldname));  
+		            } catch (Exception e) {
+	        		}
 		            }else if(c == boolean.class){  
+		            	try {
 		                method.invoke(obj, rs.getBoolean(fieldname));  
-		            }else if(c == byte.class){  
+		            } catch (Exception e) {
+	        		}
+		            }else if(c == byte.class){ 
+		            	try {
 		                method.invoke(obj, rs.getBytes(fieldname));  
+		            } catch (Exception e) {
+	        		}
 		            }else if(c == char.class){  
+		            	try {
 		                method.invoke(obj, rs.getCharacterStream(fieldname));  
+		            } catch (Exception e) {
+	        		}
 		            }else{  
-		                method.invoke(obj, rs.getObject(fieldname));  
+		            	try {
+		                method.invoke(obj, rs.getObject(fieldname));
+		            } catch (Exception e) {
+	        		}
 		            }  
 		        }
 			 return obj;
