@@ -11,14 +11,10 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
-<link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script>
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <style type="text/css">
 .reg-wrapper li span{
 	width: 30%;
@@ -61,9 +57,7 @@
                         <td> 
                                <div id="cusCityDiv"  style="overflow: auto; padding-left:0; width: 100%; background-color: #F2F2F2;height: 100%; ">
                                	<ul>
-                               		<c:forEach items="${requestScope.cityList }" var="cyty">
-                               			<li>${cyty.cityname }</li>
-                               		</c:forEach>
+                               			<li>嘉兴市</li>
                                	</ul>
                                </div> 
                         </td> 
@@ -80,6 +74,10 @@
                         <td> 
                                <div id="cusXianDiv"  style="overflow: auto; padding-left:0; width: 100%; background-color: #F2F2F2;height: 100%; ">
                                	<ul>
+                               		<li>海盐县</li>
+                               		<li>嘉善县</li>
+                               		<li>秀洲区</li>
+                               		<li>南湖区</li>
                                	</ul>
                                </div> 
                         </td> 
@@ -119,10 +117,10 @@ $("#divList").css("top",divListTop + "px");
 $("#xianList").css("top",xianListTop + "px");
 	$(function(){
 		//防止openid 为 字符串"null"
-		if(!window.localStorage.getItem("openid") || window.localStorage.getItem("openid")== 'null' || window.localStorage.getItem("openid") == ''){
+		/* if(!window.localStorage.getItem("openid") || window.localStorage.getItem("openid")== 'null' || window.localStorage.getItem("openid") == ''){
 			window.location.href = "index.jsp";
 			return;
-		}
+		} */
 		$(".cd-popup").on("click",function(event){		//绑定点击事件
 				$(this).removeClass("is-visible");	//移除'is-visible' class
 		});
@@ -156,20 +154,24 @@ $("#xianList").css("top",xianListTop + "px");
 			return;
 		}
 		$.ajax({
-			url: "reg.action",
+			url: "CustomerAction.do?method=regCustomer",
+			type:"post",
 			data: {
-				"openid":window.localStorage.getItem("openid"),
-				"customercity":$("[name='customercity']").val(),
-				"customerphone":$("#customerphone").val(),
-				"customerxian":$("[name='customerxian']").val(),
-				"customershop":$("#customershop").val(),
-				"customername":$("#customername").val(),
-				"customeraddress":$("#customeraddress").val()
+				json:'[{'+
+				//'"openid":"'+window.localStorage.getItem("openid")+'",'+
+				'"customercity":"'+$("[name='customercity']").val()+'",'+
+				'"customerphone":"'+$("#customerphone").val()+'",'+
+				'"customerxian":"'+$("[name='customerxian']").val()+'",'+
+				'"customershop":"'+$("#customershop").val()+'",'+
+				'"customername":"'+$("#customername").val()+'",'+
+				'"customeraddress":"'+$("#customeraddress").val()+'"'+
+				'}]'
 			},
-			dataType:"json",
-			success: function(data) {
-				window.localStorage.setItem("customer",JSON.stringify(data));
-				$(".meg").text("注册成功！");
+			success: function(resp) {
+				alert(resp);
+				var respText = eval('('+resp+')'); 
+				//window.localStorage.setItem("customer",respText);
+				$(".meg").text(respText.msg);
 				$(".cd-buttons a").attr("href","index.jsp");
 				$(document).click(function(){
 					window.location.href = "index.jsp";
@@ -177,16 +179,17 @@ $("#xianList").css("top",xianListTop + "px");
 				$(".cd-popup").addClass("is-visible");	//弹出窗口
 			},
 			error:function(data) {
-				if(data.responseText == 'no'){
-					$(".meg").text("您的手机已经注册过了");
+				var dataJson = JSON.parse(data);
+				if(dataJson.code == '400'){
+					$(".meg").text(dataJson.msg);
 					$(".cd-buttons a").attr("href","index.jsp");
 					$(document).click(function(){
-						window.location.href = "index.jsp";
+						window.location.reload();
 					});
 					$(".cd-popup").addClass("is-visible");	//弹出窗口
 				} else {
-					alert("网络出现问题,请稍后再试");
-					window.location.href = "index.jsp";
+					alert("未知问题,请联系客服。");
+					window.location.reload();
 				}
 			}
 		});
@@ -216,7 +219,7 @@ $("#xianList").css("top",xianListTop + "px");
 	     //城市的选项被点击时的事件
     	   $("#cusCityDiv ul li").click(function(){
     		   $(oRegion).val($(this).text());
-    		   customercity = $(this).text();
+    		   /* customercity = $(this).text();
     		   Ext.Ajax.request({
    				url : "querycity.action",
    				method : "post",
@@ -236,18 +239,16 @@ $("#xianList").css("top",xianListTop + "px");
    				failure : function(resp,opts) {
    					Ext.Msg.alert('提示', '网络出现问题，请稍后再试');
    				}
-   			});
+   			}); */
     	   });
 	     
        });
-	     /* $("#cusXianDiv ul li").click(function(){
-	    	 alert("lok");
-	    	 alert($(this).text());
+	     $("#cusXianDiv ul li").click(function(){
 	    	 customerxianObj.val($(this).text());
-	     }); */
-	   function cityclick(obj){
+	     });
+	   /* function cityclick(obj){
 		   customerxianObj.val($(obj).text());
-	   }
+	   } */
        //文本获得焦点时的事件 (弹出下拉框)
        oRegion.onfocus = function() { 
            oRegion.style.backgroundColor="white" ;
