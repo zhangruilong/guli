@@ -117,10 +117,10 @@ $("#divList").css("top",divListTop + "px");
 $("#xianList").css("top",xianListTop + "px");
 	$(function(){
 		//防止openid 为 字符串"null"
-		/* if(!window.localStorage.getItem("openid") || window.localStorage.getItem("openid")== 'null' || window.localStorage.getItem("openid") == ''){
+		if(!window.localStorage.getItem("openid") || window.localStorage.getItem("openid")== 'null' || window.localStorage.getItem("openid") == ''){
 			window.location.href = "index.jsp";
 			return;
-		} */
+		}
 		$(".cd-popup").on("click",function(event){		//绑定点击事件
 				$(this).removeClass("is-visible");	//移除'is-visible' class
 		});
@@ -158,7 +158,7 @@ $("#xianList").css("top",xianListTop + "px");
 			type:"post",
 			data: {
 				json:'[{'+
-				//'"openid":"'+window.localStorage.getItem("openid")+'",'+
+				'"openid":"'+window.localStorage.getItem("openid")+'",'+
 				'"customercity":"'+$("[name='customercity']").val()+'",'+
 				'"customerphone":"'+$("#customerphone").val()+'",'+
 				'"customerxian":"'+$("[name='customerxian']").val()+'",'+
@@ -168,9 +168,8 @@ $("#xianList").css("top",xianListTop + "px");
 				'}]'
 			},
 			success: function(resp) {
-				alert(resp);
 				var respText = eval('('+resp+')'); 
-				//window.localStorage.setItem("customer",respText);
+				//window.localStorage.setItem("customer",JSON.stringify(respText.root));
 				$(".meg").text(respText.msg);
 				$(".cd-buttons a").attr("href","index.jsp");
 				$(document).click(function(){

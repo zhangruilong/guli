@@ -1,10 +1,14 @@
 package com.server.action;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.server.poco.CityPoco;
 import com.server.poco.OrderdPoco;
 import com.server.pojo.Orderd;
 import com.system.tools.CommonConst;
@@ -12,6 +16,7 @@ import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
+import com.system.tools.pojo.Treeinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.FileUtil;
 
@@ -107,4 +112,48 @@ public class OrderdAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//查询客户购买的秒杀商品数量
+	@SuppressWarnings("unchecked")
+	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
+		Pageinfo pageinfo = new Pageinfo(0,selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
+				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+request.getParameter("customerid")+
+				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) group by od.orderdcode,od.orderdtype,od.orderdunits"));
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}
+	//查询客户购买的秒杀商品数量
+	/*@SuppressWarnings("unchecked")
+	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
+		Pageinfo pageinfo = new Pageinfo(0, selCusXGOrderd(request.getParameter("customerid")));
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}*/
+	/*public ArrayList<Orderd> selCusXGOrderd(String customerid) {
+		String sql = null;
+		Orderd temp = null;
+		ArrayList<Orderd> temps = new ArrayList<Orderd>();
+		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			sql = "select '' as orderdid,od.orderdcode as orderdcode,od.orderdtype as orderdtype,od.orderdunits as orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
+					"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
+					"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) group by od.orderdcode,od.orderdtype,od.orderdunits";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				temp = new Orderd();
+				temp.setOrderdcode( rs.getString("orderdcode"));
+				temp.setOrderdclass(rs.getString("orderdclass"));
+				temp.setOrderdunits(rs.getString("orderdunits"));
+				temp.setOrderdtype(rs.getString("orderdtype"));
+				temps.add(temp);
+			}
+		} catch (Exception e) {
+			System.out.println("Exception:" + e.getMessage());
+		} finally{
+			connectionMan.freeConnection(CommonConst.DSNAME,conn,stmt,rs);
+			return temps;
+		}
+	};*/
 }

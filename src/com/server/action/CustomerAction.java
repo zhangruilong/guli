@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.CustomerPoco;
 import com.server.pojo.Customer;
+import com.server.pojo.entity.Address;
+import com.server.pojo.entity.Ccustomer;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
@@ -130,4 +132,64 @@ public class CustomerAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//注册
+	@SuppressWarnings("unchecked")
+	public void regCustomer(HttpServletRequest request, HttpServletResponse response){
+		json2cuss(request);
+		for(Customer temp:cuss){
+			ArrayList<Customer> cusList = (ArrayList<Customer>) selAll(Customer.class, "select * from customer c where c.customerphone='"+temp.getCustomerphone()+"'");
+			if(cusList != null && cusList.size() > 0){
+				result = "{success:false,code:400,msg:'手机已经注册过了。'}";
+			}else{
+				String newId = CommonUtil.getNewId();
+				temp.setCustomerid(newId);		//设置新id
+				temp.setCustomerstatue("启用");
+				temp.setCustomerlevel(3);
+				temp.setCustomertype("3");
+				temp.setCreatetime(DateUtils.getDateTime());
+				String sqlCustomer = getInsSingleSql(temp);
+				
+				//添加新地址
+				Address address = new Address();
+				address.setAddressture(1);							//自动设为默认地址
+				address.setAddressid(newId);		//设置新id
+				address.setAddressaddress(temp.getCustomercity()+temp.getCustomerxian()+temp.getCustomeraddress());
+				address.setAddresscustomer(newId);				//客户id
+				address.setAddressphone(temp.getCustomerphone());
+				address.setAddressconnect(temp.getCustomername());
+				String sqlAddress = getInsSingleSql(address);
+				
+				//添加与唯一客户的关系
+				Ccustomer newccustomer = new Ccustomer();
+				newccustomer.setCcustomerid(newId);
+				newccustomer.setCcustomercompany("1");
+				newccustomer.setCcustomercustomer(newId);
+				newccustomer.setCcustomerdetail("3");
+				String sqlCcustomer = getInsSingleSql(newccustomer);
+				result = doAll(sqlCustomer,sqlAddress,sqlCcustomer);
+				if(CommonConst.SUCCESS.equals(result)){
+					ArrayList<Customer> retCust = new ArrayList<Customer>();
+					retCust.add(temp);
+					Pageinfo pageinfo = new Pageinfo(0, retCust);
+					result = CommonConst.GSON.toJson(pageinfo);
+				}
+			}
+			
+		}
+		responsePW(response, result);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
