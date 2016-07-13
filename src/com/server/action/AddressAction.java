@@ -92,7 +92,7 @@ public class AddressAction extends BaseActionDao {
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Address.class);
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setOrder(AddressPoco.ORDER);
+		if(CommonUtil.isNull(queryinfo.getOrder())) queryinfo.setOrder(AddressPoco.ORDER);
 		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);

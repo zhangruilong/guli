@@ -1,6 +1,7 @@
 package com.server.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +10,7 @@ import com.server.poco.OrdermPoco;
 import com.server.poco.TimegoodsPoco;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
+import com.server.pojo.entity.Timegoods;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
@@ -138,6 +140,17 @@ public class OrdermAction extends BaseActionDao {
 			java.lang.reflect.Type sOrderdTYPE = new com.google.gson.reflect.TypeToken<ArrayList<Orderd>>() {}.getType();
 			sOrderd = CommonConst.GSON.fromJson(orderdetjson, sOrderdTYPE);
 			for(Orderd mOrderd:sOrderd){
+				if(mOrderd.getOrderdtype().equals("秒杀")){
+					@SuppressWarnings("unchecked")
+					List<Timegoods> tgList = selAll(Timegoods.class,"select * from timegoods tg where tg.timegoodsid = '"+mOrderd.getOrderdid()+"'");
+					if(tgList.size() >0){
+						Timegoods editNumTG = tgList.get(0);
+						editNumTG.setSurplusnum(editNumTG.getSurplusnum() - mOrderd.getOrderdnum());
+						result = updSingle(editNumTG,TimegoodsPoco.KEYCOLUMN);
+					}
+					/*String timegoodssql = "update ";
+					sqls.add(timegoodssql);*/
+				}
 				mOrderd.setOrderdid(CommonUtil.getNewId());
 				mOrderd.setOrderdorderm(mOrdermid);
 				mOrderd.setOrderdrightmoney(mOrderd.getOrderdmoney());
@@ -148,10 +161,11 @@ public class OrdermAction extends BaseActionDao {
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'服务器异常,操作失败'}";
-		} else {
-			updSingle(TimegoodsPoco.TABLE, "statue=0", "id!=1 and");
-			doSingle("update a =1");
-		}
+		}/* else {
+			result = updSingle(cuss.get(0),TimegoodsPoco.KEYCOLUMN);
+			//updSingle(TimegoodsPoco.TABLE, "statue=0", "id!=1 and");			//这是修改
+			//doSingle("update a =1");											//这是执行一条sql语句
+		}*/
 		responsePW(response, result);
 	}
 	//导出

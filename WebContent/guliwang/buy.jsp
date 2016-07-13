@@ -85,7 +85,10 @@ $(function(){
 	$.ajax({
 		url:"AddressAction.do?method=selAll",
 		type:"post",
-		data:{wheresql:"addresscustomer='"+customer.customerid+"' and addressture='1'"},
+		data:{
+			wheresql:"addresscustomer='"+customer.customerid+"'",
+			order : "addressture desc"
+		},
 		success : function(resp){
 			var data = JSON.parse(resp);
 			var item = data.root[0];
@@ -141,7 +144,7 @@ function buy(){
 				return false;
 			}
 			if(mcompany.ordermcompany == item.goodscompany)
-				orderdetjson += '{"orderdetdishes":"' + item.goodsid
+				orderdetjson += '{"orderdid":"' + item.goodsid
 						+ '","orderdcode":"' + item.goodscode
 						+ '","orderdtype":"' + item.orderdtype
 						+ '","orderdname":"' + item.goodsname
