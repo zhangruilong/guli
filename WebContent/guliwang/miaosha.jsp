@@ -95,12 +95,11 @@ function initMiaoshaPage(resp){
 			$.each(data.root,function(j,item2){
 				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.timegoodsnum);
-				var liObj = '<li><span onclick="gotogoodsDetail(\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'+
-				'\',\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+item2.timegoodsimage+
+				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+item2.timegoodsimage+
 	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
-				'<h1 onclick="gotogoodsDetail(\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。\',\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
+				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1> <span style="" onclick="gotogoodsDetail(\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。\',\''+encodeURI(jsonitem)+'\')">';
+				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
@@ -181,7 +180,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 			var newtmoney = (tmoney+pricesprice).toFixed(2);						//总价加上商品价格得到新价格
 			window.localStorage.setItem("totalmoney",newtmoney);					//设置总价格到缓存
 			//数量
-			var numt = $(obj).prev(); 							//得到加号前面一个元素(input元素)
+			var numt = $(obj).prev();
 			var num = parseInt(numt.val());						//得到input的值,商品数
 			numt.val(num+1);									//input的值加一
 			//订单

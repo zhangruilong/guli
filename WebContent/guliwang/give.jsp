@@ -163,7 +163,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 			var newtmoney = (tmoney+pricesprice).toFixed(2);						//总价加上商品价格得到新价格
 			window.localStorage.setItem("totalmoney",newtmoney);					//设置总价格到缓存
 			//数量
-			var numt = $(obj).prev(); 							//得到加号前面一个元素(input元素)
+			var numt = $(obj).prev();
 			var num = parseInt(numt.val());						//得到input的值,商品数
 			numt.val(num+1);									//input的值加一
 			//订单
