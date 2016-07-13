@@ -66,27 +66,11 @@ $(function(){
 	if(xian == ''){
 		xian = customer.customerxian
 	}
-	$.ajax({
-		url:"AddressAction.do?method=selAll",
-		type:"post",
-		data:{wheresql:"address.addresscustomer='"+customer.customerid+"'"},
-		success : function(resp){
-			var respText = eval('('+resp+')'); 
-			if(typeof(respText.root) == 'undefined' || !respText.root){
-				$(".popup_msg").text("还没有收货地址,请先添加收货地址。");				//修改弹窗文字信息
-				$(".ok").attr("href","index.jsp");
-				$(".cd-popup").addClass("is-visible");
-			}
-		},
-		error : function(data){
-			alert("网络出现问题!");
-			history.go(-1);
-		}
-	});
+	
 	$.ajax({
 		url:"TimegoodsAction.do?method=selAll",
 		type:"post",
-		data:{},
+		data:{wheresql:"timegoods.timegoodsscope like '%"+customer.customertype+"%'"},
 		success: initMiaoshaPage,
 		error: function(resp){
 			var respText = eval('('+resp+')'); 
@@ -95,10 +79,9 @@ $(function(){
 	});
 });
 //到商品详情页
-function gotogoodsDetail(companyshop,companydetail,jsonitem){
-	window.location.href = 'goodsDetail.jsp?type=秒杀&companyshop='+companyshop+'&companydetail='+companydetail+'&goods='+jsonitem;
+function gotogoodsDetail(jsonitem){
+	window.location.href = 'goodsDetail.jsp?type=秒杀&goods='+jsonitem;
 }
-var cusOrder = null;
 //初始化页面
 function initMiaoshaPage(resp){
 	var data = JSON.parse(resp);
@@ -107,11 +90,11 @@ function initMiaoshaPage(resp){
 		type:"post",
 		data:{customerid:customer.customerid},
 		success : function(data2){
-			cusOrder = JSON.parse(data2);
+			var cusOrder = JSON.parse(data2);
 			$(".home-hot-commodity").html("");
 			$.each(data.root,function(j,item2){
 				var jsonitem = JSON.stringify(item2);
-				var dailySur = 0;
+				var dailySur = parseInt(item2.timegoodsnum);
 				var liObj = '<li><span onclick="gotogoodsDetail(\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'+
 				'\',\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+item2.timegoodsimage+
 	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
@@ -119,14 +102,13 @@ function initMiaoshaPage(resp){
 					'<span>（'+item2.timegoodsunits+'）</span>'+
 				'</h1> <span style="" onclick="gotogoodsDetail(\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。\',\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
-					//alert(JSON.stringify(cusOrder));
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
 						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
-					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;
+					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
 					liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'</font>';
 					if(item2.allnum != '-1'){
 						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
@@ -175,7 +157,6 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		return;
 	}
 	var item = JSON.parse($(obj).next().text());				//得到商品信息
-		var count = 0;
 		//数量
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());

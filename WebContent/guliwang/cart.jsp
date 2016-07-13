@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -35,10 +35,27 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
+	$.ajax({
+		url:"AddressAction.do?method=selAll",
+		type:"post",
+		data:{wheresql:"address.addresscustomer='"+customer.customerid+"'"},
+		success : function(resp){
+			var respText = eval('('+resp+')'); 
+			if(typeof(respText.root) == 'undefined' || !respText.root){
+				$(".popup_msg").text("还没有收货地址,请先添加收货地址。");				//修改弹窗文字信息
+				$(".ok").attr("href","index.jsp");
+				$(".cd-popup").addClass("is-visible");
+			}
+		},
+		error : function(data){
+			alert("网络出现问题!");
+			history.go(-1);
+		}
+	});
 	if('${requestScope.nullInfo}' == 'y'){
 		$(".popup_msg").text("网络问题请重试。");
 		$(".popup_queding").attr("href","index.jsp");

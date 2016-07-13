@@ -12,9 +12,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 .gdw_t_li3_pri{color: #F86B4F;font-size: 24px;float: left;margin-top: 26px;}
 #gdw_t_li3{height: 51px;overflow: visible;}
@@ -54,7 +54,7 @@
 </div>
 <div><img id="goods_det_img2" alt="" src=""></div>
 <div class="goodsdetail_float">
-	<div class="gdf_gwc_div" onclick="docart()"><img src="images/gwc.png"><em id="totalnum">0</em></div>
+	<div class="gdf_gwc_div" onclick="docart()"><img src="../images/gwc.png"><em id="totalnum">0</em></div>
 </div>
 <!--弹框-->
 <div class="cd-popup" role="alert">
@@ -66,7 +66,7 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customer"));
@@ -95,39 +95,83 @@ $(function(){
 		$("#gdw_t_li2").append(' <span class="gdw_t_li3_cc"><input type="checkbox" id="'+data.goodsid+'checkbox" class="chk_1" '+data.goodsdetail+'>'+
 	     		'<label for="'+data.goodsid+'checkbox" onclick="checkedgoods(\''+data.goodsid+'\');"></label></span>');
 	} else if (type == '秒杀'){
+		$.ajax({
+			url:"OrderdAction.do?method=selCusXGOrderd",
+			type:"post",
+			data:{customerid:customer.customerid},
+			success : function(data2){
+				var cusOrder = JSON.parse(data2);
+				var dailySur = parseInt(data.timegoodsnum);
+				if(cusOrder){
+					var itemGoodsCount = 0;
+					$.each(cusOrder.root,function(k,item3){
+						if(item3.orderdtype == '秒杀' && item3.orderdcode == data.timegoodscode){
+							itemGoodsCount += parseInt(item3.orderdclass);
+						}
+					});
+					dailySur = parseInt(data.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+				}
+				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.timegoodsname+'（'+data.timegoodsunits+'）</span>');
+				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.timegoodsorgprice+'/'+data.timegoodsunit+'</span>');
+				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.timegoodsid+'">'+
+			            '<span class="jian min"  onclick="subnum(this,'+data.timegoodsorgprice+')"></span>'+
+			            '<input readonly="readonly" class="text_box shuliang" name="danpin" type="text" value="'+
+			             getcurrennumdanpin(data.timegoodsid)+'"> '+
+			            ' <span name="'+dailySur+'" class="jia add" onclick="addtimegoodsnum(this,'+data.timegoodsorgprice
+						   +',\''+data.timegoodsname+'\',\''+data.timegoodsunit+'\',\''+data.timegoodsunits
+						   +'\',\''+data.timegoodscode+'\',\''+data.timegoodsclass
+						   +'\',\''+data.timegoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
+						   +'\')"></span>'+
+						   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
+			        	'</div>');
+			},
+			error : function(resp2){
+				var respText2 = eval('('+resp2+')');
+				alert(respText2.msg);
+			}
+		});
 		$("#goods_det_img1").attr("src",'../'+data.timegoodsimage);
 		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
-		$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.timegoodsname+'（'+data.timegoodsunits+'）</span>');
-		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.timegoodsorgprice+'/'+data.timegoodsunit+'</span>');
-		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.timegoodsid+'">'+
-	            '<span class="jian min"  onclick="subnum(this,'+data.timegoodsorgprice+')"></span>'+
-	            '<input readonly="readonly" class="text_box shuliang" name="danpin" type="text" value="'+
-	             getcurrennumdanpin(data.timegoodsid)+'"> '+
-	            ' <span class="jia add" onclick="addtimegoodsnum(this,'+data.timegoodsorgprice
-				   +',\''+data.timegoodsname+'\',\''+data.timegoodsunit+'\',\''+data.timegoodsunits
-				   +'\',\''+data.timegoodscode+'\',\''+data.timegoodsclass
-				   +'\',\''+data.timegoodscompany+'\',\'${param.companyshop}\',\'${param.companydetail}'
-				   +'\')"></span>'+
-				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
-	        	'</div>');
 		$(".gd-lower-liebiao span:eq(0)").text(data.timegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.timegoodsclass);
 	} else if(type == '买赠'){
+		$.ajax({
+			url:"OrderdAction.do?method=selCusXGOrderd",
+			type:"post",
+			data:{customerid:customer.customerid},
+			success : function(data2){
+				var cusOrder = JSON.parse(data2);
+				var dailySur = parseInt(data.givegoodsnum);
+				if(cusOrder){
+					var giveGoodsCount = 0;
+					$.each(cusOrder.root,function(k,item3){
+						if(item3.orderdtype == '买赠' && item3.orderdcode == data.givegoodscode){
+							giveGoodsCount += parseInt(item3.orderdclass);
+						}
+					});
+					dailySur = parseInt(data.givegoodsnum) - giveGoodsCount;																//每日限购剩余数量
+				}
+				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.givegoodsname+'（'+data.givegoodsunits+'）<br><span style="color: #666;">'+data.givegoodsdetail+'</span></span>');
+				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.givegoodsprice+'/'+data.givegoodsunit+'</span>');
+				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.givegoodsid+'">'+
+			            '<span class="jian min"  onclick="subnum(this,'+data.givegoodsprice+')"></span>'+
+			            '<input readonly="readonly" class="text_box shuliang" name="'+data.givegoodsdetail+'" type="text" value="'+
+			             getcurrennumdanpin(data.givegoodsid)+'"> '+
+			            ' <span name="'+dailySur+'" class="jia add" onclick="addgivegoodsnum(this,'+data.givegoodsprice
+						   +',\''+data.givegoodsname+'\',\''+data.givegoodsunit+'\',\''+data.givegoodsunits
+						   +'\',\''+data.givegoodscode+'\',\''+data.givegoodsclass
+						   +'\',\''+data.givegoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
+						   +'\')"></span>'+
+						   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
+			        	'</div>');
+			},
+			error : function(resp2){
+				var respText2 = eval('('+resp2+')');
+				alert(respText2.msg);
+			}
+		});
 		$("#goods_det_img1").attr("src",'../'+data.givegoodsimage);
 		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
-		$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.givegoodsname+'（'+data.givegoodsunits+'）<br><span style="color: #666;">'+data.givegoodsdetail+'</span></span>');
-		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.givegoodsprice+'/'+data.givegoodsunit+'</span>');
-		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.givegoodsid+'">'+
-	            '<span class="jian min"  onclick="subnum(this,'+data.givegoodsprice+')"></span>'+
-	            '<input readonly="readonly" class="text_box shuliang" name="'+data.givegoodsdetail+'" type="text" value="'+
-	             getcurrennumdanpin(data.givegoodsid)+'"> '+
-	            ' <span class="jia add" onclick="addgivegoodsnum(this,'+data.givegoodsprice
-				   +',\''+data.givegoodsname+'\',\''+data.givegoodsunit+'\',\''+data.givegoodsunits
-				   +'\',\''+data.givegoodscode+'\',\''+data.givegoodsclass
-				   +'\',\''+data.givegoodscompany+'\',\''+data.givegoodcompany.companyshop+'\',\''+data.givegoodcompany.companydetail
-				   +'\')"></span>'+
-				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
-	        	'</div>');
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
 	}
