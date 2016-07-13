@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 	<div class="jiesuan">
     	<div class="wapper-nav">结算 <a href='javascript:history.go(-1)' class="goback"></a></div>
     	<div class="shouhuo-wrap">
-        	<a href="">
+        	<a href="buyAddress.jsp">
         	<span>收货人：${requestScope.address.addressconnect } ${requestScope.address.addressphone }</span>
         	<span class="add">收货地址: ${requestScope.address.addressaddress }</span></a>
         	<span id="addressconnect" hidden="ture">${requestScope.address.addressconnect }</span>
@@ -62,11 +62,11 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script> 
+var customer = JSON.parse(window.localStorage.getItem("customer"));
 jQuery(document).ready(function($){
-	//open popup
+	//open popup 
 	$('.cd-popup-trigger').on('click', function(event){
 		event.preventDefault();
 		$('.cd-popup').addClass('is-visible');			//弹窗
@@ -80,9 +80,24 @@ jQuery(document).ready(function($){
 		}
 	});
 });
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+
 $(function(){
-	$(".shouhuo-wrap a").attr("href","doAddressMana.action?customerId="+customer.customerid+"&message=foBuy");
+	$.ajax({
+		url:"AddressAction.do?method=selAll",
+		type:"post",
+		data:{wheresql:"addresscustomer='"+customer.customerid+"' and addressture='1'"},
+		success : function(resp){
+			var data = JSON.parse(resp);
+			var item = data.root[0];
+			$(".shouhuo-wrap a span:eq(0)").text('收货人：'+item.addressconnect+' '+item.addressphone);
+			$(".shouhuo-wrap a span:eq(1)").text('收货地址: '+item.addressaddress);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
+	//$(".shouhuo-wrap a").attr("href","doAddressMana.action?customerId="+customer.customerid+"&message=foBuy");
 	if(!window.localStorage.getItem("totalmoney")){
 		window.localStorage.setItem("totalmoney",0);
 		$("#totalmoney").text(0);
@@ -105,6 +120,7 @@ function buy(){
 	$("#buyall").attr('onclick','');//禁用按钮
 	//将购物车写入订单表
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
+	var flag = 0;
 	$.each(scompany, function(y, mcompany) {
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
@@ -117,6 +133,13 @@ function buy(){
 		var orderdetjson = '[';
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
+			if(item.orderdtype == '秒杀' && item.orderdetnum > item.surplusnum){
+				$(".meg").text("您购买的秒杀商品卖完了.......");
+				$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
+				$('.cd-popup').addClass('is-visible');			//弹窗
+				flag++;
+				return false;
+			}
 			if(mcompany.ordermcompany == item.goodscompany)
 				orderdetjson += '{"orderdetdishes":"' + item.goodsid
 						+ '","orderdcode":"' + item.goodscode
@@ -132,8 +155,24 @@ function buy(){
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});
+		if(flag > 0){
+			return false;
+		}
 		orderdetjson = orderdetjson.substr(0, orderdetjson.length - 1)
 				+ ']';
+		saveOrder(ordermjson,orderdetjson);
+		/* $.each(JSON.parse(orderdetjson),function(i,item){
+			if(item.orderdtype == '秒杀'){
+				
+			}
+		});
+		if(data == 'ok'){
+			saveOrder(ordermjson,orderdetjson,timegoodsids,timegoodssum);
+		} else {
+			$(".meg").text("您购买的秒杀商品卖完了.......");
+			$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
+			$('.cd-popup').addClass('is-visible');			//弹窗
+		}
 		var timegoodsids = '';				//秒杀商品id
 		var timegoodssum = '';				//秒杀商品数量
 		$.each(JSON.parse(orderdetjson),function(i,item){	//遍历添加的订单详情
@@ -156,11 +195,11 @@ function buy(){
 			});
 		} else {
 			saveOrder(ordermjson,orderdetjson);
-		}
+		} */
      });
 }
 //保存订单和订单详情
-function saveOrder(ordermjson,orderdetjson,timegoodsids,timegoodssum){
+function saveOrder(ordermjson,orderdetjson){
 	$.ajax({
 		url : 'OrdermAction.do?method=addOrder',
 		type:"post",
@@ -172,21 +211,6 @@ function saveOrder(ordermjson,orderdetjson,timegoodsids,timegoodssum){
 			var respText = eval('('+resp+')'); 
 			if(respText.success == false) {
 				alert(respText.msg);
-			} else if(timegoodsids && timegoodssum && timegoodsids != '' && timegoodssum != '' ){
-				$.ajax({
-					url:"editRestAmount.action",
-					type:"post",
-					data:{'timegoodsids':timegoodsids,'timegoodssum':timegoodssum},
-					success:function(data){
-						window.localStorage.setItem("sdishes", "[]");
-						window.localStorage.setItem("totalnum", 0);
-						window.localStorage.setItem("totalmoney", 0);
-						window.localStorage.setItem("cartnum", 0);
-						alert("下单成功！");
-						window.location.href = "order.jsp";
-					},
-					error:function(){}
-				});
 			} else {
 				window.localStorage.setItem("sdishes", "[]");
 				window.localStorage.setItem("totalnum", 0);

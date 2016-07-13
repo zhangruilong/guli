@@ -1245,14 +1245,13 @@ public class BaseDao {
 	 * @param TABLE 表名
 	 * @param datasql 指update table set 后面跟的字符串，例如fieldname='test'
 	 * @param wheresql 指where后面跟的字符串，例如fieldname='test'
-	 * @param param 参数集合
 	 * @return 成功CommonConst.SUCCESS,失败CommonConst.FAILURE
 	 */
 	public String updSingle(String TABLE, String datasql,
-			String wheresql, Object... param) {
+			String wheresql) {
 		String sql = "update " + TABLE + " set " + datasql + " where "
 				+ wheresql;
-		return doSingle(sql, param);
+		return doSingle(sql);
 	}
 	/**
 	 * 获取修改TABLE数据的sql

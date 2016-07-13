@@ -28,7 +28,7 @@ public class Address
     */
    private String addressaddress;   
    /**
-    * 是否默认
+    * 是否默认(1默认,0不是默认)
     */
    private int addressture;   
     //属性方法	    

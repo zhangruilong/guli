@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.OrdermPoco;
+import com.server.poco.TimegoodsPoco;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
 import com.system.tools.CommonConst;
@@ -147,6 +148,9 @@ public class OrdermAction extends BaseActionDao {
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'服务器异常,操作失败'}";
+		} else {
+			updSingle(TimegoodsPoco.TABLE, "statue=0", "id!=1 and");
+			doSingle("update a =1");
 		}
 		responsePW(response, result);
 	}

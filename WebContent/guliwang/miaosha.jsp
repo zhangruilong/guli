@@ -88,7 +88,8 @@ function initMiaoshaPage(resp){
 	$.ajax({
 		url:"OrderdAction.do?method=selCusXGOrderd",
 		type:"post",
-		data:{customerid:customer.customerid},
+		data:{customerid:customer.customerid
+			wheresql: "surplusnum>'0'"},
 		success : function(data2){
 			var cusOrder = JSON.parse(data2);
 			$(".home-hot-commodity").html("");
@@ -114,7 +115,7 @@ function initMiaoshaPage(resp){
 					}
 				} else {
 					liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'</font>';
-					if(item2.allnum != '-1'){
+					if(item2.allnum != '-1' ){
 						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
 					}
 				}
@@ -129,7 +130,7 @@ function initMiaoshaPage(resp){
 					   +',\''+item2.timegoodsname+'\',\''+item2.timegoodsunit+'\',\''+item2.timegoodsunits
 					   +'\',\''+item2.timegoodscode+'\',\''+item2.timegoodsclass
 					   +'\',\''+item2.timegoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
-					   +'\')"></span>'+
+					   +'\',\''+item2.surplusnum+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
 		        	'</div>';
 		        liObj += '</li>';
@@ -207,6 +208,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.orderdetnum = num + 1;
 				mdishes.goodsimage = item.timegoodsimage;
 				mdishes.orderdtype = '秒杀';
+				mdishes.surplusnum = surplusnum;
 				mdishes.timegoodsnum = item.timegoodsnum;
 				sdishes.push(mdishes);
 				//种类数
