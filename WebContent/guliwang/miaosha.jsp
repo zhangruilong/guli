@@ -104,7 +104,7 @@ function initMiaoshaPage(resp){
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode){
+						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && item3.orderdunits == item2.timegoodsunits ){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});

@@ -9,10 +9,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
-<link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<!-- <link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet"> -->
 <style type="text/css">
 #result{ width:auto; position: absolute; top:0;text-align:center;}
 #result img{ width:70px; height:70px; border-radius:50px;}
@@ -31,21 +31,21 @@ input:focus{ outline:none}
 	<div class="wapper-nav">我的</div>
 	<form action="System_attachAction.do?other=getch&method=upload">
 	<input type="hidden" name="json" id="json" value="">
-    <div style="width:100%; padding-top:2%; color:#fff; background:url(images/minebg.jpg);">
+    <div style="width:100%; padding-top:2%; color:#fff; background:url(../images/minebg.jpg);">
     	<div id="uploadImg" style="margin:0 41% auto;">
                 <span id="result" style="">
-                  <img id="result_img" src="images/default.jpg" style="border-radius:50px;">
+                  <img id="result_img" src="../images/default.jpg" style="border-radius:50px;">
                 </span>
             </div>
         <p id="myshopname" style="text-align: center;"></p>
     </div>
     </form>
 	<div class="personal-center">
-        <a id="a_myshop" onclick="tiaozhuan('doEditCus.action?customerid=')">我的店铺 <span class="sign"></span></a>
-        <a id="a_mycollect" onclick="javascript:window.location.href = 'order.jsp'">我的订单 <span class="sign"></span></a>
-        <a id="a_mycollect" onclick="javascript:window.location.href = 'collect.jsp'">我的收藏 <span class="sign"></span></a>
+        <a id="a_myshop" href="myshop.jsp" onclick="">我的店铺 <span class="sign"></span></a>
+        <a id="a_mycollect" href="order.jsp" onclick="">我的订单 <span class="sign"></span></a>
+        <a id="a_mycollect" href="collect.jsp" onclick="">我的收藏 <span class="sign"></span></a>
         <a onclick="notOnLine()">我的谷币 <span class="sign"></span></a>
-        <a id="a_address" onclick="tiaozhuan('doAddressMana.action?customerId=')">收货地址 <span class="sign"></span></a>
+        <a id="a_address" href="address.jsp" onclick="">收货地址 <span class="sign"></span></a>
     </div>
     <div class="personal-center">
     	<a onclick="clearlocalstore();">清除缓存 <span class="sign"></span></a>
@@ -72,10 +72,10 @@ input:focus{ outline:none}
 		</div>
 	</div>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<!-- <script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
 <script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script> -->
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){

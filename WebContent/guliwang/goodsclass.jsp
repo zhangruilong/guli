@@ -14,9 +14,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 .stock-num{float: left;width: 60%;}
 .goods-wrapper .home-hot-commodity li span{margin: 5% 0% 5% 0%;}
@@ -26,8 +26,8 @@
 <body>
 <div class="gl-box">
 	<div class="home-search-wrapper">
-        <span class="citydrop on"><span id="curgoodsclass">大米</span> <em><img src="images/dropbg.png"></em></span> 
-        <div class="menu" style="display: block; height: 92%;">
+        <span class="citydrop on"><span id="curgoodsclass">大米</span> <em><img src="../images/dropbg.png"></em></span> 
+        <div class="menu" style="display: block; height: 95%;">
             <div class="menu-tags home-city-drop">
                 <div class="fenlei-tit">商品分类</div>
                 <div class="wrapper">
@@ -67,8 +67,8 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
-<script src="js/jquery-dropdown.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-dropdown.js"></script>
 <script> 
 var basePath = '<%=basePath%>';
 var searchdishesvalue = '<%=searchdishesvalue%>';
@@ -130,10 +130,10 @@ function initGoodsclass(data){																								//初始化商品大小类
 	 $("#fenlei-left").html("");
 	 $.each(data.root, function(i, item) {				//遍历 data 中的 root 
 		if(item.goodsclassid==window.localStorage.getItem("goodsclassparent")){
-			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
+			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 			getJson(basePath+"GoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 		}else{
-			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
+			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 		}
     });
  	$("#fenlei-left li").each(function(){				//遍历 li

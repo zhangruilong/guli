@@ -9,10 +9,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 
 </head>
 

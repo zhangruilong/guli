@@ -9,10 +9,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
-<link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<!-- <link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet"> -->
 <style type="text/css">
 #result{ width:auto; position: absolute; right:0; top:0}
 #result img{ width:30px; height:30px; border-radius:50px}
@@ -79,10 +79,10 @@ input:focus{ outline:none}
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<!-- <script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
 <script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script> -->
 <script type="text/javascript">
 $(function(){
 	$("#city").change(function(){

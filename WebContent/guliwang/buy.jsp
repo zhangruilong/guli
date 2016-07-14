@@ -82,24 +82,36 @@ jQuery(document).ready(function($){
 });
 
 $(function(){
-	$.ajax({
-		url:"AddressAction.do?method=selAll",
-		type:"post",
-		data:{
-			wheresql:"addresscustomer='"+customer.customerid+"'",
-			order : "addressture desc"
-		},
-		success : function(resp){
-			var data = JSON.parse(resp);
-			var item = data.root[0];
-			$(".shouhuo-wrap a span:eq(0)").text('收货人：'+item.addressconnect+' '+item.addressphone);
-			$(".shouhuo-wrap a span:eq(1)").text('收货地址: '+item.addressaddress);
-		},
-		error : function(resp2){
-			var respText2 = eval('('+resp2+')');
-			alert(respText2.msg);
-		}
-	});
+	if('${param.address }' != ''){
+		var item = JSON.parse('${param.address }');
+		$(".shouhuo-wrap a span:eq(0)").text('收货人：'+item.addressconnect+' '+item.addressphone);
+		$(".shouhuo-wrap a span:eq(1)").text('收货地址: '+item.addressaddress);
+		$("#addressconnect").text(item.addressconnect);
+		$("#addressphone").text(item.addressphone);
+		$("#addressaddress").text(item.addressaddress);
+	} else {
+		$.ajax({
+			url:"AddressAction.do?method=selAll",
+			type:"post",
+			data:{
+				wheresql:"addresscustomer='"+customer.customerid+"'",
+				order : "addressture desc"
+			},
+			success : function(resp){
+				var data = JSON.parse(resp);
+				var item = data.root[0];
+				$(".shouhuo-wrap a span:eq(0)").text('收货人：'+item.addressconnect+' '+item.addressphone);
+				$(".shouhuo-wrap a span:eq(1)").text('收货地址: '+item.addressaddress);
+				$("#addressconnect").text(item.addressconnect);
+				$("#addressphone").text(item.addressphone);
+				$("#addressaddress").text(item.addressaddress);
+			},
+			error : function(resp2){
+				var respText2 = eval('('+resp2+')');
+				alert(respText2.msg);
+			}
+		});
+	}
 	//$(".shouhuo-wrap a").attr("href","doAddressMana.action?customerId="+customer.customerid+"&message=foBuy");
 	if(!window.localStorage.getItem("totalmoney")){
 		window.localStorage.setItem("totalmoney",0);
