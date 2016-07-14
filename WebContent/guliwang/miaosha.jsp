@@ -88,7 +88,7 @@ function initMiaoshaPage(resp){
 	$.ajax({
 		url:"OrderdAction.do?method=selCusXGOrderd",
 		type:"post",
-		data:{customerid:customer.customerid
+		data:{customerid:customer.customerid,
 			wheresql: "surplusnum>'0'"},
 		success : function(data2){
 			var cusOrder = JSON.parse(data2);
@@ -151,7 +151,7 @@ function docart(obj){
 	}
 }
 //加号
-function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
+function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail,surplusnum){
 	if(!customer.customerid || customer.customerid == '' || typeof(customer.customerid) == 'undefined'){
 		$(".cd-popup").addClass("is-visible");
 		return;

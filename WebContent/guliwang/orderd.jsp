@@ -13,8 +13,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -37,7 +37,7 @@
         <a onclick="regoumai()" href="#">重新购买</a>
     </div>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var ordermid = '<%=ordermid%>';
@@ -47,13 +47,22 @@ $(function(){
 		getJson(basePath+"OrderdAction.do",{method:"selAll",wheresql:"orderdorderm='"+ordermid+"'"},initOrderd,null);
 	}
 })
+//从新购买
 function regoumai(){
-	var orderds = JSON.parse($("#orderd_data").text());
-	var orderdcodes = "";
-	var orderdtypes = "";
-	$.each(orderds,function(i,item){
-		orderdcodes += item.orderdcode + ",";
-		orderdtypes += item.orderdtype + ",";
+	var orderds = $("#orderd_data").text();
+	$.ajax({
+		url:"OrderdAction.do?method=queryREgoumaiGoods",
+		type:"post",
+		data:{
+			json:orderds
+		},
+		success: function(resp){
+			alert(resp);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
 	});
 	$.ajax({
 		url: "queryREgoumaiGoods.action",

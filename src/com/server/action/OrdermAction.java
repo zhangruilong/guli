@@ -10,7 +10,7 @@ import com.server.poco.OrdermPoco;
 import com.server.poco.TimegoodsPoco;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
-import com.server.pojo.entity.Timegoods;
+import com.server.pojo.Timegoods;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;

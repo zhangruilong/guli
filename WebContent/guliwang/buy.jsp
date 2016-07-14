@@ -20,11 +20,11 @@
     	<div class="wapper-nav">结算 <a href='javascript:history.go(-1)' class="goback"></a></div>
     	<div class="shouhuo-wrap">
         	<a href="buyAddress.jsp">
-        	<span>收货人：${requestScope.address.addressconnect } ${requestScope.address.addressphone }</span>
-        	<span class="add">收货地址: ${requestScope.address.addressaddress }</span></a>
-        	<span id="addressconnect" hidden="ture">${requestScope.address.addressconnect }</span>
-        	<span id="addressphone" hidden="ture">${requestScope.address.addressphone }</span>
-        	<span id="addressaddress" hidden="ture">${requestScope.address.addressaddress }</span>
+        	<span>收货人：</span>
+        	<span class="add">收货地址: </span></a>
+        	<span id="addressconnect" hidden="ture"></span>
+        	<span id="addressphone" hidden="ture"></span>
+        	<span id="addressaddress" hidden="ture"></span>
         </div>
         <div class="jiesuan-info">
         	<h1>结算信息</h1>
@@ -223,6 +223,7 @@ function saveOrder(ordermjson,orderdetjson){
 			orderdetjson : orderdetjson
 		},
 		success : function(resp) {
+			alert(resp);
 			var respText = eval('('+resp+')'); 
 			if(respText.success == false) {
 				alert(respText.msg);

@@ -1,22 +1,22 @@
 package com.server.action;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.server.poco.CityPoco;
 import com.server.poco.OrderdPoco;
+import com.server.pojo.Givegoodsview;
+import com.server.pojo.GoodsVo;
 import com.server.pojo.Orderd;
+import com.server.pojo.Timegoods;
+import com.server.pojo.Timegoodsview;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
-import com.system.tools.pojo.Treeinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.FileUtil;
 
@@ -120,6 +120,31 @@ public class OrderdAction extends BaseActionDao {
 				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) group by od.orderdcode,od.orderdtype,od.orderdunits"));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
+	}
+	//重新购买
+	public void queryREgoumaiGoods(HttpServletRequest request, HttpServletResponse response){
+		json2cuss(request);
+		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
+		for (Orderd item : cuss) {
+			GoodsVo gvo = new GoodsVo();
+			if(item.getOrderdtype().equals("商品")){
+				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"");
+				if(tgviewList.size() >0){
+					gvo.setType(item.getOrderdtype());
+					gvo.setTgview(tgviewList.get(0));
+					gvoList.add(gvo);
+				}
+			} else if(item.getOrderdtype().equals("秒杀")){
+				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"");
+				if(ggviewList.size() >0){
+					gvo.setType(item.getOrderdtype());
+					gvo.setGgview(ggviewList.get(0));
+					gvoList.add(gvo);
+				}
+			} else if(item.getOrderdtype().equals("买赠")){
+				
+			}
+		}
 	}
 	//查询客户购买的秒杀商品数量
 	/*@SuppressWarnings("unchecked")

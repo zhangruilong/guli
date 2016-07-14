@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.CustomerPoco;
+import com.server.pojo.Address;
+import com.server.pojo.Ccustomer;
 import com.server.pojo.Customer;
-import com.server.pojo.entity.Address;
-import com.server.pojo.entity.Ccustomer;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Fileinfo;
