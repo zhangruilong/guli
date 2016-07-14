@@ -135,11 +135,19 @@ public class OrderdAction extends BaseActionDao {
 							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
 							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
 							   " and gv.goodsstatue = '上架'");
-				if(tgviewList.size() >0){
+				if(tgviewList.size() > 0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGoodsview(tgviewList.get(0));
-					gvoList.add(gvo);
+					gvo.setNowGoodsNum(item.getOrderdnum());
+				} else {
+					Goodsview xjg = new Goodsview();
+					xjg.setGoodsname(item.getOrderdname());
+					xjg.setGoodsunits(item.getOrderdunits());
+					gvo.setType(item.getOrderdtype());
+					gvo.setGoodsview(xjg);
+					gvo.setStatue("下架");
 				}
+				
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
@@ -147,8 +155,16 @@ public class OrderdAction extends BaseActionDao {
 				if(tgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setTgview(tgviewList.get(0));
-					gvoList.add(gvo);
+					gvo.setNowGoodsNum(item.getOrderdnum());
+				} else {
+					Timegoodsview xjg = new Timegoodsview();
+					xjg.setTimegoodsname(item.getOrderdname());
+					xjg.setTimegoodsunits(item.getOrderdunits());
+					gvo.setType(item.getOrderdtype());
+					gvo.setTgview(xjg);
+					gvo.setStatue("下架");
 				}
+				gvoList.add(gvo);
 			} else if(item.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
 								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
@@ -156,13 +172,21 @@ public class OrderdAction extends BaseActionDao {
 				if(ggviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGgview(ggviewList.get(0));
-					gvoList.add(gvo);
+					gvo.setNowGoodsNum(item.getOrderdnum());
+				} else {
+					Givegoodsview xjg = new Givegoodsview();
+					xjg.setGivegoodsname(item.getOrderdname());
+					xjg.setGivegoodsunits(item.getOrderdunits());
+					gvo.setType(item.getOrderdtype());
+					gvo.setGgview(xjg);
+					gvo.setStatue("下架");
 				}
+				gvoList.add(gvo);
 			}
-			Pageinfo pageinfo = new Pageinfo(gvoList);
-			result = CommonConst.GSON.toJson(pageinfo);
-			responsePW(response, result);
 		}
+		Pageinfo pageinfo = new Pageinfo(gvoList);
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
 	}
 	//查询客户购买的秒杀商品数量
 	/*

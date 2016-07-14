@@ -223,7 +223,6 @@ function saveOrder(ordermjson,orderdetjson){
 			orderdetjson : orderdetjson
 		},
 		success : function(resp) {
-			alert(resp);
 			var respText = eval('('+resp+')'); 
 			if(respText.success == false) {
 				alert(respText.msg);

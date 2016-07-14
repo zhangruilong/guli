@@ -6,6 +6,10 @@ public class GoodsVo {
 	 */
 	private String type;
 	/**
+	 * 商品数量
+	 */
+	private int nowGoodsNum;
+	/**
 	 * 商品
 	 */
 	private Goodsview goodsview;
@@ -17,8 +21,27 @@ public class GoodsVo {
 	 * 买赠商品
 	 */
 	private Givegoodsview ggview;
-	
-	
+	/**
+	 * 是否已下架
+	 */
+	private String statue;
+
+	public String getStatue() {
+		return statue;
+	}
+
+	public void setStatue(String statue) {
+		this.statue = statue;
+	}
+
+	public int getNowGoodsNum() {
+		return nowGoodsNum;
+	}
+
+	public void setNowGoodsNum(int nowGoodsNum) {
+		this.nowGoodsNum = nowGoodsNum;
+	}
+
 	public String getType() {
 		return type;
 	}

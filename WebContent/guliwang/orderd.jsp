@@ -34,7 +34,7 @@
 	<div class="order-detail-foot">
     	<!-- <a href="#">取消订单</a> -->
         <span id="orderd_data" hidden="true"></span>
-        <a onclick="regoumai()" href="#">重新购买</a>
+        <a onclick="regoumai()" >重新购买</a>
     </div>
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
@@ -59,7 +59,229 @@ function regoumai(){
 			customerlevel: customer.customerlevel
 		},
 		success: function(resp){
-			alert(resp);
+			
+			var jsonResp = JSON.parse(resp);
+			var data = jsonResp.root;
+			var xjGIds = '您购买的：';
+			var xjFlag = 0;
+			$.each(data,function(i,item){
+				if(item.statue == '下架'){
+					xjFlag++;
+					if(item.type == '商品'){
+						xjGIds += item.goodsview.goodsname+'('+item.goodsview.goodsunits+'),'
+					} else if(item.type == '秒杀'){
+						xjGIds += item.tgview.timegoodsname+'('+item.tgview.timegoodsunits+'),'
+					} else if(item.type == '买赠'){
+						xjGIds += item.goodsview.givegoodsname+'('+item.goodsview.givegoodsunits+'),'
+					}
+				}
+			});
+			xjGIds = xjGIds.substr(0, xjGIds.length - 1);
+			xjGIds += ' 已下架或者超过了限购数量，是否要加入购物车？';
+			if(xjFlag > 0){
+				if(confirm(xjGIds) == false){
+					return ;
+				}
+			}
+			$.each(data,function(i,item){
+				var now_GNum = parseInt(item.nowGoodsNum);
+				if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
+					//没有购物车
+					window.localStorage.setItem("sdishes", "[]");						//创建一个购物车
+					var sdishes = JSON.parse(window.localStorage.getItem("sdishes")); 	//将缓存中的sdishes(字符串)转换为json对象
+					var money = 0.00;
+					if(item.type == '商品' && item.statue != '下架'){
+						//新增订单
+						var mdishes = new Object();
+						mdishes.goodsid = item.goodsview.goodsid;
+						mdishes.goodsdetail = item.goodsview.goodsdetail;
+						mdishes.goodscompany = item.goodsview.goodscompany;
+						mdishes.companyshop = item.goodsview.companyshop;
+						mdishes.companydetail = item.goodsview.companydetail;
+						mdishes.goodsclassname = item.goodsview.goodsclass;
+						mdishes.goodscode = item.goodsview.goodscode;
+						mdishes.pricesprice = item.goodsview.pricesprice;
+						mdishes.pricesunit = item.goodsview.pricesunit;
+						mdishes.goodsname = item.goodsview.goodsname;
+						mdishes.goodsimage = item.goodsview.goodsimage;
+						mdishes.orderdtype = '商品';
+						mdishes.goodsunits = item.goodsview.goodsunits;
+						mdishes.orderdetnum = item.nowGoodsNum;
+						money = (parseFloat(item.goodsview.pricesprice) * now_GNum).toFixed(2);
+					} else if(item.type == '秒杀' && item.statue != '下架'){
+						var mdishes = new Object();
+						mdishes.goodsid = item.tgview.timegoodsid;
+						mdishes.goodsdetail = item.tgview.timegoodsdetail;
+						mdishes.goodscompany = item.tgview.timegoodscompany;
+						mdishes.companyshop = item.tgview.companyshop;
+						mdishes.companydetail = item.tgview.companydetail;
+						mdishes.goodsclassname = item.tgview.timegoodsclass;
+						mdishes.goodscode = item.tgview.timegoodscode;
+						mdishes.pricesprice = item.tgview.timegoodsorgprice;
+						mdishes.pricesunit = item.tgview.timegoodsunit;
+						mdishes.goodsname = item.tgview.timegoodsname;
+						mdishes.goodsimage = item.tgview.timegoodsimage;
+						mdishes.orderdtype = item.type;
+						mdishes.goodsunits = item.tgview.timegoodsunits;
+						mdishes.orderdetnum = item.nowGoodsNum;
+						mdishes.surplusnum = item.tgview.surplusnum;
+						mdishes.timegoodsnum = item.tgview.timegoodsnum;
+						money = (parseFloat(item.tgview.timegoodsorgprice) * now_GNum).toFixed(2);
+					} else if(item.type == '买赠' && item.statue != '下架'){
+						var mdishes = new Object();
+						mdishes.goodsid = item.ggview.givegoodsid;
+						mdishes.goodsdetail = item.ggview.givegoodsdetail;
+						mdishes.goodscompany = item.ggview.givegoodscompany;
+						mdishes.companyshop = item.ggview.companyshop;
+						mdishes.companydetail = item.ggview.companydetail;
+						mdishes.goodsclassname = item.ggview.givegoodsclass;
+						mdishes.goodscode = item.ggview.givegoodscode;
+						mdishes.pricesprice = item.ggview.givegoodsprice;
+						mdishes.pricesunit = item.ggview.givegoodsunit;
+						mdishes.goodsname = item.ggview.givegoodsname;
+						mdishes.goodsimage = item.ggview.givegoodsimage;
+						mdishes.orderdtype = item.type;
+						mdishes.goodsunits = item.ggview.givegoodsunits;
+						mdishes.orderdetnum = item.nowGoodsNum;
+						mdishes.timegoodsnum = item.ggview.givegoodsnum;
+						money = (parseFloat(item.ggview.givegoodsprice) * now_GNum).toFixed(2);
+					}
+					sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
+					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+					
+					window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
+					window.localStorage.setItem("totalmoney", money);				//总金额等于商品价
+					var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+					window.localStorage.setItem("cartnum",cartnum+now_GNum);
+				} else {
+					//有购物车
+					var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//将缓存中的sdishes(字符串)转换为json对象
+					var tnum = parseInt(window.localStorage.getItem("totalnum"));		//取出商品的总类数
+					$.each(sdishes,function(j,item1) {								//遍历购物车中的商品
+						if(item.type == '商品' && item.statue != '下架'){
+							if( item1.goodsid == item.goodsview.goodsid){
+								//如果商品id相同
+								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.goodsview.pricesprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+								return false;
+							} else if(j == (tnum-1)){
+								//如果最后一次进入时goodsid不相同
+								//新增订单
+								var mdishes = new Object();
+								mdishes.goodsid = item.goodsview.goodsid;
+								mdishes.goodsdetail = item.goodsview.goodsdetail;
+								mdishes.goodscompany = item.goodsview.goodscompany;
+								mdishes.companyshop = item.goodsview.companyshop;
+								mdishes.companydetail = item.goodsview.companydetail;
+								mdishes.goodsclassname = item.goodsview.goodsclass;
+								mdishes.goodscode = item.goodsview.goodscode;
+								mdishes.pricesprice = item.goodsview.pricesprice;
+								mdishes.pricesunit = item.goodsview.pricesunit;
+								mdishes.goodsname = item.goodsview.goodsname;
+								mdishes.goodsimage = item.goodsview.goodsimage;
+								mdishes.orderdtype = '商品';
+								mdishes.goodsunits = item.goodsview.goodsunits;
+								mdishes.orderdetnum = item.nowGoodsNum;
+								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.goodsview.pricesprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+							}
+						} else if(item.type == '秒杀' && item.statue != '下架'){
+							alert(JSON.stringify(item));
+							if( item1.goodsid == item.tgview.timegoodsid){
+								//如果商品id相同
+								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.tgview.timegoodsorgprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+								return false;
+							} else if(j == (tnum-1)){
+								//如果最后一次进入时goodsid不相同
+								//新增订单
+								var mdishes = new Object();
+								mdishes.goodsid = item.tgview.timegoodsid;
+								mdishes.goodsdetail = item.tgview.timegoodsdetail;
+								mdishes.goodscompany = item.tgview.timegoodscompany;
+								mdishes.companyshop = item.tgview.companyshop;
+								mdishes.companydetail = item.tgview.companydetail;
+								mdishes.goodsclassname = item.tgview.timegoodsclass;
+								mdishes.goodscode = item.tgview.timegoodscode;
+								mdishes.pricesprice = item.tgview.timegoodsorgprice;
+								mdishes.pricesunit = item.tgview.timegoodsunit;
+								mdishes.goodsname = item.tgview.timegoodsname;
+								mdishes.goodsimage = item.tgview.timegoodsimage;
+								mdishes.orderdtype = item.type;
+								mdishes.goodsunits = item.tgview.timegoodsunits;
+								mdishes.orderdetnum = item.nowGoodsNum;
+								mdishes.surplusnum = item.tgview.surplusnum;
+								mdishes.timegoodsnum = item.tgview.timegoodsnum;
+								mdishes.surplusnum = item.tgview.timegoodsnum;
+								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.tgview.timegoodsorgprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+							}
+						} else if(item.type == '买赠' && item.statue != '下架'){
+							if( item1.goodsid == item.ggview.givegoodsid){
+								//如果商品id相同
+								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.ggview.givegoodsprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+								return false;
+							} else if(j == (tnum-1)){
+								//如果最后一次进入时goodsid不相同
+								//新增订单
+								var mdishes = new Object();
+								mdishes.goodsid = item.ggview.givegoodsid;
+								mdishes.goodsdetail = item.ggview.givegoodsdetail;
+								mdishes.goodscompany = item.ggview.givegoodscompany;
+								mdishes.companyshop = item.ggview.companyshop;
+								mdishes.companydetail = item.ggview.companydetail;
+								mdishes.goodsclassname = item.ggview.givegoodsclass;
+								mdishes.goodscode = item.ggview.givegoodscode;
+								mdishes.pricesprice = item.ggview.givegoodsprice;
+								mdishes.pricesunit = item.ggview.givegoodsunit;
+								mdishes.goodsname = item.ggview.givegoodsname;
+								mdishes.goodsimage = item.ggview.givegoodsimage;
+								mdishes.orderdtype = item.type;
+								mdishes.goodsunits = item.ggview.givegoodsunits;
+								mdishes.orderdetnum = item.nowGoodsNum;
+								mdishes.timegoodsnum = item.ggview.givegoodsnum;
+								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.ggview.givegoodsprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+							}
+						}
+					});
+				}
+			});
+			window.location.href = "cart.jsp";
 		},
 		error : function(resp2){
 			var respText2 = eval('('+resp2+')');
@@ -73,200 +295,7 @@ function regoumai(){
 		data: {"orderdcodes":orderdcodes,"orderdtypes":orderdtypes,"customertype":customer.customertype,"customerlevel":customer.customerlevel},
 		dataType:"json",
 		success: function(data) {
-			$.each(data,function(i,item){
-				if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
-					//没有购物车
-					window.localStorage.setItem("sdishes", "[]");						//创建一个购物车
-					var sdishes = JSON.parse(window.localStorage.getItem("sdishes")); 	//将缓存中的sdishes(字符串)转换为json对象
-					var money = 0.00;
-					if(data[i].type == '商品'){
-						//新增订单
-						var mdishes = new Object();
-						mdishes.goodsid = item.goods.goodsid;
-						mdishes.goodsdetail = item.goods.goodsdetail;
-						mdishes.goodscompany = item.goods.goodscompany;
-						mdishes.companyshop = $(".order-detail-info p").first().text();
-						mdishes.companydetail = $(".order-detail-info p").last().text();
-						mdishes.goodsclassname = item.goods.goodsclass;
-						mdishes.goodscode = item.goods.goodscode;
-						mdishes.pricesprice = item.goods.pricesList[0].pricesprice;
-						mdishes.pricesunit = item.goods.pricesList[0].pricesunit;
-						mdishes.goodsname = item.goods.goodsname;
-						mdishes.goodsimage = item.goods.goodsimage;
-						mdishes.orderdtype = data[i].type;
-						mdishes.goodsunits = item.goods.goodsunits;
-						mdishes.orderdetnum = orderds[i].orderdnum;
-						money = (parseFloat(item.goods.pricesList[0].pricesprice) * parseFloat(orderds[i].orderdnum)).toFixed(2);
-					} else if(data[i].type == '秒杀'){
-						var mdishes = new Object();
-						mdishes.goodsid = item.timegoods.timegoodsid;
-						mdishes.goodsdetail = item.timegoods.timegoodsdetail;
-						mdishes.goodscompany = item.timegoods.timegoodscompany;
-						mdishes.companyshop = $(".order-detail-info p").first().text();
-						mdishes.companydetail = $(".order-detail-info p").last().text();
-						mdishes.goodsclassname = item.timegoods.timegoodsclass;
-						mdishes.goodscode = item.timegoods.timegoodscode;
-						mdishes.pricesprice = item.timegoods.timegoodsorgprice;
-						mdishes.pricesunit = item.timegoods.timegoodsunit;
-						mdishes.goodsname = item.timegoods.timegoodsname;
-						mdishes.goodsimage = item.timegoods.timegoodsimage;
-						mdishes.orderdtype = data[i].type;
-						mdishes.goodsunits = item.timegoods.timegoodsunits;
-						mdishes.orderdetnum = orderds[i].orderdnum;
-						mdishes.timegoodsnum = item.timegoods.timegoodsnum;
-						money = (parseFloat(item.timegoods.timegoodsorgprice) * parseFloat(orderds[i].orderdnum)).toFixed(2);
-					} else if(data[i].type == '买赠'){
-						var mdishes = new Object();
-						mdishes.goodsid = item.givegoods.givegoodsid;
-						mdishes.goodsdetail = item.givegoods.givegoodsdetail;
-						mdishes.goodscompany = item.givegoods.givegoodscompany;
-						mdishes.companyshop = $(".order-detail-info p").first().text();
-						mdishes.companydetail = $(".order-detail-info p").last().text();
-						mdishes.goodsclassname = item.givegoods.givegoodsclass;
-						mdishes.goodscode = item.givegoods.givegoodscode;
-						mdishes.pricesprice = item.givegoods.givegoodsprice;
-						mdishes.pricesunit = item.givegoods.givegoodsunit;
-						mdishes.goodsname = item.givegoods.givegoodsname;
-						mdishes.goodsimage = item.givegoods.givegoodsimage;
-						mdishes.orderdtype = data[i].type;
-						mdishes.goodsunits = item.givegoods.givegoodsunits;
-						mdishes.orderdetnum = orderds[i].orderdnum;
-						mdishes.timegoodsnum = item.givegoods.givegoodsnum;
-						money = (parseFloat(item.givegoods.givegoodsprice) * parseFloat(orderds[i].orderdnum)).toFixed(2);
-					}
-					sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
-					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-					
-					window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
-					window.localStorage.setItem("totalmoney", money);				//总金额等于商品价
-					var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-					window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-				} else {
-					//有购物车
-					var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//将缓存中的sdishes(字符串)转换为json对象
-					var tnum = parseInt(window.localStorage.getItem("totalnum"));		//取出商品的总类数
-					$.each(sdishes,function(j,item1) {								//遍历购物车中的商品
-						if(data[i].type == '商品'){
-							if( item1.goodsid == item.goods.goodsid){
-								//如果商品id相同
-								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + parseInt(orderds[i].orderdnum);
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.goods.pricesList[0].pricesprice) * parseFloat(orderds[i].orderdnum) ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-								return false;
-							} else if(j == (tnum-1)){
-								//如果最后一次进入时goodsid不相同
-								//新增订单
-								var mdishes = new Object();
-								mdishes.goodsid = item.goods.goodsid;
-								mdishes.goodsdetail = item.goods.goodsdetail;
-								mdishes.goodscompany = item.goods.goodscompany;
-								mdishes.companyshop = $(".order-detail-info p").first().text();
-								mdishes.companydetail = $(".order-detail-info p").last().text();
-								mdishes.goodsclassname = item.goods.goodsclass;
-								mdishes.goodscode = item.goods.goodscode;
-								mdishes.pricesprice = item.goods.pricesList[0].pricesprice;
-								mdishes.pricesunit = item.goods.pricesList[0].pricesunit;
-								mdishes.goodsname = item.goods.goodsname;
-								mdishes.goodsimage = item.goods.goodsimage;
-								mdishes.orderdtype = data[i].type;
-								mdishes.goodsunits = item.goods.goodsunits;
-								mdishes.orderdetnum = orderds[i].orderdnum;
-								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.goods.pricesList[0].pricesprice) * parseFloat(orderds[i].orderdnum) ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-							}
-						} else if(data[i].type == '秒杀'){
-							if( item1.goodsid == item.timegoods.timegoodsid){
-								//如果商品id相同
-								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + parseInt(orderds[i].orderdnum);
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.timegoods.timegoodsorgprice) * parseFloat(orderds[i].orderdnum) ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-								return false;
-							} else if(j == (tnum-1)){
-								//如果最后一次进入时goodsid不相同
-								//新增订单
-								var mdishes = new Object();
-								mdishes.goodsid = item.timegoods.timegoodsid;
-								mdishes.goodsdetail = item.timegoods.timegoodsdetail;
-								mdishes.goodscompany = item.timegoods.timegoodscompany;
-								mdishes.companyshop = $(".order-detail-info p").first().text();
-								mdishes.companydetail = $(".order-detail-info p").last().text();
-								mdishes.goodsclassname = item.timegoods.timegoodsclass;
-								mdishes.goodscode = item.timegoods.timegoodscode;
-								mdishes.pricesprice = item.timegoods.timegoodsorgprice;
-								mdishes.pricesunit = item.timegoods.timegoodsunit;
-								mdishes.goodsname = item.timegoods.timegoodsname;
-								mdishes.goodsimage = item.timegoods.timegoodsimage;
-								mdishes.orderdtype = data[i].type;
-								mdishes.goodsunits = item.timegoods.timegoodsunits;
-								mdishes.orderdetnum = orderds[i].orderdnum;
-								mdishes.timegoodsnum = item.timegoods.timegoodsnum;
-								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.timegoods.timegoodsorgprice) * parseFloat(orderds[i].orderdnum) ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-							}
-						} else if(data[i].type == '买赠'){
-							if( item1.goodsid == item.givegoods.givegoodsid){
-								//如果商品id相同
-								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + parseInt(orderds[i].orderdnum);
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.givegoods.givegoodsprice) * parseFloat(orderds[i].orderdnum) ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-								return false;
-							} else if(j == (tnum-1)){
-								//如果最后一次进入时goodsid不相同
-								//新增订单
-								var mdishes = new Object();
-								mdishes.goodsid = item.givegoods.givegoodsid;
-								mdishes.goodsdetail = item.givegoods.givegoodsdetail;
-								mdishes.goodscompany = item.givegoods.givegoodscompany;
-								mdishes.companyshop = $(".order-detail-info p").first().text();
-								mdishes.companydetail = $(".order-detail-info p").last().text();
-								mdishes.goodsclassname = item.givegoods.givegoodsclass;
-								mdishes.goodscode = item.givegoods.givegoodscode;
-								mdishes.pricesprice = item.givegoods.givegoodsprice;
-								mdishes.pricesunit = item.givegoods.givegoodsunit;
-								mdishes.goodsname = item.givegoods.givegoodsname;
-								mdishes.goodsimage = item.givegoods.givegoodsimage;
-								mdishes.orderdtype = data[i].type;
-								mdishes.goodsunits = item.givegoods.givegoodsunits;
-								mdishes.orderdetnum = orderds[i].orderdnum;
-								mdishes.timegoodsnum = item.givegoods.givegoodsnum;
-								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.givegoods.givegoodsprice) * parseFloat(orderds[i].orderdnum) ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+parseInt(orderds[i].orderdnum));
-							}
-						}
-					});
-				}
-			});
-			window.location.href = "cart.jsp";
+			
 		},
 		error:function() {
 			alert("网络问题请稍候再试");

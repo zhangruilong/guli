@@ -90,7 +90,22 @@ $(function(){
 //点击结算时执行的方法
 function nextpage(){
 	setscompany();		//设置供应商信息
-	window.location.href = "buy.jsp";
+	var flag = 0;
+	var goodsname = '';
+	$(".jia.add").each(function(i,item){
+		var goodsNum = parseInt($(item).prev().val());
+		var dailySur = parseInt($(item).attr("name"));
+		if(goodsNum > dailySur){
+			flag++;
+			goodsname = $(item).parent().children("h2").text();
+			return false;
+		}
+	});
+	if(flag == 0){
+		window.location.href = "buy.jsp";
+	} else {
+		alert("您购买的："+goodsname+" 超过了限购数量");
+	}
 }
 //检查客户是否可以购买秒杀商品
 /* function checkCusSecKill(){
@@ -207,9 +222,9 @@ function initDishes(data){
 		            $(".cart-wrapper").append('<li name="'+item.goodsid+'">'+
 		                      	'<em><img src="../'+item.goodsimage+
 		         	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></em> '+
-		                      	'<h2>'+item.goodsname+'<span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
+		                      	'<h2>'+item.goodsname+' <span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
 		          				'<span onclick="subnum(this,'+item.pricesprice+')" class="jian min"></span>'+
-		                          '<input class="text_box shuliang" name="'+item.goodsdetail+'" type="text" value="'+
+		                          '<input class="text_box shuliang" readonly="readonly" name="'+item.goodsdetail+'" type="text" value="'+
 		       	                getcurrennum(item.goodsid,item.goodsdetail)+'"> '+
 		                          '<span name="'+dailySur+'" onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.goodsclassname+'\')" class="jia add"></span>'+
 		                      '</li>');
