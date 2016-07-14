@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.server.poco.OrderdPoco;
 import com.server.pojo.Givegoodsview;
 import com.server.pojo.GoodsVo;
+import com.server.pojo.Goodsview;
 import com.server.pojo.Orderd;
 import com.server.pojo.Timegoods;
 import com.server.pojo.Timegoodsview;
@@ -122,32 +123,49 @@ public class OrderdAction extends BaseActionDao {
 		responsePW(response, result);
 	}
 	//重新购买
+	@SuppressWarnings("unchecked")
 	public void queryREgoumaiGoods(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
 		for (Orderd item : cuss) {
 			GoodsVo gvo = new GoodsVo();
 			if(item.getOrderdtype().equals("商品")){
-				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"");
+				List<Goodsview> tgviewList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
+							   "' and gv.goodsunits = '"+item.getOrderdunits()+
+							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
+							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
+							   " and gv.goodsstatue = '上架'");
+				if(tgviewList.size() >0){
+					gvo.setType(item.getOrderdtype());
+					gvo.setGoodsview(tgviewList.get(0));
+					gvoList.add(gvo);
+				}
+			} else if(item.getOrderdtype().equals("秒杀")){
+				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
+								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
+								"' and tv.timegoodsstatue = '启用'");
 				if(tgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setTgview(tgviewList.get(0));
 					gvoList.add(gvo);
 				}
-			} else if(item.getOrderdtype().equals("秒杀")){
-				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"");
+			} else if(item.getOrderdtype().equals("买赠")){
+				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
+								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
+								"' and gv.givegoodsstatue = '启用'");
 				if(ggviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGgview(ggviewList.get(0));
 					gvoList.add(gvo);
 				}
-			} else if(item.getOrderdtype().equals("买赠")){
-				
 			}
+			Pageinfo pageinfo = new Pageinfo(gvoList);
+			result = CommonConst.GSON.toJson(pageinfo);
+			responsePW(response, result);
 		}
 	}
 	//查询客户购买的秒杀商品数量
-	/*@SuppressWarnings("unchecked")
+	/*
 	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
 		Pageinfo pageinfo = new Pageinfo(0, selCusXGOrderd(request.getParameter("customerid")));
 		result = CommonConst.GSON.toJson(pageinfo);

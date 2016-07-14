@@ -54,7 +54,9 @@ function regoumai(){
 		url:"OrderdAction.do?method=queryREgoumaiGoods",
 		type:"post",
 		data:{
-			json:orderds
+			json:orderds,
+			customertype: customer.customertype,
+			customerlevel: customer.customerlevel
 		},
 		success: function(resp){
 			alert(resp);
@@ -64,6 +66,7 @@ function regoumai(){
 			alert(respText2.msg);
 		}
 	});
+	return ;
 	$.ajax({
 		url: "queryREgoumaiGoods.action",
 		async:true,

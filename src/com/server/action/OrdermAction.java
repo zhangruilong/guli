@@ -168,15 +168,4 @@ public class OrdermAction extends BaseActionDao {
 		}*/
 		responsePW(response, result);
 	}
-	//导出
-	/*public void expOrderm(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String staTime = request.getParameter("staTime");
-		String endTime = request.getParameter("staTime");
-		String companyid = request.getParameter("companyid");
-		ArrayList<com.server.pojo.entity.Orderd> list = orderdMapper.selectByTime(staTime, endTime, companyid);
-		String[] heads = {"商品编码","商品名称","规格","单位","数量","商品单价","商品总价","实际金额"};				//表头
-		String[] discard = {"orderdid","orderdorderm","orderddetail","orderdclass","orderdtype"};			//要忽略的字段名
-		String name = "订单商品统计报表";	
-		FileUtil.expExcel(response,list,heads,discard,name);
-	}*/
 }
