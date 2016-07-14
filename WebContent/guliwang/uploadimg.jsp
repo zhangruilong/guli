@@ -83,7 +83,7 @@ body{
 	</div>
 </div>
 </form>
-<script src="js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 function uploadimg(){

@@ -1,4 +1,3 @@
-<%@page import="com.server.pojo.entity.Customer"%>
 <%@ page language="java" import="java.util.*"
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
@@ -16,8 +15,8 @@
 <meta http-equiv="cache-control" content="no-cache">  
 <meta http-equiv="expires" content="0">  
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 input {
 	float: left;
@@ -61,8 +60,8 @@ input:checked {
 			</ul>
 		</div>
 	</form>
-<script src="js/jquery-1.8.3.min.js"></script>
-<script src="js/jquery-dropdown.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){

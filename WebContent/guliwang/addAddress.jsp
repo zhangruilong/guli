@@ -9,12 +9,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<!-- <link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
 <script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script> -->
 </head>
 
 <body>
@@ -46,7 +46,7 @@
 	<a onclick="javascript:history.go(-1)" >返回</a>
     <a onclick="addAddress()">保存</a>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function addAddress(){

@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -27,7 +27,7 @@
 		<a href="doAddAddress.action">+ 新增收货地址</a>
 	</div>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 	
 </script>
