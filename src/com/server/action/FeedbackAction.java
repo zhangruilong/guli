@@ -13,6 +13,7 @@ import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
+import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
 
 /**
@@ -49,6 +50,7 @@ public class FeedbackAction extends BaseActionDao {
 		json2cuss(request);
 		for(Feedback temp:cuss){
 			temp.setFeedbackid(CommonUtil.getNewId());
+			temp.setFeedbacktime(DateUtils.getDateTime());				//反馈时间为当前时间
 			result = insSingle(temp);
 		}
 		responsePW(response, result);

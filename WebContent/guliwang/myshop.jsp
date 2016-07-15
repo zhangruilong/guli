@@ -28,39 +28,38 @@ input:focus{ outline:none}
 </head>
 
 <body>
-<form action="editCus.action" method="post">
-<input type="hidden" name="customerid" value="${requestScope.customer.customerid }">
 <div class="reg-wrapper">
 	<ul>
-    	<li><span>店铺名称</span> <input name="customershop" type="text" value="${requestScope.customer.customershop }" placeholder="请输入店铺名称"></li>
-        <li><span>联系人</span> <input name="customername" type="text" value="${requestScope.customer.customername }" placeholder="请输入联系人"></li>
-        <li><span>联系电话</span> <input name="customerphone" type="text" value="${requestScope.customer.customerphone }" placeholder="请输入联系电话"></li>
+    	<li><span>店铺名称</span> <input name="customershop" type="text" value="" placeholder="请输入店铺名称"></li>
+        <li><span>联系人</span> <input name="customername" type="text" value="" placeholder="请输入联系人"></li>
+        <li><span>联系电话</span> <input name="customerphone" type="text" value="" placeholder="请输入联系电话"></li>
         <li><span>所在城市</span> 
 			<span style="position:absolute;overflow:hidden;margin-left: 170px;"> 
 			<select id="city" style="width:160%;">
 				<option></option>
-				<c:forEach items="${requestScope.cityList }" var="cyty">
-					<option>${cyty.cityname }</option>
-				</c:forEach>
+					<option>嘉兴市</option>
 			</select>
 			</span><i></i> 
 			<span style="position:absolute;display:block;">
-				<input id="customercity" name="customercity" type="text" value="${requestScope.customer.customercity }" 
+				<input id="customercity" name="customercity" type="text" value="" 
 				placeholder="请输入城市" style="width:118px;margin-left: 228%;">
 			</span>
 			</li>
-			<li><span>服务区域</span> 
+			<li><span>所在地区</span> 
 			<span style="position:absolute;overflow:hidden;margin-left: 170px;"> 
 			<select id="xian" style="width:160%;">
-				<option></option>
+				<option>海盐县</option>
+				<option>嘉善县</option>
+				<option>秀洲区</option>
+				<option>南湖区</option>
 			</select>
 			</span><i></i> 
 			<span style="position:absolute;display: block;">
-				<input id="customerxian" name="customerxian" type="text" value="${requestScope.customer.customerxian }" 
+				<input id="customerxian" name="customerxian" type="text" value="" 
 				placeholder="请输入地区" style="width:118px;margin-left: 228%;">
 			</span>
 			</li>
-        <li><span>店铺地址</span> <input name="customeraddress" type="text" value="${requestScope.customer.customeraddress }"
+        <li><span>店铺地址</span> <input name="customeraddress" type="text" value=""
          placeholder="请输入店铺地址"></li>
     </ul>
 </div>
@@ -68,7 +67,6 @@ input:focus{ outline:none}
 <div class="confirm-reg">
 	<a onclick="doedit()" class="confirm-reg-btn">保存修改</a>
 </div>
-</form>
 <!--弹框-->
 <div class="cd-popup" role="alert">
 	<div class="cd-popup-container">
@@ -80,16 +78,34 @@ input:focus{ outline:none}
 	</div>
 </div>
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
-<!-- <script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script> -->
 <script type="text/javascript">
+var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
+	$.ajax({
+		url:"CustomerAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"customerid='"+customer.customerid+"'"
+		},
+		success:function(resp){
+			var data = JSON.parse(resp);
+			$("input[name='customershop']").val(data.root[0].customershop);
+			$("input[name='customername']").val(data.root[0].customername);
+			$("input[name='customerphone']").val(data.root[0].customerphone);
+			$("#customercity").val(data.root[0].customercity);
+			$("#customerxian").val(data.root[0].customerxian);
+			$("input[name='customeraddress']").val(data.root[0].customeraddress);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
 	$("#city").change(function(){
 		var city = $("#city").val();		//得到城市复选框的值
 		$("#city").val("");					//将城市复选框清空
 		$("#customercity").val(city);		//将城市输入框的值变为城市复选框的值
-		Ext.Ajax.request({
+		/* Ext.Ajax.request({
 			//通过ajax查询到地区复选框的值
 			url:"querycity.action",
 			method:"POST",
@@ -111,8 +127,8 @@ $(function(){
 			failure:function(response,option){
 				Ext.Msg.alert("提示","网络出现问题,请稍后再试");
 			}
-		});
-	});
+		}); */
+	}); 
 	$("#xian").change(function(){
 		var xian = $("#xian").val();
 		$("#xian").val("");
@@ -125,7 +141,9 @@ $(function(){
 function doedit(){
 	var count = 0;
 	var alt;
+	var strjson = '[{"customerid":"'+customer.customerid+'",';
 	$("input").each(function(i,item){
+		strjson += '"'+$(item).attr("name")+'":"'+$(item).val()+'",';
 		if($(item).val() == null || $(item).val() == ''){
 			if($(item).attr("id") != "file_input"){
 				count++;
@@ -134,14 +152,28 @@ function doedit(){
 			}
 		}
 	});
+	strjson = strjson.substr(0, strjson.length - 1);
+	strjson += "}]";
 	if(count > 0){
 		$(".meg").text(alt);		//修改弹窗信息
 		$(".cd-popup").addClass("is-visible");	//弹出窗口
 		return;
 	}
-	//$(".meg").text("以保存修改");		//修改弹窗信息
-	//$(".cd-popup").addClass("is-visible");	//弹出窗口
-	document.forms[0].submit();
+	$.ajax({
+		url:"CustomerAction.do?method=updAll",
+		type:"post",
+		data:{
+			json:strjson
+		},
+		success:function(resp){
+			var data = eval('('+resp+')');
+			alert(data.msg);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
 }
 </script>
 </body>

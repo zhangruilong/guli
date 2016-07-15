@@ -80,14 +80,26 @@ input:focus{ outline:none}
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$("#myshopname").text(customer.customershop);
-	$.post('minePage.action',{
+	/* $.ajax({
+		url:"",
+		type:"post",
+		data:{},
+		success:function(resp){
+			
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	}); */
+	/* $.post('minePage.action',{
 		'classify':'客户',
 		'fid':customer.customerid+','
 	},function(data){
 		if(data.name){
 			$("#result_img").attr("src","../"+data.name);
 		}
-	});
+	}); */
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
 			//如果点击的是'取消'或者除'确定'外的其他地方

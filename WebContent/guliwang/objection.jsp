@@ -17,14 +17,11 @@
 </head>
 
 <body>
-<form action="feedbackof.action" method="post">
-<input id="feedbackcustomer" type="hidden" name="feedbackcustomer" value="">
 <div class="view-box">
 <div class="wapper-nav">意见反馈</div>
 <textarea id="feedbackdetail" name="feedbackdetail" cols="" rows="" placeholder="请输入您的反馈意见（字数200字以内）"></textarea>
 <a onclick="subform()" class="view-tj">提交</a>
 </div>
-</form>
 <!--弹框-->
 <div class="cd-popup" role="alert">
 	<div class="cd-popup-container">
@@ -38,7 +35,6 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
-	$("#feedbackcustomer").val(customer.customerid);
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
@@ -54,8 +50,34 @@ function subform(){
 	$(".cd-popup").addClass("is-visible");	//弹出窗口
 }
 function submitform(){
-	document.forms[0].submit();
+	$.ajax({
+		url:"FeedbackAction.do?method=insAll",
+		type:"post",
+		data:{json:'[{"feedbackdetail":"'+$("#feedbackdetail").val()+'","feedbackcustomer":"'+customer.customerid+'"}]'},
+		success : function(resp){
+			alert(resp);
+			var respText2 = eval('('+resp+')');
+			alert(respText2.success);
+			if(respText2.success == true){
+				history.go(-1);
+			} else {
+				alert(respText2.msg);
+			}
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
 }
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
