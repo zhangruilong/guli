@@ -476,7 +476,7 @@ function checkedgoods(goodsid){
 	if($("#"+goodsid+"checkbox").is(':checked')){
 		url +='delAllByGoodsid';
 	}else{
-		url +='insAll';
+		url +='insAllByGoodsid';
 	}
 	var json = '[{"collectgoods":"' + goodsid + 
 		'","collectcustomer":"' + customer.customerid + '"}]';

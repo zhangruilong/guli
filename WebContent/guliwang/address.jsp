@@ -19,17 +19,35 @@
 	<div class="wapper-nav"><a href='mine.jsp' class='goback'></a>
 	地址管理</div>
 	<div class="add-admin">
-		<c:forEach items="${requestScope.addressList }" var="address">
-			<a href="doEditAddress.action?addressid=${address.addressid }"><span>${address.addressconnect }</span><span>  ${address.addressphone } </span><span class="sign"></span>${address.addressture == 1?'[默认]':'' }收货地址: ${address.addressaddress } </a>
-		</c:forEach>
     </div>
     <div class="add-address">
-		<a href="doAddAddress.action">+ 新增收货地址</a>
+		<a href="addAddress.jsp">+ 新增收货地址</a>
 	</div>
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	
+var customer = JSON.parse(window.localStorage.getItem("customer"));
+$(function(){
+	$.ajax({
+		url:"AddressAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"addresscustomer='"+customer.customerid+"'",
+			order:"addressture desc"
+		},
+		success:function(resp){
+			var data = JSON.parse(resp).root;
+			$.each(data,function(i,item){
+				var isDF = item.addressture == '1'?'[默认] ':'';
+				$(".add-admin").append('<a href="editAddress.jsp?id='+item.addressid+'"><span>'+item.addressconnect+'</span><span>  '+item.addressphone+' </span><span class="sign"></span>'+isDF+'收货地址:  '+item.addressaddress+'</a>');
+			});
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
+});
 </script>
 </body>
 </html>

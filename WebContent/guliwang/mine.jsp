@@ -12,7 +12,6 @@
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
-<!-- <link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet"> -->
 <style type="text/css">
 #result{ width:auto; position: absolute; top:0;text-align:center;}
 #result img{ width:70px; height:70px; border-radius:50px;}
@@ -34,7 +33,7 @@ input:focus{ outline:none}
     <div style="width:100%; padding-top:2%; color:#fff; background:url(../images/minebg.jpg);">
     	<div id="uploadImg" style="margin:0 41% auto;">
                 <span id="result" style="">
-                  <img id="result_img" src="../images/default.jpg" style="border-radius:50px;">
+                  <img id="result_img" src="../images/default.jpg" onerror="javascript:this.src=\'../images/default.jpg\'" style="border-radius:50px;">
                 </span>
             </div>
         <p id="myshopname" style="text-align: center;"></p>
@@ -73,33 +72,25 @@ input:focus{ outline:none}
 	</div>
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
-<!-- <script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script> -->
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$("#myshopname").text(customer.customershop);
-	/* $.ajax({
-		url:"",
+	$.ajax({
+		url:"System_attachAction.do?method=selAll",
 		type:"post",
-		data:{},
+		data:{
+			wheresql:"classify='客户' and fid like '%"+customer.customerid+"%'"
+		},
 		success:function(resp){
-			
+			var data = JSON.parse(resp);
+			$("#result_img").attr("src","../"+data.root[0].name);
 		},
 		error : function(resp2){
 			var respText2 = eval('('+resp2+')');
 			alert(respText2.msg);
 		}
-	}); */
-	/* $.post('minePage.action',{
-		'classify':'客户',
-		'fid':customer.customerid+','
-	},function(data){
-		if(data.name){
-			$("#result_img").attr("src","../"+data.name);
-		}
-	}); */
+	});
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
 			//如果点击的是'取消'或者除'确定'外的其他地方

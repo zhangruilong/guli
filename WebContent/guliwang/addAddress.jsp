@@ -11,10 +11,6 @@
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
-<!-- <link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script> -->
 </head>
 
 <body>
@@ -27,12 +23,13 @@
 <div class="reg-wrapper reg-dianpu-info">
 	<ul>
     	<li><span>所在城市</span> <select id="city">
-    		<option value="">请选择城市</option>
-    		<c:forEach items="${requestScope.cityParents }" var="cyty">
-				<option>${cyty.cityname }</option>
-			</c:forEach></select><i></i></li>
+    		<option>嘉兴市</option>
+			</select><i></i></li>
         <li><span>所在区域</span> <select  id="xian">
-        	<option value="">请选择地区</option>
+        		<option>海盐县</option>
+				<option>嘉善县</option>
+				<option>秀洲区</option>
+				<option>南湖区</option>
 			</select><i></i></li>
         <li><span>详细地址</span> <input id="detaAddressa" type="text" placeholder="请输入详细地址"></li>
     </ul>
@@ -50,23 +47,37 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function addAddress(){
-		
 		var city = $("#city").val();
 		var xian = $("#xian").val();
 		var detaAddressa = $("#detaAddressa").val();
-		$.getJSON('addAddress.action',{
-			'addressconnect':$('[name="addressconnect"]').val(),
-			'addressphone':$('[name="addressphone"]').val(),
-			'addressaddress':city+xian+detaAddressa,
-			'addresscustomer':customer.customerid,
-			'addressture':$('[name="addressture"]').val(),
-			'customerId':customer.customerid
-		},function(data){
-			window.location.href = 'doAddressMana.action?customerId='+customer.customerid;
+		var addressture = "0";
+		if($("[name='addressture']:checkbox").get(0).checked){
+			addressture = '1';
+		}
+		$.ajax({
+			url:"AddressAction.do?method=insertCusAdd",
+			type:"post",
+			data:{
+				json:'[{"addressconnect":"'+$("input[name='addressconnect']").val()+
+				'","addressphone":"'+$("input[name='addressphone']").val()+
+				'","addressaddress":"'+city+xian+detaAddressa+
+				'","addresscustomer":"'+customer.customerid+
+				'","addressture":"'+addressture+
+				'"}]'
+			},
+			success:function(resp){
+				var respText = eval('('+resp+')');
+				alert(respText.msg);
+				history.go(-1);
+			},
+			error : function(resp2){
+				var respText2 = eval('('+resp2+')');
+				alert(respText2.msg);
+			}
 		});
 	}
 	$(function(){
-		$("#city").change(function(){
+		/* $("#city").change(function(){
 			var customercity = $("#city").val();
 			Ext.Ajax.request({
 				url : 'querycity.action',
@@ -90,7 +101,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 					Ext.Msg.alert('提示', '网络出现问题，请稍后再试');
 				}
 			});
-		});	         
+		});	     */
 	})
 </script>
 </body>

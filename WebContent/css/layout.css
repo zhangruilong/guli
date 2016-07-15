@@ -151,6 +151,8 @@ color:#fff !important;
 .shoucang-wrap li a h1 span { font-size: .6em }
 .shoucang-wrap li a p { margin-top: 2% }
 .shoucang-wrap li a p font { color: #f64320 }
+.shoucang-wrap .clct-GP-img{margin: 25px 0px 0px 0px;}
+/* .shoucang-wrap .clct-GP-img:after{ content: '\2713'; width: 20px; height: 20px; line-height: 20px; position: absolute; top: 50%; left: 5%; margin-top: -10px; text-align: center; color: #eb3c07 } */
 /*结算*/
 .jiesuan .shouhuo-wrap { background: url(../images/shouhuobg.png) #f9f4e9 bottom repeat-x }
 .jiesuan .shouhuo-wrap a { display: block; width: 87%; padding: 4% 5% 6% 2%; margin: auto; background: url(../images/abg.png) no-repeat right; background-size: 3% }

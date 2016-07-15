@@ -87,6 +87,78 @@ public class Collectview
     * goodsorder
     */
    private int goodsorder;   
+   /**
+    * goodsclassid
+    */
+   private String goodsclassid;   
+   /**
+    * goodsclasscode
+    */
+   private String goodsclasscode;   
+   /**
+    * goodsclassname
+    */
+   private String goodsclassname;   
+   /**
+    * goodsclassparent
+    */
+   private String goodsclassparent;   
+   /**
+    * goodsclassdetail
+    */
+   private String goodsclassdetail;   
+   /**
+    * goodsclassstatue
+    */
+   private String goodsclassstatue;   
+   /**
+    * companyshop
+    */
+   private String companyshop;   
+   /**
+    * companycity
+    */
+   private String companycity;   
+   /**
+    * companyaddress
+    */
+   private String companyaddress;   
+   /**
+    * companydetail
+    */
+   private String companydetail;   
+   /**
+    * companystatue
+    */
+   private String companystatue;   
+   /**
+    * pricesid
+    */
+   private String pricesid;   
+   /**
+    * pricesclass
+    */
+   private String pricesclass;   
+   /**
+    * priceslevel
+    */
+   private int priceslevel;   
+   /**
+    * pricesprice
+    */
+   private String pricesprice;   
+   /**
+    * pricesunit
+    */
+   private String pricesunit;   
+   /**
+    * pricesprice2
+    */
+   private String pricesprice2;   
+   /**
+    * pricesunit2
+    */
+   private String pricesunit2;   
     //属性方法	    
      /**
 	 *设置主键"collectid"属性
@@ -427,6 +499,312 @@ public class Collectview
 	{
 		return this.goodsorder;
 	}	   
+
+	/**
+	 *设置"goodsclassid"属性
+	 *@param goodsclassid 实体的Goodsclassid属性
+	 */
+	public void setGoodsclassid(String goodsclassid)
+	{
+		this.goodsclassid = goodsclassid;
+	}
+	
+	/**
+	 *获取"goodsclassid"属性
+	 */
+	public String getGoodsclassid()
+	{
+		return this.goodsclassid;
+	}	   
+
+	/**
+	 *设置"goodsclasscode"属性
+	 *@param goodsclasscode 实体的Goodsclasscode属性
+	 */
+	public void setGoodsclasscode(String goodsclasscode)
+	{
+		this.goodsclasscode = goodsclasscode;
+	}
+	
+	/**
+	 *获取"goodsclasscode"属性
+	 */
+	public String getGoodsclasscode()
+	{
+		return this.goodsclasscode;
+	}	   
+
+	/**
+	 *设置"goodsclassname"属性
+	 *@param goodsclassname 实体的Goodsclassname属性
+	 */
+	public void setGoodsclassname(String goodsclassname)
+	{
+		this.goodsclassname = goodsclassname;
+	}
+	
+	/**
+	 *获取"goodsclassname"属性
+	 */
+	public String getGoodsclassname()
+	{
+		return this.goodsclassname;
+	}	   
+
+	/**
+	 *设置"goodsclassparent"属性
+	 *@param goodsclassparent 实体的Goodsclassparent属性
+	 */
+	public void setGoodsclassparent(String goodsclassparent)
+	{
+		this.goodsclassparent = goodsclassparent;
+	}
+	
+	/**
+	 *获取"goodsclassparent"属性
+	 */
+	public String getGoodsclassparent()
+	{
+		return this.goodsclassparent;
+	}	   
+
+	/**
+	 *设置"goodsclassdetail"属性
+	 *@param goodsclassdetail 实体的Goodsclassdetail属性
+	 */
+	public void setGoodsclassdetail(String goodsclassdetail)
+	{
+		this.goodsclassdetail = goodsclassdetail;
+	}
+	
+	/**
+	 *获取"goodsclassdetail"属性
+	 */
+	public String getGoodsclassdetail()
+	{
+		return this.goodsclassdetail;
+	}	   
+
+	/**
+	 *设置"goodsclassstatue"属性
+	 *@param goodsclassstatue 实体的Goodsclassstatue属性
+	 */
+	public void setGoodsclassstatue(String goodsclassstatue)
+	{
+		this.goodsclassstatue = goodsclassstatue;
+	}
+	
+	/**
+	 *获取"goodsclassstatue"属性
+	 */
+	public String getGoodsclassstatue()
+	{
+		return this.goodsclassstatue;
+	}	   
+
+	/**
+	 *设置"companyshop"属性
+	 *@param companyshop 实体的Companyshop属性
+	 */
+	public void setCompanyshop(String companyshop)
+	{
+		this.companyshop = companyshop;
+	}
+	
+	/**
+	 *获取"companyshop"属性
+	 */
+	public String getCompanyshop()
+	{
+		return this.companyshop;
+	}	   
+
+	/**
+	 *设置"companycity"属性
+	 *@param companycity 实体的Companycity属性
+	 */
+	public void setCompanycity(String companycity)
+	{
+		this.companycity = companycity;
+	}
+	
+	/**
+	 *获取"companycity"属性
+	 */
+	public String getCompanycity()
+	{
+		return this.companycity;
+	}	   
+
+	/**
+	 *设置"companyaddress"属性
+	 *@param companyaddress 实体的Companyaddress属性
+	 */
+	public void setCompanyaddress(String companyaddress)
+	{
+		this.companyaddress = companyaddress;
+	}
+	
+	/**
+	 *获取"companyaddress"属性
+	 */
+	public String getCompanyaddress()
+	{
+		return this.companyaddress;
+	}	   
+
+	/**
+	 *设置"companydetail"属性
+	 *@param companydetail 实体的Companydetail属性
+	 */
+	public void setCompanydetail(String companydetail)
+	{
+		this.companydetail = companydetail;
+	}
+	
+	/**
+	 *获取"companydetail"属性
+	 */
+	public String getCompanydetail()
+	{
+		return this.companydetail;
+	}	   
+
+	/**
+	 *设置"companystatue"属性
+	 *@param companystatue 实体的Companystatue属性
+	 */
+	public void setCompanystatue(String companystatue)
+	{
+		this.companystatue = companystatue;
+	}
+	
+	/**
+	 *获取"companystatue"属性
+	 */
+	public String getCompanystatue()
+	{
+		return this.companystatue;
+	}	   
+
+	/**
+	 *设置"pricesid"属性
+	 *@param pricesid 实体的Pricesid属性
+	 */
+	public void setPricesid(String pricesid)
+	{
+		this.pricesid = pricesid;
+	}
+	
+	/**
+	 *获取"pricesid"属性
+	 */
+	public String getPricesid()
+	{
+		return this.pricesid;
+	}	   
+
+	/**
+	 *设置"pricesclass"属性
+	 *@param pricesclass 实体的Pricesclass属性
+	 */
+	public void setPricesclass(String pricesclass)
+	{
+		this.pricesclass = pricesclass;
+	}
+	
+	/**
+	 *获取"pricesclass"属性
+	 */
+	public String getPricesclass()
+	{
+		return this.pricesclass;
+	}	   
+
+	/**
+	 *设置"priceslevel"属性
+	 *@param priceslevel 实体的Priceslevel属性
+	 */
+	public void setPriceslevel(int priceslevel)
+	{
+		this.priceslevel = priceslevel;
+	}
+	
+	/**
+	 *获取"priceslevel"属性
+	 */
+	public int getPriceslevel()
+	{
+		return this.priceslevel;
+	}	   
+
+	/**
+	 *设置"pricesprice"属性
+	 *@param pricesprice 实体的Pricesprice属性
+	 */
+	public void setPricesprice(String pricesprice)
+	{
+		this.pricesprice = pricesprice;
+	}
+	
+	/**
+	 *获取"pricesprice"属性
+	 */
+	public String getPricesprice()
+	{
+		return this.pricesprice;
+	}	   
+
+	/**
+	 *设置"pricesunit"属性
+	 *@param pricesunit 实体的Pricesunit属性
+	 */
+	public void setPricesunit(String pricesunit)
+	{
+		this.pricesunit = pricesunit;
+	}
+	
+	/**
+	 *获取"pricesunit"属性
+	 */
+	public String getPricesunit()
+	{
+		return this.pricesunit;
+	}	   
+
+	/**
+	 *设置"pricesprice2"属性
+	 *@param pricesprice2 实体的Pricesprice2属性
+	 */
+	public void setPricesprice2(String pricesprice2)
+	{
+		this.pricesprice2 = pricesprice2;
+	}
+	
+	/**
+	 *获取"pricesprice2"属性
+	 */
+	public String getPricesprice2()
+	{
+		return this.pricesprice2;
+	}	   
+
+	/**
+	 *设置"pricesunit2"属性
+	 *@param pricesunit2 实体的Pricesunit2属性
+	 */
+	public void setPricesunit2(String pricesunit2)
+	{
+		this.pricesunit2 = pricesunit2;
+	}
+	
+	/**
+	 *获取"pricesunit2"属性
+	 */
+	public String getPricesunit2()
+	{
+		return this.pricesunit2;
+	}	   
 	public Collectview() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -452,6 +830,24 @@ public class Collectview
 	 	,String goodsbrand
 	 	,String goodstype
 	 	,int goodsorder
+	 	,String goodsclassid
+	 	,String goodsclasscode
+	 	,String goodsclassname
+	 	,String goodsclassparent
+	 	,String goodsclassdetail
+	 	,String goodsclassstatue
+	 	,String companyshop
+	 	,String companycity
+	 	,String companyaddress
+	 	,String companydetail
+	 	,String companystatue
+	 	,String pricesid
+	 	,String pricesclass
+	 	,int priceslevel
+	 	,String pricesprice
+	 	,String pricesunit
+	 	,String pricesprice2
+	 	,String pricesunit2
 		 ){
 		super();
 		this.collectid = collectid;
@@ -474,6 +870,24 @@ public class Collectview
 	 	this.goodsbrand = goodsbrand;
 	 	this.goodstype = goodstype;
 	 	this.goodsorder = goodsorder;
+	 	this.goodsclassid = goodsclassid;
+	 	this.goodsclasscode = goodsclasscode;
+	 	this.goodsclassname = goodsclassname;
+	 	this.goodsclassparent = goodsclassparent;
+	 	this.goodsclassdetail = goodsclassdetail;
+	 	this.goodsclassstatue = goodsclassstatue;
+	 	this.companyshop = companyshop;
+	 	this.companycity = companycity;
+	 	this.companyaddress = companyaddress;
+	 	this.companydetail = companydetail;
+	 	this.companystatue = companystatue;
+	 	this.pricesid = pricesid;
+	 	this.pricesclass = pricesclass;
+	 	this.priceslevel = priceslevel;
+	 	this.pricesprice = pricesprice;
+	 	this.pricesunit = pricesunit;
+	 	this.pricesprice2 = pricesprice2;
+	 	this.pricesunit2 = pricesunit2;
 	}
 }
 

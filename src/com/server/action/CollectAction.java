@@ -109,6 +109,18 @@ public class CollectAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//新增
+	public void insAllByGoodsid(HttpServletRequest request, HttpServletResponse response){
+		json2cuss(request);
+		for(Collect temp:cuss){
+			if(getTotal(CollectPoco.TABLE, "collectgoods='"+temp.getCollectgoods()+"' and collectcustomer='"+temp.getCollectcustomer()+"'")==0){
+				temp.setCreatetime(DateUtils.getDateTime());
+				temp.setCollectid(CommonUtil.getNewId());
+				result = insSingle(temp);
+			};
+		}
+		responsePW(response, result);
+	}
 	//删除
 	public void delAllByGoodsid(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);

@@ -14,42 +14,102 @@
 </head>
 
 <body>
-<form action="editAddress.action" method="post">
 <div class="reg-wrapper">
 	<ul>
-    	<li><span>收件人</span> <input value="${requestScope.address.addressconnect }"  name="addressconnect" type="text" placeholder="请输入联系人名" /></li>
-        <li><span>手机号</span> <input value="${requestScope.address.addressphone }" name="addressphone" type="text" placeholder="请输入手机号" /></li>
+    	<li><span>收件人</span> <input value=""  name="addressconnect" type="text" placeholder="请输入联系人名" /></li>
+        <li><span>手机号</span> <input value="" name="addressphone" type="text" placeholder="请输入手机号" /></li>
     </ul>
 </div>
 <div class="reg-wrapper reg-dianpu-info">
 	<ul>
-        <li><span>详细地址</span> <input name="addressaddress" value="${requestScope.address.addressaddress }" id="detaAddressa" type="text" placeholder="请输入详细地址"></li>
+        <li><span>详细地址</span> <input name="addressaddress" value="" id="detaAddressa" type="text" placeholder="请输入详细地址"></li>
     </ul>
 </div>
 <div class="reg-wrapper">
 	<ul>
-    	<li><label><input style="margin-top: 4px;" name="addressture" type="checkbox" value="1" class="set-default" ${requestScope.address.addressture == 1?'checked':'' }> 
+    	<li><label><input style="margin-top: 4px;" name="addressture" type="checkbox" value="1" class="set-default" > 
     	<span>设置默认</span></label></li>
     </ul>
 </div>
-<input type="hidden" id="addressid" name="addressid" value="${requestScope.address.addressid }">
-<input type="hidden" id="addresscustomer" name="addresscustomer" value="${sessionScope.customer.customerid }">
-    <input type="hidden" id="customerId" name="customerId" value="${sessionScope.customer.customerid }">
+<input type="hidden" name="addressid" value=""> 
 <div class="add-address-btn">
-	<a onclick="javascript:document.forms[0].action = 'delAddress.action';document.forms[0].submit();">删除</a>
-    <a onclick="addAddress()">保存</a>
+	<a onclick="delAddress()">删除</a>
+    <a onclick="saveAddress()">保存</a>
 </div>
-</form>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
-	$("#addresscustomer").val(customer.customerid);
-	$("#customerId").val(customer.customerid);
+	$.ajax({
+		url:"AddressAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"addressid='${param.id}'"
+		},
+		success:function(resp){
+			var data = JSON.parse(resp).root[0];
+			$("input[name='addressconnect']").val(data.addressconnect);
+			$("input[name='addressphone']").val(data.addressphone);
+			$("input[name='addressaddress']").val(data.addressaddress);
+			$("input[name='addressid']").val(data.addressid);
+			if(data.addressture == '1'){
+				$("[name='addressture']:checkbox").attr("checked",true);
+			}
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
 });
-	function addAddress(){
-		document.forms[0].submit();
+//保存地址
+function saveAddress(){
+	var addressture = "0";
+	if($("[name='addressture']:checkbox").get(0).checked){
+		addressture = '1';
 	}
+	$.ajax({
+		url:"AddressAction.do?method=updCusAdd",
+		type:"post",
+		data:{
+			json:'[{"addressid":"'+$("input[name='addressid']").val()+
+				'","addressconnect":"'+$("input[name='addressconnect']").val()+
+				'","addressphone":"'+$("input[name='addressphone']").val()+
+				'","addressaddress":"'+$("input[name='addressaddress']").val()+
+				'","addresscustomer":"'+customer.customerid+
+				'","addressture":"'+addressture+
+				'"}]'
+		},
+		success:function(resp){
+			var respText = eval('('+resp+')');
+			alert(respText.msg);
+			history.go(-1);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
+}
+//删除地址
+function delAddress(){
+	$.ajax({
+		url:"AddressAction.do?method=delAll",
+		type:"post",
+		data:{
+			json:'[{"addressid":"'+$("input[name='addressid']").val()+'"}]'
+		},
+		success:function(resp){
+			var respText = eval('('+resp+')');
+			alert(respText.msg);
+			history.go(-1);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
+}
 </script>
 </body>
 </html>

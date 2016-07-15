@@ -238,7 +238,7 @@ function checkedgoods(goodsid){
 	if($("#"+goodsid+"checkbox").is(':checked')){
 		url +='delAllByGoodsid';
 	}else{
-		url +='insAll';
+		url +='insAllByGoodsid';
 	}
 	var json = '[{"collectgoods":"' + goodsid + 
 		'","collectcustomer":"' + customer.customerid + '"}]';
@@ -249,17 +249,13 @@ function checkedgoods(goodsid){
 		},
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 
-			if(respText.success == false) 
-				alert(respText.msg);
-			else {
-				$(".cd-buttons .meg").text("操作成功!");
-				$(".cd-buttons .ok").css("display","none");
-				$(".cd-popup-close").text("确定");
-				$(".cd-popup").addClass("is-visible");	//弹出窗口
-				setTimeout(function () {  
-					$(".cd-popup").removeClass("is-visible");	//一秒钟后关闭弹窗
-			    }, 1000);
-			}
+			$(".cd-buttons .meg").text("操作成功!");
+			$(".cd-buttons .ok").css("display","none");
+			$(".cd-popup-close").text("确定");
+			$(".cd-popup").addClass("is-visible");	//弹出窗口
+			setTimeout(function () {  
+				$(".cd-popup").removeClass("is-visible");	//一秒钟后关闭弹窗
+		    }, 1000);
 		},
 		error : function(resp) {
 			alert('网络出现问题，请稍后再试');

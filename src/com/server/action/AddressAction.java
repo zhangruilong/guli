@@ -107,4 +107,25 @@ public class AddressAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//修改客户收货地址
+	public void updCusAdd(HttpServletRequest request, HttpServletResponse response){
+		json2cuss(request);
+		Address editAdd = cuss.get(0);
+		result = updSingle(editAdd,AddressPoco.KEYCOLUMN);
+		if(CommonConst.SUCCESS.equals(result) && editAdd.getAddressture() == 1){
+			updSingle(AddressPoco.TABLE, "addressture=0", "addressid!='"+editAdd.getAddressid()+"' and addresscustomer='"+editAdd.getAddresscustomer()+"'");
+		}
+		responsePW(response, result);
+	}
+	//新增收货地址
+	public void insertCusAdd(HttpServletRequest request, HttpServletResponse response){
+		json2cuss(request);
+		Address temp = cuss.get(0);
+		temp.setAddressid(CommonUtil.getNewId());
+		result = insSingle(temp);
+		if(CommonConst.SUCCESS.equals(result) && temp.getAddressture() == 1){
+			updSingle(AddressPoco.TABLE, "addressture=0", "addressid!='"+temp.getAddressid()+"' and addresscustomer='"+temp.getAddresscustomer()+"'");
+		}
+		responsePW(response, result);
+	}
 }
