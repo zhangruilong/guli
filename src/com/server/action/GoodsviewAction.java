@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.GoodsviewPoco;
+import com.server.pojo.Ccustomer;
 import com.server.pojo.Collect;
 import com.server.pojo.Goodsview;
 import com.system.tools.CommonConst;
@@ -98,37 +99,48 @@ public class GoodsviewAction extends BaseActionDao {
 		String customertype = request.getParameter("customertype");
 		String customerlevel = request.getParameter("customerlevel");
 		String goodsclassname = request.getParameter("goodsclassname");
-		String wheresql = "goodsstatue ='上架' and pricesclass='"+customertype+"' and priceslevel='"+customerlevel+"'";
-		if(CommonUtil.isNotEmpty(companyid)){
-			wheresql += " and goodscompany='"+companyid+"'";
-		}
-		if(CommonUtil.isNotEmpty(goodsclassname)){
-			wheresql += " and (goodsclassname='"+goodsclassname+
-					"' or goodsbrand='"+goodsclassname+
-					"' or goodstype='"+goodsclassname+
-					"')";
-		}
-		Queryinfo queryinfo = getQueryinfo(request);
-		queryinfo.setType(Goodsview.class);
-		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setWheresql(wheresql);
-		queryinfo.setOrder(GoodsviewPoco.ORDER);
-		cuss = (ArrayList<Goodsview>) selAll(queryinfo);
-		
-		Queryinfo collectqueryinfo = getQueryinfo();
-		collectqueryinfo.setType(Collect.class);
-		collectqueryinfo.setWheresql("collectcustomer='"+customerid+"'");
-		ArrayList<Collect> cussCollect = (ArrayList<Collect>) selAll(collectqueryinfo);
-		for(Goodsview mGoodsview:cuss){
-			for(Collect mCollect:cussCollect){
-				if(mGoodsview.getGoodsid().equals(mCollect.getCollectgoods())){
-					mGoodsview.setGoodsdetail("checked");
+		//查询该客户的供应商关系表
+		Queryinfo Ccustomerqueryinfo = getQueryinfo();
+		Ccustomerqueryinfo.setType(Ccustomer.class);
+		Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
+		ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
+		if(Ccustomercuss.size()!=0){
+			String wheresql = "goodsstatue ='上架' and pricesclass='"+customertype+"' and priceslevel='"+customerlevel+"'";
+			if(CommonUtil.isNotEmpty(companyid)){
+				wheresql += " and goodscompany='"+companyid+"'";
+			}else{
+				for(Ccustomer mCcustomer:Ccustomercuss){
+					wheresql += " and goodscompany ='"+mCcustomer.getCcustomercompany()+"'";
 				}
 			}
+			if(CommonUtil.isNotEmpty(goodsclassname)){
+				wheresql += " and (goodsclassname='"+goodsclassname+
+						"' or goodsbrand='"+goodsclassname+
+						"' or goodstype='"+goodsclassname+
+						"')";
+			}
+			Queryinfo queryinfo = getQueryinfo(request);
+			queryinfo.setType(Goodsview.class);
+			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
+			queryinfo.setWheresql(wheresql);
+			queryinfo.setOrder(GoodsviewPoco.ORDER);
+			cuss = (ArrayList<Goodsview>) selAll(queryinfo);
+			
+			Queryinfo collectqueryinfo = getQueryinfo();
+			collectqueryinfo.setType(Collect.class);
+			collectqueryinfo.setWheresql("collectcustomer='"+customerid+"'");
+			ArrayList<Collect> cussCollect = (ArrayList<Collect>) selAll(collectqueryinfo);
+			for(Goodsview mGoodsview:cuss){
+				for(Collect mCollect:cussCollect){
+					if(mGoodsview.getGoodsid().equals(mCollect.getCollectgoods())){
+						mGoodsview.setGoodsdetail("checked");
+					}
+				}
+			}
+		
+			Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), cuss);
+			result = CommonConst.GSON.toJson(pageinfo);
 		}
-	
-		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), cuss);
-		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
 }
