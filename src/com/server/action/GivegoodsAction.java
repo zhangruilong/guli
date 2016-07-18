@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.GivegoodsPoco;
+import com.server.pojo.Ccustomer;
 import com.server.pojo.Givegoods;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
@@ -106,4 +107,19 @@ public class GivegoodsAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -40,7 +40,7 @@
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
-var xian = '${param.xian}';
+//var xian = '${param.xian}';
 var givegoodscode = '${param.givegoodscode}';
 $(function(){ 
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
@@ -59,14 +59,21 @@ $(function(){
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	//页面信息
-	if(!xian || xian==''){
+	/* if(!xian || xian==''){
 		xian = customer.customerxian;
+	} */
+	var companyid = '';
+	if(typeof(emp) != 'undefined'){
+		companyid = emp.empcompany;
 	}
-	//$.getJSON("maizengPage.action",{"givegoodcompany.city.cityname":xian,"givegoodscode":givegoodscode,"givegoodsscope":customer.customertype},initMiaoshaPage);
 	$.ajax({
-		url:"GivegoodsAction.do?method=selAll",
+		url:"GivegoodsviewAction.do?method=cusGiveG",
 		type:"post",
-		data:{wheresql:"givegoods.givegoodsscope like '%"+customer.customertype+"%'"},
+		data:{
+			companyid:companyid,
+			customerid:customer.customerid,
+			customertype:customer.customertype
+		},
 		success : initMiaoshaPage,
 		error: function(resp){
 			var respText = eval('('+resp+')'); 
@@ -80,6 +87,7 @@ function gotogoodsDetail(jsonitem,dailySur){
 }
 //初始化页面
 function initMiaoshaPage(resp){
+	alert(resp);
 	var data = JSON.parse(resp);														//将返回的字符串转换为json
 	$(".home-hot-commodity").html("");													//清空商品列表
 	$.ajax({
@@ -121,7 +129,7 @@ function initMiaoshaPage(resp){
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item1.givegoodsprice
 					   +',\''+item1.givegoodsname+'\',\''+item1.givegoodsunit+'\',\''+item1.givegoodsunits
 					   +'\',\''+item1.givegoodscode+'\',\''+item1.givegoodsclass
-					   +'\',\''+item1.givegoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
+					   +'\',\''+item1.givegoodscompany+'\',\''+item1.companyshop+'\',\''+item1.companydetail+
 					   +'\')"></span>'+
 		        	'</div></div>';
 		        liObj += '</li>';
