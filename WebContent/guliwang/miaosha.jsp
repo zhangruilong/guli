@@ -66,12 +66,19 @@ $(function(){
 	if(xian == ''){
 		xian = customer.customerxian
 	}
-	
+	var companyid = '';
+	if(typeof(emp) != 'undefined'){
+		companyid = emp.empcompany;
+	}
 	$.ajax({
-		url:"TimegoodsAction.do?method=selAll",
+		url:"TimegoodsviewAction.do?method=cusTimeG",
 		type:"post",
-		data:{wheresql:"timegoods.timegoodsscope like '%"+customer.customertype+"%'"},
-		success: initMiaoshaPage,
+		data:{
+			companyid:companyid,
+			customerid:customer.customerid,
+			customertype:customer.customertype
+		},
+		success : initMiaoshaPage,
 		error: function(resp){
 			var respText = eval('('+resp+')'); 
 			alert(respText.msg);
@@ -129,7 +136,7 @@ function initMiaoshaPage(resp){
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item2.timegoodsorgprice
 					   +',\''+item2.timegoodsname+'\',\''+item2.timegoodsunit+'\',\''+item2.timegoodsunits
 					   +'\',\''+item2.timegoodscode+'\',\''+item2.timegoodsclass
-					   +'\',\''+item2.timegoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
+					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail+
 					   +'\',\''+item2.surplusnum+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
 		        	'</div>';

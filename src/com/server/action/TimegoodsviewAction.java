@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.server.pojo.Ccustomer;
+import com.server.pojo.Givegoodsview;
 import com.server.pojo.Timegoodsview;
+import com.server.poco.GivegoodsviewPoco;
 import com.server.poco.TimegoodsviewPoco;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
@@ -68,4 +71,49 @@ public class TimegoodsviewAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	
+	//买赠页
+	@SuppressWarnings("unchecked")
+	public void cusTimeG(HttpServletRequest request, HttpServletResponse response){
+		String companyid = request.getParameter("companyid");
+		String customerid = request.getParameter("customerid");
+		String customertype = request.getParameter("customertype");
+		String wheresql = null;
+		if(CommonUtil.isEmpty(companyid)){
+			//如果不是业务员补单
+			Queryinfo Ccustomerqueryinfo = getQueryinfo();
+			Ccustomerqueryinfo.setType(Ccustomer.class);
+			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
+			ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
+			if(Ccustomercuss.size()!=0){
+				wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' ";
+				for (Ccustomer ccustomer : Ccustomercuss) {
+					wheresql += "and timegoodscompany='"+ccustomer.getCcustomercompany()+"'";
+				}
+			}
+		} else {
+			//如果是业务员补单
+			wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' and timegoodscompany='"+companyid+"'";
+		}
+		Queryinfo queryinfo = getQueryinfo(request);
+		queryinfo.setType(Timegoodsview.class);
+		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
+		queryinfo.setWheresql(wheresql);
+		queryinfo.setOrder(TimegoodsviewPoco.ORDER);
+		cuss = (ArrayList<Timegoodsview>) selAll(queryinfo);
+		Pageinfo pageinfo = new Pageinfo(0, cuss);
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 package com.server.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
+import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
 
 /**
@@ -113,12 +115,13 @@ public class OrderdAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
-	//查询客户购买的秒杀商品数量
+	//查询客户今天购买的秒杀商品数量
 	@SuppressWarnings("unchecked")
 	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
 		Pageinfo pageinfo = new Pageinfo(0,selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
 				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+request.getParameter("customerid")+
-				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) group by od.orderdcode,od.orderdtype,od.orderdunits"));
+				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) and om.ordermtime >= '"+DateUtils.getDate()+
+				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdcode,od.orderdtype,od.orderdunits"));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}

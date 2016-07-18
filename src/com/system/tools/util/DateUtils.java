@@ -156,7 +156,9 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		return t/(24*60*60*1000);
 	}
 	
-    
+    /**
+     * 得到今天的开始时间
+     */
 	public static Date getDateStart(Date date) {
 		if(date==null) {
 			return null;
@@ -169,7 +171,11 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		}
 		return date;
 	}
-	
+	/**
+	 * 得到今天的结束时间
+	 * @param date
+	 * @return
+	 */
 	public static Date getDateEnd(Date date) {
 		if(date==null) {
 			return null;
@@ -182,7 +188,11 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		}
 		return date;
 	}
-	
+	/**
+	 * 把日期转换成字符串
+	 * @param date
+	 * @return
+	 */
 	public static String getDateFromObject(Object date){
 		if(date==null){
 			return "";

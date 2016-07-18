@@ -1,13 +1,16 @@
 package com.server.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.server.poco.CompanyviewPoco;
 import com.server.poco.CustomerPoco;
 import com.server.pojo.Address;
 import com.server.pojo.Ccustomer;
+import com.server.pojo.Companyview;
 import com.server.pojo.Customer;
 import com.system.tools.CommonConst;
 import com.system.tools.base.BaseActionDao;
@@ -137,6 +140,7 @@ public class CustomerAction extends BaseActionDao {
 	public void regCustomer(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		for(Customer temp:cuss){
+			ArrayList<String> sqlList = new ArrayList<String>();							//sql语句的list集合
 			ArrayList<Customer> cusList = (ArrayList<Customer>) selAll(Customer.class, "select * from customer c where c.customerphone='"+temp.getCustomerphone()+"'");
 			if(cusList != null && cusList.size() > 0){
 				result = "{success:false,code:400,msg:'手机已经注册过了。'}";
@@ -148,7 +152,7 @@ public class CustomerAction extends BaseActionDao {
 				temp.setCustomertype("3");
 				temp.setCreatetime(DateUtils.getDateTime());
 				String sqlCustomer = getInsSingleSql(temp);
-				
+				sqlList.add(sqlCustomer);
 				//添加新地址
 				Address address = new Address();
 				address.setAddressture(1);							//自动设为默认地址
@@ -158,15 +162,25 @@ public class CustomerAction extends BaseActionDao {
 				address.setAddressphone(temp.getCustomerphone());
 				address.setAddressconnect(temp.getCustomername());
 				String sqlAddress = getInsSingleSql(address);
+				sqlList.add(sqlAddress);
+				Queryinfo comqueryinfo = new Queryinfo();
+				comqueryinfo.setType(Companyview.class);
+				comqueryinfo.setQuery(getQuerysql(comqueryinfo.getQuery()));
+				comqueryinfo.setOrder(CompanyviewPoco.ORDER);
+				comqueryinfo.setWheresql("cityname='"+temp.getCustomerxian()+"'");
+				List<Companyview> cviewLi = selAll(comqueryinfo);
+				for (Companyview cview : cviewLi) {
+					//添加与唯一客户的关系
+					Ccustomer newccustomer = new Ccustomer();
+					newccustomer.setCcustomerid(CommonUtil.getNewId());
+					newccustomer.setCcustomercompany(cview.getCompanyid());
+					newccustomer.setCcustomercustomer(newId);
+					newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
+					String sqlCcustomer = getInsSingleSql(newccustomer);
+					sqlList.add(sqlCcustomer);
+				}
 				
-				//添加与唯一客户的关系
-				Ccustomer newccustomer = new Ccustomer();
-				newccustomer.setCcustomerid(newId);
-				newccustomer.setCcustomercompany("1");
-				newccustomer.setCcustomercustomer(newId);
-				newccustomer.setCcustomerdetail("3");
-				String sqlCcustomer = getInsSingleSql(newccustomer);
-				result = doAll(sqlCustomer,sqlAddress,sqlCcustomer);
+				result = doAll(sqlList);
 				if(CommonConst.SUCCESS.equals(result)){
 					ArrayList<Customer> retCust = new ArrayList<Customer>();
 					retCust.add(temp);

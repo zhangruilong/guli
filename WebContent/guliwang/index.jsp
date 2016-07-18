@@ -1,4 +1,3 @@
-<%@page import="com.server.pojo.entity.City"%>
 <%@ page language="java" import="java.util.*"
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
@@ -103,7 +102,7 @@
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
 			<p class="popup_msg">尚无账号，立即注册？</p>
-            <a class="cd-popup-close">取消</a><a class="popup_queding" href="doReg.action">确定</a>
+            <a class="cd-popup-close">取消</a><a class="popup_queding" href="reg.jsp">确定</a>
 		</div>
 	</div>
 </div>

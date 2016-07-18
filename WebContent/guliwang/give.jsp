@@ -87,7 +87,6 @@ function gotogoodsDetail(jsonitem,dailySur){
 }
 //初始化页面
 function initMiaoshaPage(resp){
-	alert(resp);
 	var data = JSON.parse(resp);														//将返回的字符串转换为json
 	$(".home-hot-commodity").html("");													//清空商品列表
 	$.ajax({
@@ -96,6 +95,9 @@ function initMiaoshaPage(resp){
 		data:{customerid:customer.customerid},
 		success : function(data2){
 			var cusOrder = JSON.parse(data2);
+			if(cusOrder.msg == '操作失败'){
+				alert("未知错误,请联系管理员.");
+			}
 			$.each(data.root,function(i,item1){
 				var dailySur = parseInt(item1.givegoodsnum);
 				var jsonitem = JSON.stringify(item1);
@@ -129,7 +131,7 @@ function initMiaoshaPage(resp){
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item1.givegoodsprice
 					   +',\''+item1.givegoodsname+'\',\''+item1.givegoodsunit+'\',\''+item1.givegoodsunits
 					   +'\',\''+item1.givegoodscode+'\',\''+item1.givegoodsclass
-					   +'\',\''+item1.givegoodscompany+'\',\''+item1.companyshop+'\',\''+item1.companydetail+
+					   +'\',\''+item1.givegoodscompany+'\',\''+item1.companyshop+'\',\''+item1.companydetail
 					   +'\')"></span>'+
 		        	'</div></div>';
 		        liObj += '</li>';
