@@ -78,7 +78,7 @@ public class CommonUtil {
 		long date = System.currentTimeMillis();
 		Random random = new Random();
 		int num = random.nextInt(9000) + 1000;
-		String newid = "zrl" + Long.toString(date) + num;
+		String newid = "G" + Long.toString(date) + num;
 		return newid;
 	}
 
