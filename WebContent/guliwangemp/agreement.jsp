@@ -5,8 +5,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>谷粒网</title>
-<link href="../css/base.css" type="text/css" rel="stylesheet">
-<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="css/base.css" type="text/css" rel="stylesheet">
+<link href="css/layout.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div class="xieyi-box">

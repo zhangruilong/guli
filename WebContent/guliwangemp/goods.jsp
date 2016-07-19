@@ -14,9 +14,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="../css/base.css" type="text/css" rel="stylesheet">
-<link href="../css/layout.css" type="text/css" rel="stylesheet">
-<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<link href="css/base.css" type="text/css" rel="stylesheet">
+<link href="css/layout.css" type="text/css" rel="stylesheet">
+<link href="css/dig.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 .stock-num{float: left;width: 60%;}
 .goods-wrapper .home-hot-commodity li span{margin: 5% 0% 5% 0%;}
@@ -26,7 +26,7 @@
 <body>
 <div class="gl-box">
 	<div class="home-search-wrapper">
-        <span class="citydrop"><span id="curgoodsclass">大米</span> <em><img src="../images/dropbg.png"></em></span> 
+        <span class="citydrop"><span id="curgoodsclass">大米</span> <em><img src="images/dropbg.png"></em></span> 
         <div class="menu">
             <div class="menu-tags home-city-drop">
                 <div class="fenlei-tit">食材谱</div>
@@ -54,7 +54,7 @@
         	<em class="icon-shouye1"></em>首页</a></li>
             <li class="active"><a href="goodsclass.jsp"><em class="icon-fenlei2"></em>商城</a></li>
             <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
-            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
+            <li class="active"><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
         </ul>
     </div>
 <!--弹框-->
@@ -67,17 +67,15 @@
 		</div>
 	</div>
 </div>
-<script src="../js/jquery-2.1.4.min.js"></script>
-<script src="../js/jquery-dropdown.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/jquery-dropdown.js"></script>
 <script> 
 var basePath = '<%=basePath%>';
 var searchdishesvalue = '<%=searchdishesvalue%>';
 var searchclassesvalue = '<%=searchclassesvalue%>';
-var openid = window.localStorage.getItem("openid");
-var customer = JSON.parse(window.localStorage.getItem("customer"));
-$(function(){
-	getJson(basePath+"CustomerAction.do",{method:"selCustomer",
-		wheresql : "openid='"+openid+"'"},initCustomer,null);		//得到openid
+var emp = JSON.parse(window.localStorage.getItem("emp"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+$(function(){ 
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
 	}
@@ -95,12 +93,12 @@ $(function(){
 	//通过ajax查询大类
 	getJson(basePath+"GoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
 	if(searchdishesvalue!="null"&&searchdishesvalue!=""){
-		getJson(basePath+"GoodsviewAction.do",{method:"mselAll",query:searchdishesvalue,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
+		getJson(basePath+"GoodsviewAction.do",{method:"mselAll",query:searchdishesvalue,companyid:emp.empcompany,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
 	}else if(searchclassesvalue!="null"&&searchclassesvalue!=""){
 		$("#curgoodsclass").html(searchclassesvalue);
-		getJson(basePath+"GoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:searchclassesvalue},initDishes,null);
+		getJson(basePath+"GoodsviewAction.do",{method:"mselAll",companyid:emp.empcompany,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:searchclassesvalue},initDishes,null);
 	}else{
-		getJson(basePath+"GoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:"大米"},initDishes,null);
+		getJson(basePath+"GoodsviewAction.do",{method:"mselAll",companyid:emp.empcompany,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:"大米"},initDishes,null);
 	}
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
@@ -118,18 +116,15 @@ function entersearch(){
     	getJson(basePath+"GoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,query:searchdishesvalue,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
     }
 }
-/* $(".citydrop").click(function(){
-	getJson(basePath+"GoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent='root'"},initGoodsclass,null);
-})  */
 //商品大小类
 function initGoodsclass(data){																								//初始化商品大小类
 	 $("#fenlei-left").html("");
 	 $.each(data.root, function(i, item) {				//遍历 data 中的 root 
 		if(item.goodsclassid==window.localStorage.getItem("goodsclassparent")){
-			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
+			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 			getJson(basePath+"GoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 		}else{
-			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
+			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 		}
     });
  	$("#fenlei-left li").each(function(){				//遍历 li
@@ -238,7 +233,7 @@ function checkedgoods(goodsid){
 	if($("#"+goodsid+"checkbox").is(':checked')){
 		url +='delAllByGoodsid';
 	}else{
-		url +='insAllByGoodsid';
+		url +='insAll';
 	}
 	var json = '[{"collectgoods":"' + goodsid + 
 		'","collectcustomer":"' + customer.customerid + '"}]';
@@ -249,13 +244,17 @@ function checkedgoods(goodsid){
 		},
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 
-			$(".cd-buttons .meg").text("操作成功!");
-			$(".cd-buttons .ok").css("display","none");
-			$(".cd-popup-close").text("确定");
-			$(".cd-popup").addClass("is-visible");	//弹出窗口
-			setTimeout(function () {  
-				$(".cd-popup").removeClass("is-visible");	//一秒钟后关闭弹窗
-		    }, 1000);
+			if(respText.success == false) 
+				alert(respText.msg);
+			else {
+				$(".cd-buttons .meg").text("操作成功!");
+				$(".cd-buttons .ok").css("display","none");
+				$(".cd-popup-close").text("确定");
+				$(".cd-popup").addClass("is-visible");	//弹出窗口
+				setTimeout(function () {  
+					$(".cd-popup").removeClass("is-visible");	//一秒钟后关闭弹窗
+			    }, 1000);
+			}
 		},
 		error : function(resp) {
 			alert('网络出现问题，请稍后再试');

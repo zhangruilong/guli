@@ -15,9 +15,9 @@ String dateString = formatter.format(currentTime);
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="../css/base.css" type="text/css" rel="stylesheet">
-<link href="../css/layout.css" type="text/css" rel="stylesheet">
-<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<link href="css/base.css" type="text/css" rel="stylesheet">
+<link href="css/layout.css" type="text/css" rel="stylesheet">
+<link href="css/dig.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 
 #menu{width:100%; overflow:hidden; margin:0 auto;border:1px solid #BF9660;}
@@ -60,11 +60,11 @@ String dateString = formatter.format(currentTime);
 		</div>
 	</div>
 </div>
-<script src="../js/jquery-2.1.4.min.js"></script>
-<script src="../js/jquery-dropdown.js"></script>
-<script src="../js/getDate.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/jquery-dropdown.js"></script>
+<script src="js/getDate.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var xian = '${param.xian}';
 var dateString = '<%=dateString%>';
 $(function(){ 
@@ -101,7 +101,7 @@ function thisMonthHotGoods(obj){
 //页面信息
 function pageInfo(staTime,endTime){
 	if(xian && typeof(xian) != 'undefined'){
-		$.getJSON("hotTodayGoods.action",{
+		$.getJSON("hotTodayGoodsEmp.action",{
 			"cityname":xian,
 			"staTime":staTime,
 			"endTime":endTime,
@@ -109,7 +109,7 @@ function pageInfo(staTime,endTime){
 			"customerlevel":customer.customerlevel
 			},initMiaoshaPage);
 	} else {
-		$.getJSON("hotTodayGoods.action",{
+		$.getJSON("hotTodayGoodsEmp.action",{
 			"cityname":customer.customerxian,
 			"staTime":staTime,
 			"endTime":endTime,
