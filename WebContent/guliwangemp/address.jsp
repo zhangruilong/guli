@@ -10,52 +10,44 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<style type="text/css">
-.p-a{
-	float: left;
-	width: 20%;
-	position: relative; 
-	background-color: #2c77e6; 
-	height: 30px; 
-	line-height: 30px; 
-	color: #fff ; 
-	text-align: center ;
-}
-.p-a a{
-	position: static;
-	height: 50px; 
-	line-height: 20px; 
-	text-align: center ;
-	font-size: 20px;
-}
-.pp{
-	width: 80%;
-}
-.wapper-nav{
-	padding: 10px 10px 10px 0px ;
-}
-</style>
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
 <div class="gl-box">
-	<div class="wapper-nav"><p class="p-a">
-	<a href="mine.jsp" >&lt;返回</a></p>
-	<p class="pp">地址管理</p></div>
+	<div class="wapper-nav"><a href='mine.jsp' class='goback'></a>
+	地址管理</div>
 	<div class="add-admin">
-		<c:forEach items="${requestScope.addressList }" var="address">
-			<a href="doEditAddress.action?addressid=${address.addressid }"><span>${address.addressconnect }</span><span>  ${address.addressphone } </span><span class="sign"></span>${address.addressture == 1?'[默认]':'' }收货地址: ${address.addressaddress } </a>
-		</c:forEach>
     </div>
     <div class="add-address">
-		<a href="doAddAddress.action">+ 新增收货地址</a>
+		<a href="addAddress.jsp">+ 新增收货地址</a>
 	</div>
 </div>
-<script src="js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	
+var customer = JSON.parse(window.localStorage.getItem("customer"));
+$(function(){
+	$.ajax({
+		url:"AddressAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"addresscustomer='"+customer.customerid+"'",
+			order:"addressture desc"
+		},
+		success:function(resp){
+			var data = JSON.parse(resp).root;
+			$.each(data,function(i,item){
+				var isDF = item.addressture == '1'?'[默认] ':'';
+				$(".add-admin").append('<a href="editAddress.jsp?id='+item.addressid+'"><span>'+item.addressconnect+'</span><span>  '+item.addressphone+' </span><span class="sign"></span>'+isDF+'收货地址:  '+item.addressaddress+'</a>');
+			});
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
+});
 </script>
 </body>
 </html>

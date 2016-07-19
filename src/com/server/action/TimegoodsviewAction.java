@@ -78,22 +78,26 @@ public class TimegoodsviewAction extends BaseActionDao {
 		String companyid = request.getParameter("companyid");
 		String customerid = request.getParameter("customerid");
 		String customertype = request.getParameter("customertype");
+		String timegoodscode = request.getParameter("timegoodscode");
 		String wheresql = null;
 		if(CommonUtil.isEmpty(companyid)){
 			//如果不是业务员补单
 			Queryinfo Ccustomerqueryinfo = getQueryinfo();
 			Ccustomerqueryinfo.setType(Ccustomer.class);
-			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
+			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"' ");
 			ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
 			if(Ccustomercuss.size()!=0){
 				wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' ";
 				for (Ccustomer ccustomer : Ccustomercuss) {
-					wheresql += "and timegoodscompany='"+ccustomer.getCcustomercompany()+"'";
+					wheresql += "and timegoodscompany='"+ccustomer.getCcustomercompany()+"' ";
 				}
 			}
 		} else {
 			//如果是业务员补单
-			wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' and timegoodscompany='"+companyid+"'";
+			wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' and timegoodscompany='"+companyid+"' ";
+		}
+		if(CommonUtil.isNotEmpty(timegoodscode)){
+			wheresql += "timegoodscode='"+timegoodscode+"'";
 		}
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Timegoodsview.class);

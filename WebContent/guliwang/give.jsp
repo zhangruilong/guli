@@ -40,7 +40,6 @@
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
-//var xian = '${param.xian}';
 var givegoodscode = '${param.givegoodscode}';
 $(function(){ 
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
@@ -58,10 +57,6 @@ $(function(){
 	}else{
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
-	//页面信息
-	/* if(!xian || xian==''){
-		xian = customer.customerxian;
-	} */
 	var companyid = '';
 	if(typeof(emp) != 'undefined'){
 		companyid = emp.empcompany;
@@ -72,7 +67,8 @@ $(function(){
 		data:{
 			companyid:companyid,
 			customerid:customer.customerid,
-			customertype:customer.customertype
+			customertype:customer.customertype,
+			givegoodscode:givegoodscode
 		},
 		success : initMiaoshaPage,
 		error: function(resp){
@@ -116,9 +112,6 @@ function initMiaoshaPage(resp){
 						}
 					});
 					dailySur = parseInt(item1.givegoodsnum) - giveGoodsCount;																//每日限购剩余数量
-					/* if(giveGoodsCount != 0){
-						alert(item1.givegoodsname+" 的每日限购数量还剩 : "+dailySur);
-					} */
 					liObj += '<font>限购'+item1.givegoodsnum+item1.givegoodsunit+'</font><br/>';
 				} else {
 					liObj += '<font>限购'+item1.givegoodsnum+item1.givegoodsunit+'</font><br/>';

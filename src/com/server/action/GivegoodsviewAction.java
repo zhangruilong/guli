@@ -77,6 +77,7 @@ public class GivegoodsviewAction extends BaseActionDao {
 		String companyid = request.getParameter("companyid");
 		String customerid = request.getParameter("customerid");
 		String customertype = request.getParameter("customertype");
+		String givegoodscode = request.getParameter("givegoodscode");
 		String wheresql = null;
 		if(CommonUtil.isEmpty(companyid)){
 			//如果不是业务员补单
@@ -87,12 +88,15 @@ public class GivegoodsviewAction extends BaseActionDao {
 			if(Ccustomercuss.size()!=0){
 				wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' ";
 				for (Ccustomer ccustomer : Ccustomercuss) {
-					wheresql += "and givegoodscompany='"+ccustomer.getCcustomercompany()+"'";
+					wheresql += "and givegoodscompany='"+ccustomer.getCcustomercompany()+"' ";
 				}
 			}
 		} else {
 			//如果是业务员补单
-			wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' and givegoodscompany='"+companyid+"'";
+			wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' and givegoodscompany='"+companyid+"' ";
+		}
+		if(CommonUtil.isNotEmpty(givegoodscode)){
+			wheresql += "and givegoodscode='"+givegoodscode+"' ";
 		}
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Givegoodsview.class);

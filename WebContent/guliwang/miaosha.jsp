@@ -42,7 +42,6 @@
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
-var xian = '${param.xian}';
 var timegoodscode = '${param.timegoodscode}';
 $(function(){ 
 	//购物车图标上的数量
@@ -62,10 +61,6 @@ $(function(){
 			
 		}
 	});
-	//页面信息
-	if(xian == ''){
-		xian = customer.customerxian
-	}
 	var companyid = '';
 	if(typeof(emp) != 'undefined'){
 		companyid = emp.empcompany;

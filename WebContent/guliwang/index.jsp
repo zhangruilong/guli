@@ -112,6 +112,7 @@
 	var basePath = '<%=basePath%>';
 	var xian = '${param.xian}';
 	var city = '${param.city}';
+	var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 	$(function(){ 
 		//openid
 		$(".cd-popup").on("click",function(event){		//绑定点击事件

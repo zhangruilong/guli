@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,22 +23,48 @@
 </form>
 </div>
 <div class="footer">
-	<div class="jiesuan-foot-info"><img src="images/jiesuanbg.png" > 种类数：<span id="totalnum">0</span>总价：<span id="totalmoney">0</span> </div><a onclick="checkCusSecKill();" class="jiesuan-button">结算</a>
+	<div class="jiesuan-foot-info"><img src="../images/jiesuanbg.png" > 种类数：<span id="totalnum">0</span>总价：<span id="totalmoney">0</span> </div><a onclick="nextpage();" class="jiesuan-button">结算</a>
 </div>
 <!--弹框-->
 <div class="cd-popup" role="alert">
 	<div class="cd-popup-container">
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
-			<p class="popup_msg">还未注册,是否现在注册?</p>
-            <a href="#" class="cd-popup-close">取消</a><a class="popup_queding" href="doReg.action">确定</a>
+			<p class="popup_msg">尚无账号，立即注册？</p>
+            <a href="#" class="cd-popup-close">取消</a><a class="popup_queding" href="reg.jsp">确定</a>
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
+	$.ajax({
+		url:"AddressAction.do?method=selAll",
+		type:"post",
+		data:{wheresql:"address.addresscustomer='"+customer.customerid+"'"},
+		success : function(resp){
+			var respText = eval('('+resp+')'); 
+			if(typeof(respText.root) == 'undefined' || !respText.root){
+				$(".popup_msg").text("还没有收货地址,请先添加收货地址。");				//修改弹窗文字信息
+				$(".ok").attr("href","index.jsp");
+				$(".cd-popup").addClass("is-visible");
+			}
+		},
+		error : function(data){
+			alert("网络出现问题!");
+			history.go(-1);
+		}
+	});
+	if('${requestScope.nullInfo}' == 'y'){
+		$(".popup_msg").text("网络问题请重试。");
+		$(".popup_queding").attr("href","index.jsp");
+		$(".cd-popup").addClass("is-visible");
+		setTimeout(function () {  
+	        window.location.href = "index.jsp";
+	    }, 500);
+		return;
+	}
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
 		$("#totalnum").text(0);
@@ -64,29 +90,45 @@ $(function(){
 //点击结算时执行的方法
 function nextpage(){
 	setscompany();		//设置供应商信息
-	if(customer.customerid != null && customer.customerid != ''){
-		window.location.href = "doEmpBuy.action?addresscustomer="+customer.customerid+"&addressture=1";
+	var flag = 0;
+	var goodsname = '';
+	$(".jia.add").each(function(i,item){
+		var goodsNum = parseInt($(item).prev().val());
+		var dailySur = parseInt($(item).attr("name"));
+		if(goodsNum > dailySur){
+			flag++;
+			goodsname = $(item).parent().children("h2").text();
+			return false;
+		}
+	});
+	if(flag == 0){
+		window.location.href = "buy.jsp";
 	} else {
-		$(".cd-popup").addClass("is-visible");
+		alert("您购买的："+goodsname+" 超过了限购数量");
 	}
 }
 //检查客户是否可以购买秒杀商品
-function checkCusSecKill(){
+/* function checkCusSecKill(){
+	if(!customer.customerid || customer.customerid == 'null' || typeof(customer.customerid) == 'undefined'){		//判断是否注册
+		$(".cd-popup").addClass("is-visible");
+		return ;
+	}
 	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 	var outGoodsName = '';
-	$.post('queryCusSecKillOrderdEmp.action',{'orderm.ordermcustomer':customer.customerid},function(data){
+	$.post('queryCusSecKillOrderd.action',{'orderm.ordermcustomer':customer.customerid},function(data){
 		var count = 0;
-		if(data.msg == 'no'){
+		if(data.msg == 'no'){																						//判断是否有地址
 			$(".popup_msg").text("还没有收货地址,请先添加收货地址。");
 			$(".popup_queding").attr("href","mine.jsp");
 			$(".cd-popup").addClass("is-visible");
 			return;
 		}
-		$.each(sdishes,function(i,item1){
-			if(item1.orderdtype == '秒杀'){
+		$.each(sdishes,function(i,item1){													//遍历购物车现有商品
+			if(item1.orderdtype == '秒杀'){						
+				//如果是限购商品
 				var restNum = parseInt(item1.timegoodsnum) - parseInt(item1.orderdetnum);
 				if(data){
-					$.each(data.miaoshaList,function(i,item2){
+					$.each(data.miaoshaList,function(i,item2){								//遍历秒杀商品的订单详细集合
 						if(item2.orderdcode == item1.goodscode){
 							restNum -= parseInt(item2.orderdnum);
 						}
@@ -97,9 +139,10 @@ function checkCusSecKill(){
 				}
 			}
 			if(item1.orderdtype == '买赠'){
+				//如果是买赠商品
 				var restNum = parseInt(item1.timegoodsnum) - parseInt(item1.orderdetnum);
 				if(data){
-					$.each(data.giveGoodsList,function(i,item2){
+					$.each(data.giveGoodsList,function(i,item2){							//遍历买赠商品的订单详细集合
 						if(item2.orderdcode == item1.goodscode){
 							restNum -= parseInt(item2.orderdnum);
 						}
@@ -116,7 +159,7 @@ function checkCusSecKill(){
 			nextpage();
 		}
 	},'json');
-}
+} */
 //设置供应商信息
 function setscompany(){
 	var data = JSON.parse(window.localStorage.getItem("sdishes"));
@@ -151,26 +194,51 @@ function setscompany(){
 	window.localStorage.setItem("scompany",JSON.stringify(scompany));
 	return scompany;
 }
+//初始化的页面信息
 function initDishes(data){
 	var scompany = setscompany();
-    $(".cart-wrapper").html("");
-    $.each(scompany, function(y, mcompany) {
-    	$(".cart-wrapper").append('<h1 name="'+mcompany.companyid +'">'+mcompany.companyshop+'</h1><ul>');
-    	$.each(data, function(i, item) {
-    		if(mcompany.ordermcompany==item.goodscompany)
-            $(".cart-wrapper").append('<li name="'+item.goodsid+'">'+
-                      	'<em><img src="../'+item.goodsimage+
-         	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></em> '+
-                      	'<h2>'+item.goodsname+'<span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
-          				'<span onclick="subnum(this,'+item.pricesprice+')" class="jian min"></span>'+
-                          '<input class="text_box shuliang" name="'+item.goodsdetail+'" type="text" value="'+
-       	                getcurrennum(item.goodsid,item.goodsdetail)+'"> '+
-                          '<span onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.goodsclassname+'\')" class="jia add"></span>'+
-                      '</li>');
-       });
-       $(".cart-wrapper").append('</ul><div class="songda">'+mcompany.companydetail+'</div>');		//添加供应商信息
+	$.ajax({
+		url:"OrderdAction.do?method=selCusXGOrderd",
+		type:"post",
+		data:{customerid:customer.customerid},
+		success : function(data2){
+    		var cusOrder = JSON.parse(data2);
+			$(".cart-wrapper").html("");
+		    $.each(scompany, function(y, mcompany) {
+		    	$(".cart-wrapper").append('<h1 name="'+mcompany.companyid +'">'+mcompany.companyshop+'</h1><ul>');
+		    	$.each(data, function(i, item) {
+		    		var dailySur = parseInt(item.timegoodsnum);
+		    		if(cusOrder.root && cusOrder.root.length > 0){
+		    			var itemGoodsCount = 0;
+						$.each(cusOrder.root,function(k,item3){
+							//alert(item.orderdtype +" == "+ item3.orderdtype +" && "+ item3.orderdcode +" == "+ item.goodscode);
+							if(item.orderdtype == item3.orderdtype && item3.orderdcode == item.goodscode){
+								itemGoodsCount += parseInt(item3.orderdclass);
+							}
+						});
+						dailySur = parseInt(item.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+		    		}
+		    		if(mcompany.ordermcompany==item.goodscompany)
+		            $(".cart-wrapper").append('<li name="'+item.goodsid+'">'+
+		                      	'<em><img src="../'+item.goodsimage+
+		         	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></em> '+
+		                      	'<h2>'+item.goodsname+' <span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
+		          				'<span onclick="subnum(this,'+item.pricesprice+')" class="jian min"></span>'+
+		                          '<input class="text_box shuliang" readonly="readonly" name="'+item.goodsdetail+'" type="text" value="'+
+		       	                getcurrennum(item.goodsid,item.goodsdetail)+'"> '+
+		                          '<span name="'+dailySur+'" onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.goodsclassname+'\')" class="jia add"></span>'+
+		                      '</li>');
+		       });
+		       $(".cart-wrapper").append('</ul><div class="songda">'+mcompany.companydetail+'</div>');		//添加供应商信息
+			});
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
 	});
 }
+//得到商品数量
 function getcurrennum(dishesid,goodsdetail){
 	//订单
 	if(window.localStorage.getItem("sdishes")==null){
@@ -188,79 +256,41 @@ function getcurrennum(dishesid,goodsdetail){
 		return orderdetnum;
 	}
 }
-//增加商品数量
+//加号
 function addnum(obj,dishesprice,goodscode,goodsclassname){
-	$.post('queryCusSecKillOrderdEmp.action',{'orderm.ordermcustomer':customer.customerid},function(data){
+	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
+	var cusMSOrderNum = parseInt($(obj).attr("name"));
+	var numt = $(obj).prev(); 
+	var num = parseInt(numt.val());
+	if((parseInt(cusMSOrderNum) - num) <= 0){
+		alert('您购买的商品超过了限购数量。');
+	} else {
+		//总价
+		var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));
+		var newtmoney = (tmoney+dishesprice).toFixed(2);
+		$("#totalmoney").text(newtmoney);
+		window.localStorage.setItem("totalmoney",newtmoney);
+		//数量
+		numt.val(num+1);
+		//订单
+		if(window.localStorage.getItem("sdishes")==null){
+			window.localStorage.setItem("sdishes","[]");
+		}
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
-		var count = 0;
-		if(data.msg == 'no'){
-			$(".popup_msg").text("还没有收货地址,请先添加收货地址。");
-			$(".popup_queding").attr("href","mine.jsp");
-			$(".cd-popup").addClass("is-visible");
-			return;
-		}
-		$.each(sdishes,function(i,item1){
-			if(item1.orderdtype == goodsclassname.substring(0,2) && item1.goodscode == goodscode){
-				var restNum = parseInt(item1.timegoodsnum) - parseInt(item1.orderdetnum);
-				if(data){
-					$.each(data.miaoshaList,function(i,item2){
-						if(item2.orderdcode == item1.goodscode){
-							restNum -= parseInt(item2.orderdnum);
-						}
-					});
-				}
-				if(restNum-1 < 0){		//买的秒杀商品数量超过了个人限量
-					count++;
-				}
+		//修改订单
+		$.each(sdishes, function(i, item) {
+			if(item.goodsid==$(obj).parent().attr('name')
+					&&item.goodsdetail==$(obj).prev().attr('name')){
+				item.orderdetnum = item.orderdetnum + 1;
+				return false;
 			}
-			/* if(item1.orderdtype == '买赠'){
-				var restNum = parseInt(item1.timegoodsnum) - parseInt(item1.orderdetnum);
-				if(data){
-					$.each(data.giveGoodsList,function(i,item2){
-						if(item2.orderdcode == item1.goodscode){
-							restNum -= parseInt(item2.orderdnum);
-						}
-					});
-				}
-				if(restNum < 0){		//买的商品数量超过了限购数量
-					count++;
-				}
-			} */
-			
 		});
-		
-		if(count > 0){
-			alert('您购买的商品超过了限购数量。');
-		} else {
-			//总价
-			var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));
-			var newtmoney = (tmoney+dishesprice).toFixed(2);
-			$("#totalmoney").text(newtmoney);
-			window.localStorage.setItem("totalmoney",newtmoney);
-			//数量
-			var numt = $(obj).prev(); 
-			var num = parseInt(numt.val());
-			numt.val(num+1);
-			//订单
-			if(window.localStorage.getItem("sdishes")==null){
-				window.localStorage.setItem("sdishes","[]");
-			}
-			var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
-			//修改订单
-			$.each(sdishes, function(i, item) {
-				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsdetail==$(obj).prev().attr('name')){
-					item.orderdetnum = item.orderdetnum + 1;
-					return false;
-				}
-			});
-			window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
-			var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-			window.localStorage.setItem("cartnum",cartnum+1);
-		}
-	},'json');
+		window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
+		var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+		window.localStorage.setItem("cartnum",cartnum+1);
+	}
 }
-//减少商品数量
+//减号
 function subnum(obj,dishesprice){
 	var numt = $(obj).next(); 
 	var num = parseInt(numt.val());
