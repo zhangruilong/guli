@@ -45,18 +45,24 @@ public class Oauth2 extends HttpServlet {
 			}.getType();
 			WxToken mWxToken = CommonConst.GSON.fromJson(s, TYPE);
 			System.out.println("openid: " + mWxToken.getOpenid());
-			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("oauth2.jsp");
-			request.setAttribute("openid", mWxToken.getOpenid());
 			try {
-				dispatcher.forward(request, response);
-			} catch (ServletException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				response.sendRedirect("oauth2.jsp?openid="+mWxToken.getOpenid());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+//			RequestDispatcher dispatcher = request
+//					.getRequestDispatcher("oauth2.jsp");
+//			request.setAttribute("openid", mWxToken.getOpenid());
+//			try {
+//				dispatcher.forward(request, response);
+//			} catch (ServletException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 
 	}
