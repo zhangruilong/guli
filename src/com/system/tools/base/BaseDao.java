@@ -222,6 +222,38 @@ public class BaseDao {
 		}
 	}
 	@SuppressWarnings("finally")
+	public List selAll(String selectsql, Queryinfo queryinfo) {
+		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
+		Statement stmt = null;
+		ResultSet rs = null;
+		List objs = new ArrayList();
+		try {
+			String sql = selectsql + " where 1=1 ";
+			if(CommonUtil.isNotEmpty(queryinfo.getWheresql())){
+				sql += " and (" + queryinfo.getWheresql() + ") ";
+			}
+			if(CommonUtil.isNotEmpty(queryinfo.getQuery())){
+				sql += " and (" + queryinfo.getQuery() + ") ";
+			}
+			if(CommonUtil.isNotEmpty(queryinfo.getOrder())){
+				sql += " order by " + queryinfo.getOrder();
+			}
+			stmt = conn.createStatement();
+			System.out.println(sql);
+			rs = stmt.executeQuery(sql);
+			//所有的属性  
+	        Field[] field = queryinfo.getType().getDeclaredFields(); 
+			while (rs.next()) {
+				objs.add(this.rsToObj(queryinfo.getType(), field, rs));
+			}
+		} catch (Exception e) {
+			System.out.println("Exception:" + e.getMessage());
+		} finally{
+			connectionMan.freeConnection(CommonConst.DSNAME,conn,stmt,rs);
+	        return objs;
+		}
+	}
+	@SuppressWarnings("finally")
 	public List selAll(Class type, String selectsql) {
 		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
 		Statement stmt = null;
