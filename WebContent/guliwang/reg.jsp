@@ -50,7 +50,7 @@
 		<ul>
 			<li>
 			<span>所在城市</span>
-			<input onclick="input_sele_city()" placeholder="所在城市" id="customercity" readonly="readonly" name="customercity" type="text" style="background-color:#fff;"/>
+			<input onclick="input_sele_city()" placeholder="所在城市" id="customercity" readonly="readonly" name="" type="text" style="background-color:#fff;"/>
          <div id="divList" style="display: none; position: absolute ;width: 50%;height:30%;right:0px; left:50%; top:10%; border: 1px solid black; overflow: auto; position: absolute; background-color:#FFFFFF; "> 
                 <table width="100%" border="0" cellpadding="0" cellspacing="0"> 
                     <tr> 
@@ -74,10 +74,7 @@
                         <td> 
                                <div id="cusXianDiv"  style="overflow: auto; padding-left:0; width: 100%; background-color: #F2F2F2;height: 100%; ">
                                	<ul>
-                               		<li>海盐县</li>
-                               		<li>嘉善县</li>
-                               		<li>秀洲区</li>
-                               		<li>南湖区</li>
+                               		<li>请选择</li>
                                	</ul>
                                </div> 
                         </td> 
@@ -124,6 +121,25 @@ $("#xianList").css("top",xianListTop + "px");
 		$(".cd-popup").on("click",function(event){		//绑定点击事件
 				$(this).removeClass("is-visible");	//移除'is-visible' class
 		});
+		$.ajax({
+			url:"CityAction.do?method=selAll",
+			type:"post",
+			data:{
+				wheresql:"cityparent='root'"
+			},
+			success:function(resp){
+				var data = JSON.parse(resp).root;
+				$("#cusCityDiv ul li").remove();
+				$.each(data,function(i,item){
+					$("#cusCityDiv ul").append('<li name="'+item.cityid+'">'+item.cityname+'</li>');
+				});
+				cityBinDing();
+			},
+			error: function(resp){
+				var respText = eval('('+resp+')'); 
+				alert(respText.msg);
+			}
+		});
 	})
 	function input_sele_city(){
 		$("#city").trigger("change");
@@ -143,12 +159,12 @@ $("#xianList").css("top",xianListTop + "px");
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
 			return;
 		}
-		if($("[name='customercity']").val() == null || $("[name='customercity']").val() == ''){
+		if($("#customercity").val() == null || $("#customercity").val() == ''){
 			$(".meg").text("请选择城市");		//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
 			return;
 		}
-		if($("[name='customerxian']").val() == null || $("[name='customerxian']").val() == ''){
+		if($("#customerxian").val() == null || $("#customerxian").val() == ''){
 			$(".meg").text("请选择地区");		//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
 			return;
@@ -159,9 +175,9 @@ $("#xianList").css("top",xianListTop + "px");
 			data: {
 				json:'[{'+
 				'"openid":"'+window.localStorage.getItem("openid")+'",'+
-				'"customercity":"'+$("[name='customercity']").val()+'",'+
+				'"customercity":"'+$("#customercity").val()+'",'+
 				'"customerphone":"'+$("#customerphone").val()+'",'+
-				'"customerxian":"'+$("[name='customerxian']").val()+'",'+
+				'"customerxian":"'+$("#customerxian").val()+'",'+
 				'"customershop":"'+$("#customershop").val()+'",'+
 				'"customername":"'+$("#customername").val()+'",'+
 				'"customeraddress":"'+$("#customeraddress").val()+'"'+
@@ -187,12 +203,13 @@ $("#xianList").css("top",xianListTop + "px");
 					});
 					$(".cd-popup").addClass("is-visible");	//弹出窗口
 				} else {
-					alert("未知问题,请联系客服。");
+					alert("操作失败。");
 					window.location.reload();
 				}
 			}
 		});
 	}
+	
 ////////////////////////////////////////////这是下拉列表菜单的js///////////////////////////////////////////////////////
 	   var oRegion = document.getElementById("customercity");     //需要弹出下拉列表的文本框 
        var oDivList = document.getElementById("divList");         //要弹出的下拉列表
@@ -204,6 +221,35 @@ $("#xianList").css("top",xianListTop + "px");
        var all_html ="" ;
        var colOptions = "" ;
        
+     //绑定城市选择的事件
+   	function cityBinDing(){
+   		alert($("#cusCityDiv ul li").length);
+   		$("#cusCityDiv ul li").click(function(){
+    		   $(oRegion).val($(this).text());
+    		   $.ajax({
+    			   url:"CityAction.do?method=selAll",
+    			   type:"post",
+    			   data:{
+    				   wheresql:"cityparent='"+$(this).attr("name")+"'"
+    			   },
+    			   success:function(resp){
+    				   var data = JSON.parse(resp).root;
+   					   $("#cusXianDiv ul li").remove();
+    				   $.each(data,function(i,item){
+    					   $("#cusXianDiv ul").append('<li>'+item.cityname+'</li>');
+    				   });
+    				  $("#cusXianDiv ul li").click(function(){
+    			    	 customerxianObj.val($(this).text());
+    			     });
+    			   },
+    			   error: function(resp){
+    					var respText = eval('('+resp+')'); 
+    					alert(respText.msg);
+    			   }
+    		   });
+    	   });
+   	     
+   	}
      //关闭下拉框
        $(document).click(function (e) {          
           var target_id = $(e.target).attr('id');             // 获取点击dom元素id ;
@@ -213,41 +259,16 @@ $("#xianList").css("top",xianListTop + "px");
           if(target_id!= customerxianObj.attr("id")){
         	  xianListObj.css("display","none");
           }
-       }) ;
-       $(function(){
-	     //城市的选项被点击时的事件
-    	   $("#cusCityDiv ul li").click(function(){
-    		   $(oRegion).val($(this).text());
-    		   /* customercity = $(this).text();
-    		   Ext.Ajax.request({
-   				url : "querycity.action",
-   				method : "post",
-   				params : {
-   					"cityname" : customercity
-   				},
-   				success : function(resp,opts) {
-   					var result = resp.responseText;
-   					var $result = Ext.util.JSON.decode(result);
-   					$("#cusXianDiv").html("<ul></ul>");
-   					for ( var i = 0; i < $result.length; i++) {
-   						var city = $result[i];
-   						$option = $("<li onclick='cityclick(this)'>"+city.cityname+"</li>");
-   						$("#cusXianDiv ul").append($option);
-   					}
-   				},
-   				failure : function(resp,opts) {
-   					Ext.Msg.alert('提示', '网络出现问题，请稍后再试');
-   				}
-   			}); */
-    	   });
-	     
        });
-	     $("#cusXianDiv ul li").click(function(){
-	    	 customerxianObj.val($(this).text());
-	     });
+       $(function(){
+	     
+    	   cityBinDing();
+	     
 	   /* function cityclick(obj){
 		   customerxianObj.val($(obj).text());
 	   } */
+       });
+
        //文本获得焦点时的事件 (弹出下拉框)
        oRegion.onfocus = function() { 
            oRegion.style.backgroundColor="white" ;
