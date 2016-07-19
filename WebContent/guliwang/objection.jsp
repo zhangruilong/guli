@@ -55,9 +55,7 @@ function submitform(){
 		type:"post",
 		data:{json:'[{"feedbackdetail":"'+$("#feedbackdetail").val()+'","feedbackcustomer":"'+customer.customerid+'"}]'},
 		success : function(resp){
-			alert(resp);
 			var respText2 = eval('('+resp+')');
-			alert(respText2.success);
 			if(respText2.success == true){
 				history.go(-1);
 			} else {

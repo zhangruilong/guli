@@ -80,11 +80,13 @@ $(function(){
 		url:"System_attachAction.do?method=selAll",
 		type:"post",
 		data:{
-			wheresql:"classify='客户' and fid like '%"+customer.customerid+"%'"
+			wheresql:"classify='客户' and fid = '"+customer.customerid+",'"
 		},
 		success:function(resp){
 			var data = JSON.parse(resp);
-			$("#result_img").attr("src","../"+data.root[0].name);
+			if(data.root[0].length > 0){
+				$("#result_img").attr("src","../"+data.root[0].name);
+			} 
 		},
 		error : function(resp2){
 			var respText2 = eval('('+resp2+')');

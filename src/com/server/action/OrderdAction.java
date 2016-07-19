@@ -150,7 +150,7 @@ public class OrderdAction extends BaseActionDao {
 					gvo.setGoodsview(xjg);
 					gvo.setStatue("下架");
 				}
-				
+				gvoList.add(gvo);
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+

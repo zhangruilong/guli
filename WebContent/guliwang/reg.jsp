@@ -223,7 +223,6 @@ $("#xianList").css("top",xianListTop + "px");
        
      //绑定城市选择的事件
    	function cityBinDing(){
-   		alert($("#cusCityDiv ul li").length);
    		$("#cusCityDiv ul li").click(function(){
     		   $(oRegion).val($(this).text());
     		   $.ajax({
