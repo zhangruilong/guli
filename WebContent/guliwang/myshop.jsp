@@ -33,32 +33,10 @@ input:focus{ outline:none}
     	<li><span>店铺名称</span> <input name="customershop" type="text" value="" placeholder="请输入店铺名称"></li>
         <li><span>联系人</span> <input name="customername" type="text" value="" placeholder="请输入联系人"></li>
         <li><span>联系电话</span> <input name="customerphone" type="text" value="" placeholder="请输入联系电话"></li>
-        <li><span>所在城市</span> 
-			<span style="position:absolute;overflow:hidden;margin-left: 170px;"> 
-			<select id="city" style="width:160%;">
-				<option></option>
-					<option>嘉兴市</option>
-			</select>
-			</span><i></i> 
-			<span style="position:absolute;display:block;">
-				<input id="customercity" name="customercity" type="text" value="" 
-				placeholder="请输入城市" style="width:118px;margin-left: 228%;">
-			</span>
-			</li>
-			<li><span>所在地区</span> 
-			<span style="position:absolute;overflow:hidden;margin-left: 170px;"> 
-			<select id="xian" style="width:160%;">
-				<option>海盐县</option>
-				<option>嘉善县</option>
-				<option>秀洲区</option>
-				<option>南湖区</option>
-			</select>
-			</span><i></i> 
-			<span style="position:absolute;display: block;">
-				<input id="customerxian" name="customerxian" type="text" value="" 
-				placeholder="请输入地区" style="width:118px;margin-left: 228%;">
-			</span>
-			</li>
+        <li><span>所在城市</span> <select name="customercity" id="city">
+			</select><i></i></li>
+        <li><span>所在区域</span> <select name="customerxian" id="xian">
+			</select><i></i></li>
         <li><span>店铺地址</span> <input name="customeraddress" type="text" value=""
          placeholder="请输入店铺地址"></li>
     </ul>
@@ -92,8 +70,30 @@ $(function(){
 			$("input[name='customershop']").val(data.root[0].customershop);
 			$("input[name='customername']").val(data.root[0].customername);
 			$("input[name='customerphone']").val(data.root[0].customerphone);
-			$("#customercity").val(data.root[0].customercity);
-			$("#customerxian").val(data.root[0].customerxian);
+			$.ajax({
+				url:"CityAction.do?method=selAll",
+				type:"post",
+				data:{
+					wheresql:"cityparent='root'"
+				},
+				success:function(resp){
+					var data2 = JSON.parse(resp).root;
+					$("#city option").remove();
+					$.each(data2,function(i,item){
+						if(item.cityname == data.root[0].customercity){
+							$("#city").append('<option value="'+item.cityid+'" selected="selected">'+item.cityname+'</option>');
+						} else {
+							$("#city").append('<option value="'+item.cityid+'" >'+item.cityname+'</option>');
+						}
+					});
+					cityChaEve();
+					initxian();
+				},
+				error: function(resp){
+					var respText = eval('('+resp+')'); 
+					alert(respText.msg);
+				}
+			});
 			$("input[name='customeraddress']").val(data.root[0].customeraddress);
 		},
 		error : function(resp2){
@@ -101,48 +101,65 @@ $(function(){
 			alert(respText2.msg);
 		}
 	});
-	$("#city").change(function(){
-		var city = $("#city").val();		//得到城市复选框的值
-		$("#city").val("");					//将城市复选框清空
-		$("#customercity").val(city);		//将城市输入框的值变为城市复选框的值
-		/* Ext.Ajax.request({
-			//通过ajax查询到地区复选框的值
-			url:"querycity.action",
-			method:"POST",
-			params:{
-				"cityname":city
-			},
-			success:function(response,option){
-				var result = response.responseText;			//得到返回的文本信息
-				var $result = Ext.util.JSON.decode(result);	//转化为json对象
-				$("#xian").empty();							//清空
-				var $option = $("<option></option>");		//添加第一个option
-				$("#xian").append($option);
-				for (var i=0; i<$result.length;i++ ){
-					var city = $result[i];
-					$option = $("<option>"+city.cityname+"</option>");
-					$("#xian").append($option);
-				}
-			},
-			failure:function(response,option){
-				Ext.Msg.alert("提示","网络出现问题,请稍后再试");
-			}
-		}); */
-	}); 
-	$("#xian").change(function(){
+	
+	/* $("#xian").change(function(){
 		var xian = $("#xian").val();
 		$("#xian").val("");
 		$("#customerxian").val(xian);
-	});
-	$(".cd-popup").on("click",function(event){		//绑定点击事件
+	}); */
+	/* $(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
-	});
+	}); */
 })
+//初始化县
+function initxian(){
+	$.ajax({
+		   url:"CityAction.do?method=selAll",
+		   type:"post",
+		   data:{
+			   wheresql:"cityparent='"+$("#city").val()+"'"
+		   },
+		   success:function(resp){
+			   var data = JSON.parse(resp).root;
+			   $("#xian option").remove();
+			   $.each(data,function(i,item){
+				   $("#xian").append('<option>'+item.cityname+'</option>');
+			   });
+		   },
+		   error: function(resp){
+				var respText = eval('('+resp+')'); 
+				alert(respText.msg);
+		   }
+	   });
+}
+//绑定更换城市时的事件
+function cityChaEve(){
+	$("#city").change(function(){
+		 $.ajax({
+ 			   url:"CityAction.do?method=selAll",
+ 			   type:"post",
+ 			   data:{
+ 				   wheresql:"cityparent='"+$(this).val()+"'"
+ 			   },
+ 			   success:function(resp){
+ 				   var data = JSON.parse(resp).root;
+				   $("#xian option").remove();
+ 				   $.each(data,function(i,item){
+ 					   $("#xian").append('<option>'+item.cityname+'</option>');
+ 				   });
+ 			   },
+ 			   error: function(resp){
+ 					var respText = eval('('+resp+')'); 
+ 					alert(respText.msg);
+ 			   }
+ 		   });
+	});
+}
 function doedit(){
 	var count = 0;
 	var alt;
 	var strjson = '[{"customerid":"'+customer.customerid+'",';
-	$("input").each(function(i,item){
+	$("input,select").each(function(i,item){
 		strjson += '"'+$(item).attr("name")+'":"'+$(item).val()+'",';
 		if($(item).val() == null || $(item).val() == ''){
 			if($(item).attr("id") != "file_input"){
@@ -168,6 +185,7 @@ function doedit(){
 		success:function(resp){
 			var data = eval('('+resp+')');
 			alert(data.msg);
+			history.go(-1);
 		},
 		error : function(resp2){
 			var respText2 = eval('('+resp2+')');

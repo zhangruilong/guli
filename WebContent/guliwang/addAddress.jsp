@@ -23,13 +23,8 @@
 <div class="reg-wrapper reg-dianpu-info">
 	<ul>
     	<li><span>所在城市</span> <select id="city">
-    		<option>嘉兴市</option>
 			</select><i></i></li>
         <li><span>所在区域</span> <select  id="xian">
-        		<option>海盐县</option>
-				<option>嘉善县</option>
-				<option>秀洲区</option>
-				<option>南湖区</option>
 			</select><i></i></li>
         <li><span>详细地址</span> <input id="detaAddressa" type="text" placeholder="请输入详细地址"></li>
     </ul>
@@ -47,8 +42,8 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function addAddress(){
-		var city = $("#city").val();
-		var xian = $("#xian").val();
+		var city = $("#city").text();
+		var xian = $("#xian").text();
 		var detaAddressa = $("#detaAddressa").val();
 		var addressture = "0";
 		if($("[name='addressture']:checkbox").get(0).checked){
@@ -77,32 +72,49 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 		});
 	}
 	$(function(){
-		/* $("#city").change(function(){
-			var customercity = $("#city").val();
-			Ext.Ajax.request({
-				url : 'querycity.action',
-				method : 'POST',
-				params : {
-					"cityname" : customercity
-				},
-				success : function(resp,opts) {
-					var result = resp.responseText;
-					var $result = Ext.util.JSON.decode(result);
-					$("#xian").empty();			//清空select组件内的原始值
-					var $option = $("<option value='' >请选择地区</option>");
-					$("#xian").append($option);
-					for ( var i = 0; i < $result.length; i++) {
-						var city = $result[i];
-						var $option = $("<option>"+city.cityname+"</option>");
-						$("#xian").append($option);
-					}
-				},
-				failure : function(resp,opts) {
-					Ext.Msg.alert('提示', '网络出现问题，请稍后再试');
-				}
-			});
-		});	     */
+		$.ajax({
+			url:"CityAction.do?method=selAll",
+			type:"post",
+			data:{
+				wheresql:"cityparent='root'"
+			},
+			success:function(resp){
+				var data = JSON.parse(resp).root;
+				$("#city option").remove();
+				$.each(data,function(i,item){
+					$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
+				});
+				cityChaEve()
+			},
+			error: function(resp){
+				var respText = eval('('+resp+')'); 
+				alert(respText.msg);
+			}
+		});
 	})
+	//绑定更换城市时的事件
+	function cityChaEve(){
+		$("#city").change(function(){
+			 $.ajax({
+  			   url:"CityAction.do?method=selAll",
+  			   type:"post",
+  			   data:{
+  				   wheresql:"cityparent='"+$(this).val()+"'"
+  			   },
+  			   success:function(resp){
+  				   var data = JSON.parse(resp).root;
+ 				   $("#xian option").remove();
+  				   $.each(data,function(i,item){
+  					   $("#xian").append('<option>'+item.cityname+'</option>');
+  				   });
+  			   },
+  			   error: function(resp){
+  					var respText = eval('('+resp+')'); 
+  					alert(respText.msg);
+  			   }
+  		   });
+		});
+	}
 </script>
 </body>
 </html>
