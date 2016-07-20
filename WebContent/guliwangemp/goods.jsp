@@ -54,7 +54,7 @@
         	<em class="icon-shouye1"></em>首页</a></li>
             <li class="active"><a href="goodsclass.jsp"><em class="icon-fenlei2"></em>商城</a></li>
             <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
-            <li class="active"><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
+            <li><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
         </ul>
     </div>
 <!--弹框-->
@@ -158,8 +158,6 @@ function initDishes(data){
      $(".home-hot-commodity").html("");
  	 $.each(data.root, function(i, item) {
  		var jsonitem = JSON.stringify(item);
- 		//var goods = jsonitem.replace(/\"/g,'\\"');
- 		//alert(goods);
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+item.goodsimage+
  	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+

@@ -84,7 +84,7 @@ $(function(){
 		},
 		success:function(resp){
 			var data = JSON.parse(resp);
-			if(data.root[0].length > 0){
+			if(data.root.length > 0){
 				$("#result_img").attr("src","../"+data.root[0].name);
 			} 
 		},

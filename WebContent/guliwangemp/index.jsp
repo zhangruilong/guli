@@ -92,7 +92,7 @@
         	<em class="icon-shouye2"></em>首页</a></li>
             <li><a href="goodsclass.jsp"><em class="icon-fenlei1"></em>商城</a></li>
             <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
-            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
+            <li><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
         </ul>
     </div>
 	</div>

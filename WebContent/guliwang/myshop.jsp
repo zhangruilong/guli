@@ -23,7 +23,7 @@ input:focus{ outline:none}
 
 #uploadImg{ width:69%; height:34px; float:left; position:relative; font-size:12px; overflow:hidden}
 #uploadImg a{ display:block; text-align:right;  height:34px; line-height:34px; font-size:1.4em; color:#aaa}
-#file_input{ width:auto; position:absolute; z-index:100; margin-left:-180px; font-size:60px;opacity:0;filter:alpha(opacity=0); margin-top:-5px;}
+/* #file_input{ width:auto; position:absolute; z-index:100; margin-left:-180px; font-size:60px;opacity:0;filter:alpha(opacity=0); margin-top:-5px;} */
 </style>
 </head>
 
@@ -160,13 +160,17 @@ function doedit(){
 	var alt;
 	var strjson = '[{"customerid":"'+customer.customerid+'",';
 	$("input,select").each(function(i,item){
-		strjson += '"'+$(item).attr("name")+'":"'+$(item).val()+'",';
+		if($(item).attr("id") != "city"){
+			strjson += '"'+$(item).attr("name")+'":"'+$(item).val()+'",';
+		} else {
+			strjson += '"'+$(item).attr("name")+'":"'+$(item).children("option:selected").text()+'",';
+		}
 		if($(item).val() == null || $(item).val() == ''){
-			if($(item).attr("id") != "file_input"){
+			//if($(item).attr("id") != "file_input"){
 				count++;
 				alt=$(item).attr("placeholder");
 				return false;
-			}
+			//}
 		}
 	});
 	strjson = strjson.substr(0, strjson.length - 1);
