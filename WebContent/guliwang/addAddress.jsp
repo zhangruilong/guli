@@ -42,13 +42,15 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function addAddress(){
-		var city = $("#city").text();
-		var xian = $("#xian").text();
+		var city = $("#city").children("option:selected").text();
+		var xian = $("#xian").children("option:selected").text();
 		var detaAddressa = $("#detaAddressa").val();
 		var addressture = "0";
 		if($("[name='addressture']:checkbox").get(0).checked){
 			addressture = '1';
 		}
+		//alert($("input[name='addressconnect']").val());
+		//alert($("input[name='addressphone']").val());
 		$.ajax({
 			url:"AddressAction.do?method=insertCusAdd",
 			type:"post",
@@ -80,11 +82,33 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			},
 			success:function(resp){
 				var data = JSON.parse(resp).root;
+				var paramcity = '';
 				$("#city option").remove();
 				$.each(data,function(i,item){
 					$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
+					if(i == 0){
+						paramcity = item.cityid;
+					}
 				});
-				cityChaEve()
+				$.ajax({
+		  			   url:"CityAction.do?method=selAll",
+		  			   type:"post",
+		  			   data:{
+		  				   wheresql:"cityparent='"+paramcity+"'"
+		  			   },
+		  			   success:function(resp){
+		  				   var data = JSON.parse(resp).root;
+		 				   $("#xian option").remove();
+		  				   $.each(data,function(i,item2){
+		  					   $("#xian").append('<option>'+item2.cityname+'</option>');
+		  				   });
+		  			   },
+		  			   error: function(resp){
+		  					var respText = eval('('+resp+')'); 
+		  					alert(respText.msg);
+		  			   }
+		  		});
+				cityChaEve();
 			},
 			error: function(resp){
 				var respText = eval('('+resp+')'); 

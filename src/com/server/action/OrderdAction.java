@@ -7,10 +7,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.server.poco.GoodsviewPoco;
 import com.server.poco.OrderdPoco;
 import com.server.pojo.Givegoodsview;
 import com.server.pojo.GoodsVo;
 import com.server.pojo.Goodsview;
+import com.server.pojo.HotOrderdSumVO;
 import com.server.pojo.Orderd;
 import com.server.pojo.Timegoods;
 import com.server.pojo.Timegoodsview;
@@ -191,39 +193,66 @@ public class OrderdAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
-	//查询客户购买的秒杀商品数量
-	/*
-	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
-		Pageinfo pageinfo = new Pageinfo(0, selCusXGOrderd(request.getParameter("customerid")));
+	//热销商品
+	@SuppressWarnings("unchecked")
+	public void hotgoodssel(HttpServletRequest request, HttpServletResponse response){
+		String staTime = request.getParameter("staTime");
+		String endTime = request.getParameter("endTime");
+		String customerxian = request.getParameter("customerxian");
+		String sql = "select * from (select A.*, ROWNUM RN from ( "+
+			"select sum(od.orderdnum) odgoodsnum,od.orderdcode,od.orderdtype,od.orderdunits "+
+			"from orderd od left join orderm om on om.ordermid = od.orderdorderm  "+
+			"left join company cp on om.ordermcompany = cp.companyid left join city ct on ct.cityid = cp.companycity "+
+			"where om.ordermtime >= '"+staTime+"' and om.ordermtime <= '"+endTime+"' and ct.cityname = '"+customerxian+
+			"' group by od.orderdcode,od.orderdtype,od.orderdunits order by odgoodsnum desc "+
+			") A where ROWNUM  <= (1*10) ) where RN > ((1-1)*10)";
+		List<HotOrderdSumVO> hos = (ArrayList<HotOrderdSumVO>) selAll(HotOrderdSumVO.class, sql);
+		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
+		for (HotOrderdSumVO item : hos) {
+			GoodsVo gvo = new GoodsVo();
+			if(item.getOrderdtype().equals("商品")){
+				List<Goodsview> tgviewList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
+							   "' and gv.goodsunits = '"+item.getOrderdunits()+
+							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
+							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
+							   " and gv.goodsstatue = '上架'");
+				if(tgviewList.size() > 0){
+					gvo.setType(item.getOrderdtype());
+					gvo.setGoodsview(tgviewList.get(0));
+					gvoList.add(gvo);
+				}
+			} else if(item.getOrderdtype().equals("秒杀")){
+				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
+								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
+								"' and tv.timegoodsstatue = '启用'");
+				if(tgviewList.size() >0){
+					gvo.setType(item.getOrderdtype());
+					gvo.setTgview(tgviewList.get(0));
+					gvoList.add(gvo);
+				}
+			} else if(item.getOrderdtype().equals("买赠")){
+				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
+								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
+								"' and gv.givegoodsstatue = '启用'");
+				if(ggviewList.size() >0){
+					gvo.setType(item.getOrderdtype());
+					gvo.setGgview(ggviewList.get(0));
+					gvoList.add(gvo);
+				}
+			}
+		}
+		Pageinfo pageinfo = new Pageinfo(gvoList);
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
-	}*/
-	/*public ArrayList<Orderd> selCusXGOrderd(String customerid) {
-		String sql = null;
-		Orderd temp = null;
-		ArrayList<Orderd> temps = new ArrayList<Orderd>();
-		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			sql = "select '' as orderdid,od.orderdcode as orderdcode,od.orderdtype as orderdtype,od.orderdunits as orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
-					"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
-					"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) group by od.orderdcode,od.orderdtype,od.orderdunits";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				temp = new Orderd();
-				temp.setOrderdcode( rs.getString("orderdcode"));
-				temp.setOrderdclass(rs.getString("orderdclass"));
-				temp.setOrderdunits(rs.getString("orderdunits"));
-				temp.setOrderdtype(rs.getString("orderdtype"));
-				temps.add(temp);
-			}
-		} catch (Exception e) {
-			System.out.println("Exception:" + e.getMessage());
-		} finally{
-			connectionMan.freeConnection(CommonConst.DSNAME,conn,stmt,rs);
-			return temps;
-		}
-	};*/
+	}
 }
+
+
+
+
+
+
+
+
+
+

@@ -34,8 +34,8 @@
 	<div class="gl-box">
 		<div class="home-search-wrapper">
 			<span class="citydrop">海盐县<!-- <em><img src="../images/dropbg.png"></em> --></span>
-			<div class="menu">
-				<!-- <div class="host-city">
+			<!-- <div class="menu">
+				<div class="host-city">
 					<p class="quyu">
 						请选择服务区域 <span class="fr"></span>
 					</p>
@@ -47,8 +47,8 @@
 						<li><a href="index.jsp?xian=秀洲区city=16">秀洲区</a></li>
 						<li><a href="index.jsp?xian=海盐县city=16">嘉善县</a></li>
 					</ul>
-				</div> -->
-			</div>
+				</div>
+			</div> -->
 			<input id="searchdishes" type="text" placeholder="请输入商品名称" onkeydown="submitSearch(this)" />
 			<a onclick="docart(this)" href="cart.jsp" class="gwc"><!-- <img src="images/gwc.png"> --><em id="totalnum">0</em></a>
 		</div>
@@ -107,11 +107,10 @@
 	</div>
 </div>
 	<script src="../js/jquery-1.8.3.min.js"></script>
-	<script src="../js/jquery-dropdown.js"></script>
 	<script type="text/javascript">
 	var basePath = '<%=basePath%>';
-	var xian = '';
-	var city = '';
+	//var xian = '';
+	//var city = '';
 	var customer = JSON.parse(window.localStorage.getItem("customer"));
 	$(function(){
 		//openid
@@ -172,32 +171,13 @@
 			$(".cd-popup").addClass("is-visible");
 		}
 		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
-		city = data.root[0].customercity;
-		xian = data.root[0].customerxian;
-		initIndexPage();
+		$(".fr").text('所在城市：'+data.root[0].customercity);
+		$(".citydrop").text(data.root[0].customerxian);
+		//initIndexPage();
 	}
 	//初始化页面
 	function initIndexPage(){
-		$(".fr").text('所在城市：'+city);
-		$(".citydrop").text(xian);
-		/* $.ajax({
-			   url:"CityAction.do?method=indexXianQu",
-			   type:"post",
-			   data:{
-				   wheresql:"ct2.cityname='"+city+"'"
-			   },
-			   success:function(resp){
-				   var data = JSON.parse(resp).root;
-				   $("#citys-menu li").remove();
-				   $.each(data,function(i,item){
-					   $("#citys-menu").append('<li><a href="index.jsp?xian='+item.cityname+'city='+item.cityparent+'">'+item.cityname+'</a></li>');
-				   });
-			   },
-			   error: function(resp){
-					var respText = eval('('+resp+')'); 
-					alert(respText.msg);
-			   }
-		   }); */
+		
 	}
 	//跳转
 	function dohrefJump(url){

@@ -32,7 +32,7 @@ String dateString = formatter.format(currentTime);
 <body>
 <div class="gl-box">
     <div class="wapper-nav"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	热销商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><img src="images/gwc.png" ><em id="totalnum">0</em></a></div>
+	热销商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><img src="../images/gwc.png" ><em id="totalnum">0</em></a></div>
     <!--代码部分begin-->
 <div id="menu">
 <!--tag标题-->
@@ -65,7 +65,7 @@ String dateString = formatter.format(currentTime);
 <script src="../js/getDate.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
-var xian = '${param.xian}';
+var xian = '';
 var dateString = '<%=dateString%>';
 $(function(){ 
 	//购物车图标上的数量
@@ -100,45 +100,46 @@ function thisMonthHotGoods(obj){
 }
 //页面信息
 function pageInfo(staTime,endTime){
-	if(xian && typeof(xian) != 'undefined'){
-		$.getJSON("hotTodayGoods.action",{
-			"cityname":xian,
+	$.ajax({
+		url:"OrderdAction.do?method=hotgoodssel",
+		type:"post",
+		data:{
+			"customerxian":customer.customerxian,
 			"staTime":staTime,
 			"endTime":endTime,
 			"customertype":customer.customertype,
 			"customerlevel":customer.customerlevel
-			},initMiaoshaPage);
-	} else {
-		$.getJSON("hotTodayGoods.action",{
-			"cityname":customer.customerxian,
-			"staTime":staTime,
-			"endTime":endTime,
-			"customertype":customer.customertype,
-			"customerlevel":customer.customerlevel
-			},initMiaoshaPage);
-	}
+		},
+		success : initMiaoshaPage,
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
+
 }
 //初始化页面
-function initMiaoshaPage(data){
+function initMiaoshaPage(resp){
+	var data = JSON.parse(resp).root;
 	$(".home-hot-commodity").html("");
 	$.each(data,function(i,item){
 		if(item.type == '商品'){
-			var liObj = '<li onclick="purchaseGoods(\''+item.goods.goodscode+'\')">'+
-	         	'<span class="fl"><img src="../'+item.goods.goodsimage+
+			var liObj = '<li onclick="purchaseGoods(\''+item.goodsview.goodscode+'\')">'+
+	         	'<span class="fl"><img src="../'+item.goodsview.goodsimage+
 	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
-	         	'<h1>'+item.goods.goodsname+'<br><span>('+item.goods.goodsunits+')</span></h1>'+
+	         	'<h1>'+item.goodsview.goodsname+'<br><span>('+item.goodsview.goodsunits+')</span></h1>'+
 	           '  <div class="block"> </div></li>';
 		} else if(item.type == '秒杀'){
-			var liObj = '<li onclick="purchaseMiaosha(\''+item.timegoods.timegoodscode+'\')">'+
-         	'<span class="fl"><img src="../'+item.timegoods.timegoodsimage+
+			var liObj = '<li onclick="purchaseMiaosha(\''+item.tgview.timegoodscode+'\')">'+
+         	'<span class="fl"><img src="../'+item.tgview.timegoodsimage+
          	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
-         	'<h1>'+item.timegoods.timegoodsname+'<br><span>('+item.timegoods.timegoodsunits+')</span></h1>'+
+         	'<h1>'+item.tgview.timegoodsname+'<br><span>('+item.tgview.timegoodsunits+')</span></h1>'+
            '  <div class="block"> </div></li>';
 		} else {
-			var liObj = '<li onclick="purchaseGiveGoods(\''+item.givegoods.givegoodscode+'\')">'+
-         	'<span class="fl"><img src="../'+item.givegoods.givegoodsimage+
+			var liObj = '<li onclick="purchaseGiveGoods(\''+item.ggview.givegoodscode+'\')">'+
+         	'<span class="fl"><img src="../'+item.ggview.givegoodsimage+
          	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
-         	'<h1>'+item.givegoods.givegoodsname+'<br><span>('+item.givegoods.givegoodsunits+')</span></h1>'+
+         	'<h1>'+item.ggview.givegoodsname+'<br><span>('+item.ggview.givegoodsunits+')</span></h1>'+
            '  <div class="block"> </div></li>';
 		}
 		$(".home-hot-commodity").append(liObj);
