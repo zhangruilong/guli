@@ -287,19 +287,6 @@ function regoumai(){
 			alert(respText2.msg);
 		}
 	});
-	return ;
-	$.ajax({
-		url: "queryREgoumaiGoods.action",
-		async:true,
-		data: {"orderdcodes":orderdcodes,"orderdtypes":orderdtypes,"customertype":customer.customertype,"customerlevel":customer.customerlevel},
-		dataType:"json",
-		success: function(data) {
-			
-		},
-		error:function() {
-			alert("网络问题请稍候再试");
-		}
-	});
 }
 function initOrderd(data){
 	$("#orderd_data").text(JSON.stringify(data.root));

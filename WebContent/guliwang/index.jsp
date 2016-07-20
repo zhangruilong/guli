@@ -82,9 +82,9 @@
 		
 		<div class="" style="padding-top: 10px;margin-bottom: 15%;">
 			
-	        <a id="a_myshop" onclick="" href="miaosha.jsp?xian=${param.xian }"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
-	        <a id="a_mycollect" onclick="" href="give.jsp?xian=${param.xian }"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <a onclick="" href="hotgoods.jsp?xian=${param.xian }"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
+	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
+	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
+	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
     	<ul>

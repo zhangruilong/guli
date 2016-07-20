@@ -33,22 +33,22 @@
 <body>
 	<div class="gl-box">
 		<div class="home-search-wrapper">
-			<span class="citydrop">海盐县<em><img src="../images/dropbg.png"></em></span>
-			<div class="menu">
+			<span class="citydrop">海盐县<!-- <em><img src="../images/dropbg.png"></em> --></span>
+			<!-- <div class="menu">
 				<div class="host-city">
 					<p class="quyu">
-						请选择服务区域 <span class="fr">所在城市：嘉兴市</span>
+						请选择服务区域 <span class="fr"></span>
 					</p>
 				</div>
 				<div class="menu-tags home-city-drop">
-					<ul id="citys-menu">
+					<ul id="citys-menu" name="">
 						<li><a href="index.jsp?xian=海盐县city=16">海盐县</a></li>
 						<li><a href="index.jsp?xian=南湖区city=16">南湖区</a></li>
 						<li><a href="index.jsp?xian=秀洲区city=16">秀洲区</a></li>
 						<li><a href="index.jsp?xian=海盐县city=16">嘉善县</a></li>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 			<input id="searchdishes" type="text" placeholder="请输入商品名称" onkeydown="submitSearch(this)" />
 			<a onclick="docart(this)" href="cart.jsp" class="gwc"><!-- <img src="images/gwc.png"> --><em id="totalnum">0</em></a>
 		</div>
@@ -82,9 +82,9 @@
 		
 		<div class="" style="padding-top: 10px;margin-bottom: 15%;">
 			
-	        <a id="a_myshop" onclick="" href="miaosha.jsp?xian=${param.xian }"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
-	        <a id="a_mycollect" onclick="" href="give.jsp?xian=${param.xian }"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <a onclick="" href="hotgoods.jsp?xian=${param.xian }"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
+	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
+	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
+	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
     	<ul>
@@ -92,36 +92,17 @@
         	<em class="icon-shouye2"></em>首页</a></li>
             <li><a href="goodsclass.jsp"><em class="icon-fenlei1"></em>商城</a></li>
             <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
-            <li><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
+            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
         </ul>
     </div>
 	</div>
-	<!--弹框-->
-<div class="cd-popup" role="alert">
-	<div class="cd-popup-container">
-		<div class="cd-buttons">
-        	<h1>谷粒网提示</h1>
-			<p class="popup_msg">尚无账号，立即注册？</p>
-            <a class="cd-popup-close">取消</a><a class="popup_queding" href="reg.jsp">确定</a>
-		</div>
-	</div>
-</div>
 	<script src="../js/jquery-1.8.3.min.js"></script>
-	<script src="../js/jquery-dropdown.js"></script>
 	<script type="text/javascript">
 	var basePath = '<%=basePath%>';
-	var xian = '${param.xian}';
-	var city = '${param.city}';
+	//var xian = '';
+	//var city = '';
 	var customer = JSON.parse(window.localStorage.getItem("customeremp"));
-	$(function(){ 
-		//openid
-		$(".cd-popup").on("click",function(event){		//绑定点击事件
-			if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
-				//如果点击的是'取消'或者除'确定'外的其他地方
-				$(this).removeClass("is-visible");	//移除'is-visible' class
-				
-			}
-		});
+	$(function(){
 		if(!window.localStorage.getItem("totalnum")){
 			window.localStorage.setItem("totalnum",0);
 		}
@@ -134,7 +115,7 @@
 		}else{
 			$("#totalnum").text(window.localStorage.getItem("cartnum"));
 		}
-		
+		$(".citydrop").text(customer.customerxian);
 	})
 	//跳转
 	function dohrefJump(url){
