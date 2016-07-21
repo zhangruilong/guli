@@ -100,9 +100,9 @@ public class BaseDao {
 		                method.invoke(obj, rs.getBoolean(fieldname));  
 		            } catch (Exception e) {
 	        		}
-		            }else if(c == byte.class){ 
+		            }else if(c == Integer.class){ 
 		            	try {
-		                method.invoke(obj, rs.getBytes(fieldname));  
+		                method.invoke(obj, rs.getInt(fieldname));  
 		            } catch (Exception e) {
 	        		}
 		            }else if(c == char.class){  

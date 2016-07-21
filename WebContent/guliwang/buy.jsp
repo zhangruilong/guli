@@ -177,7 +177,9 @@ function buy(){
 			url:"OrderdAction.do?method=checkGoodsXJ",
 			type:"post",
 			data:{
-				json : orderdetjson
+				json : orderdetjson,
+				customertype:customer.customertype,
+				customerlevel:customer.customerlevel
 			},
 			success : function(resp){
 				var data = JSON.parse(resp).root;							//返回的商品
@@ -217,27 +219,26 @@ function buy(){
 				});
 				xjGIds = xjGIds.substr(0, xjGIds.length - 1);
 				xjGIds += ' 已下架或者超过了限购数量，是否要结算？';
+				var odjson = JSON.parse(orderdetjson);
+				if(odjson.length <= 0){
+					alert("您购买的商品全都下架了...");
+					return;
+				}
 				if(xjFlag > 0){
 					if(confirm(xjGIds) == false){
 						return ;
 					} else {
 						var omMoney = 0.0;
 						var omNum = 0;
-						var odjson = JSON.parse(orderdetjson);
-						if(odjson.length > 0){
-							$.each(odjson,function(i,item){
-								omMoney += parseFloat(item.orderdmoney);
-								omNum += parseInt(item.orderdnum);
-							});
-							var jsonOM = JSON.parse(ordermjson);
-							jsonOM[0].ordermmoney = omMoney;
-							jsonOM[0].ordermnum = omNum;
-							ordermjson = JSON.stringify(jsonOM);
-							return ;
-							saveOrder(ordermjson,orderdetjson);
-						} else {
-							alert("您购买的商品全都下架了...");
-						}
+						$.each(odjson,function(i,item){
+							omMoney += parseFloat(item.orderdmoney);
+							omNum += parseInt(item.orderdnum);
+						});
+						var jsonOM = JSON.parse(ordermjson);
+						jsonOM[0].ordermmoney = omMoney;
+						jsonOM[0].ordermnum = omNum;
+						ordermjson = JSON.stringify(jsonOM);
+						saveOrder(ordermjson,orderdetjson);
 					}
 				} else {
 					saveOrder(ordermjson,orderdetjson);
