@@ -102,7 +102,7 @@ public class GivegoodsviewAction extends BaseActionDao {
 		queryinfo.setType(Givegoodsview.class);
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setWheresql(wheresql);
-		queryinfo.setOrder(GivegoodsviewPoco.ORDER);
+		queryinfo.setOrder("givegoodsseq");
 		cuss = (ArrayList<Givegoodsview>) selAll(queryinfo);
 		Pageinfo pageinfo = new Pageinfo(0, cuss);
 		result = CommonConst.GSON.toJson(pageinfo);

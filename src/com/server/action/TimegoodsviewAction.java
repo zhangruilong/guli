@@ -103,7 +103,7 @@ public class TimegoodsviewAction extends BaseActionDao {
 		queryinfo.setType(Timegoodsview.class);
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setWheresql(wheresql);
-		queryinfo.setOrder(TimegoodsviewPoco.ORDER);
+		queryinfo.setOrder("timegoodsseq");
 		cuss = (ArrayList<Timegoodsview>) selAll(queryinfo);
 		Pageinfo pageinfo = new Pageinfo(0, cuss);
 		result = CommonConst.GSON.toJson(pageinfo);
