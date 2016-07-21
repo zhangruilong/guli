@@ -60,64 +60,71 @@ public class BaseDao {
 	}
 	public Object rsToObj(Class type, Field[] field, ResultSet rs) {
 		try {
-			Object obj = type.newInstance();  
-			 for (int i = 0; i < field.length; i++) {  
-		            //得到属性名  
-				 	String fieldname = field[i].getName();  
-		            //包装成SetXXX方法  
-		            String methodname="set"+fieldname.substring(0,1).toUpperCase()+fieldname.substring(1);  
-		            //得到类型  
-		            Class  c = field[i].getType();  
-		            //得到方法  
-		            Method method= type.getMethod(methodname, c);  
-		            if(c == String.class){ 
-		            	try {
-		            		method.invoke(obj, rs.getString(fieldname)); 
-		            	} catch (Exception e) {
-		        		}
-		            }else if(c == int.class){  
-		            	try {
-		                method.invoke(obj, rs.getInt(fieldname));  
-		            	} catch (Exception e) {
-		        		}
-		            }else if(c == float.class){  
-		            	try {
-		                method.invoke(obj, rs.getFloat(fieldname));  
-		            } catch (Exception e) {
-	        		}
-		            }else if(c == double.class){  
-		            	try {
-		                method.invoke(obj, rs.getDouble(fieldname));  
-		            } catch (Exception e) {
-	        		}
-		            }else if(c == java.sql.Date.class){  
-		            	try {
-		                method.invoke(obj, rs.getDate(fieldname));  
-		            } catch (Exception e) {
-	        		}
-		            }else if(c == boolean.class){  
-		            	try {
-		                method.invoke(obj, rs.getBoolean(fieldname));  
-		            } catch (Exception e) {
-	        		}
-		            }else if(c == Integer.class){ 
-		            	try {
-		                method.invoke(obj, rs.getInt(fieldname));  
-		            } catch (Exception e) {
-	        		}
-		            }else if(c == char.class){  
-		            	try {
-		                method.invoke(obj, rs.getCharacterStream(fieldname));  
-		            } catch (Exception e) {
-	        		}
-		            }else{  
-		            	try {
-		                method.invoke(obj, rs.getObject(fieldname));
-		            } catch (Exception e) {
-	        		}
-		            }  
-		        }
-			 return obj;
+			Object obj = type.newInstance();
+			for (int i = 0; i < field.length; i++) {
+				// 得到属性名
+				String fieldname = field[i].getName();
+				// 包装成SetXXX方法
+				String methodname = "set"
+						+ fieldname.substring(0, 1).toUpperCase()
+						+ fieldname.substring(1);
+				// 得到类型
+				Class c = field[i].getType();
+				// 得到方法
+				Method method = type.getMethod(methodname, c);
+				if (c == String.class) {
+					try {
+						method.invoke(obj, rs.getString(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == Integer.class) {
+					try {
+						method.invoke(obj, rs.getInt(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == Float.class) {
+					try {
+						method.invoke(obj, rs.getFloat(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == Double.class) {
+					try {
+						method.invoke(obj, rs.getDouble(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == java.sql.Date.class) {
+					try {
+						method.invoke(obj, rs.getDate(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == int.class) {
+					try {
+						method.invoke(obj, rs.getInt(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == float.class) {
+					try {
+						method.invoke(obj, rs.getFloat(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == double.class) {
+					try {
+						method.invoke(obj, rs.getDouble(fieldname));
+					} catch (Exception e) {
+					}
+				} else if (c == boolean.class) {
+					try {
+						method.invoke(obj, rs.getBoolean(fieldname));
+					} catch (Exception e) {
+					}
+				} else {
+					try {
+						method.invoke(obj, rs.getObject(fieldname));
+					} catch (Exception e) {
+					}
+				}
+			}
+			return obj;
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 			return null;
