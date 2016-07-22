@@ -60,7 +60,7 @@ public class SdishesVO {
 	/**
 	 * 订单数量
 	 */
-	private String orderdetnum;
+	private Integer orderdetnum;
 	
 	/**
 	 * 商品图片
@@ -80,7 +80,7 @@ public class SdishesVO {
 	/**
 	 * 限购数量
 	 */
-	private String timegoodsnum;
+	private Integer timegoodsnum;
 
 	public String getGoodsid() {
 		return goodsid;
@@ -170,11 +170,11 @@ public class SdishesVO {
 		this.goodsunits = goodsunits;
 	}
 
-	public String getOrderdetnum() {
+	public Integer getOrderdetnum() {
 		return orderdetnum;
 	}
 
-	public void setOrderdetnum(String orderdetnum) {
+	public void setOrderdetnum(Integer orderdetnum) {
 		this.orderdetnum = orderdetnum;
 	}
 
@@ -202,11 +202,11 @@ public class SdishesVO {
 		this.surplusnum = surplusnum;
 	}
 
-	public String getTimegoodsnum() {
+	public Integer getTimegoodsnum() {
 		return timegoodsnum;
 	}
 
-	public void setTimegoodsnum(String timegoodsnum) {
+	public void setTimegoodsnum(Integer timegoodsnum) {
 		this.timegoodsnum = timegoodsnum;
 	}
 

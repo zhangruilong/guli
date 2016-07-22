@@ -2,7 +2,10 @@ package com.server.action;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.server.poco.GoodsviewPoco;
 import com.server.poco.OrderdPoco;
 import com.server.pojo.Givegoodsview;
+import com.server.pojo.Goods;
 import com.server.pojo.GoodsVo;
 import com.server.pojo.Goodsview;
 import com.server.pojo.HotOrderdSumVO;
@@ -25,6 +29,7 @@ import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
+import com.system.tools.util.TypeUtil;
 
 /**
  * 订单详细 逻辑层
@@ -136,14 +141,14 @@ public class OrderdAction extends BaseActionDao {
 		for (Orderd item : cuss) {
 			GoodsVo gvo = new GoodsVo();
 			if(item.getOrderdtype().equals("商品")){
-				List<Goodsview> tgviewList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
+				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
 							   "' and gv.goodsunits = '"+item.getOrderdunits()+
 							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
 							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
 							   " and gv.goodsstatue = '上架'");
-				if(tgviewList.size() > 0){
+				if(gList.size() > 0){
 					gvo.setType(item.getOrderdtype());
-					gvo.setGoodsview(tgviewList.get(0));
+					gvo.setGoodsview(gList.get(0));
 					gvo.setNowGoodsNum(item.getOrderdnum());
 				} else {
 					Goodsview xjg = new Goodsview();
@@ -248,17 +253,130 @@ public class OrderdAction extends BaseActionDao {
 	}
 	//整理前端传来的购物车数据
 	public void sortingSdiData(HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> infoMap = new HashMap<String, Object>();
 		String json = request.getParameter("json");
 		String customerid = request.getParameter("customerid");
 		String customertype = request.getParameter("customertype");
 		String customerlevel = request.getParameter("customerlevel");
-		
 		System.out.println("json : " + json);
 		List<SdishesVO> svoList = null;
-		if(CommonUtil.isNotEmpty(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<Orderd>>() {}.getType());
-		Pageinfo pageinfo = new Pageinfo(svoList);
+		if(CommonUtil.isNotEmpty(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<SdishesVO>>() {}.getType());
+		infoMap.put("svoList", svoList);
+		infoMap = checkXJ(infoMap, customertype, customerlevel);				//检查商品是否下架
+		infoMap = checkSurplus(customerid,infoMap);							//检查剩余限量是否足够 并修改
+		@SuppressWarnings("unchecked")
+		Pageinfo pageinfo = new Pageinfo((List<SdishesVO>)infoMap.get("svoList"));
+		pageinfo.setMsg(TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+TypeUtil.objToString(infoMap.get("editNumMsg"))+TypeUtil.objToString(infoMap.get("deleGoodsMsg")));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
+	}
+	//检查商品是否下架了
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> checkXJ(Map<String, Object> infoMap,String customertype,String customerlevel){
+		List<SdishesVO> svoList = (List<SdishesVO>) infoMap.get("svoList");
+		List<SdishesVO> svoListremove = new ArrayList<SdishesVO>();
+		String xjGoodsMsg = null;
+		for (int i = 0; i < svoList.size(); i++) {
+			SdishesVO svo = svoList.get(i);
+			if(svo.getOrderdtype().equals("商品")){
+				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+svo.getGoodscode()+
+						   "' and gv.goodsunits = '"+svo.getGoodsunits()+
+						   "' and gv.pricesclass = '"+customertype+
+						   "' and gv.priceslevel = "+customerlevel+
+						   " and gv.goodsstatue = '上架'");
+				if(gList.size() == 0){
+					svoListremove.add(svo);
+					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				}
+			} else if(svo.getOrderdtype().equals("秒杀")){
+				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
+						svo.getGoodscode()+"' and tv.timegoodsunits = '"+svo.getGoodsunits()+
+						"' and tv.timegoodsstatue = '启用'");
+				if(tgviewList.size() == 0){
+					svoListremove.add(svo);
+					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				}
+			} else if(svo.getOrderdtype().equals("买赠")){
+				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
+						svo.getGoodscode()+"' and gv.givegoodsunits = '"+svo.getGoodsunits()+
+						"' and gv.givegoodsstatue = '启用'");
+				if(ggviewList.size() == 0){
+					svoListremove.add(svo);
+					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				}
+			}
+		}
+		if(CommonUtil.isNotEmpty(xjGoodsMsg)){
+			infoMap.put("xjGoodsMsg", xjGoodsMsg+"商品已下架。");
+		}
+		infoMap.put("svoList", svoList);
+		return infoMap;
+	}
+	//检查剩余限量是否足够 并修改
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> checkSurplus(String customerid,Map<String, Object> infoMap){
+		List<SdishesVO> svoList = (List<SdishesVO>) infoMap.get("svoList");
+		List<SdishesVO> svoListremove = new ArrayList<SdishesVO>();
+		cuss = (ArrayList<Orderd>) selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
+				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
+				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) and om.ordermtime >= '"+DateUtils.getDate()+
+				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdcode,od.orderdtype,od.orderdunits");
+		String editNumMsg = null;
+		String deleGoodsMsg = null;
+		for (int i=0; i < svoList.size(); i++) {
+			SdishesVO svo = svoList.get(i);
+			Integer odNum = svo.getOrderdetnum();				//订单中购买的数量
+			//检查秒杀和买赠商品的每日限购
+			if(svo.getOrderdtype().equals("秒杀") || svo.getOrderdtype().equals("买赠")){
+				Integer daySur = svo.getTimegoodsnum() - odNum;
+				for (Orderd od : cuss) {
+					if(od.getOrderdtype().equals(svo.getOrderdtype()) && od.getOrderdcode().equals(svo.getGoodscode()) && od.getOrderdunits().equals(svo.getGoodsunits())){
+						daySur -= Integer.parseInt(od.getOrderdclass());
+					}
+				}
+				if(daySur >= 0){
+					
+				} else if(daySur < 0 && odNum + daySur > 0){
+					odNum += daySur;
+					svoList.get(i).setOrderdetnum(odNum);									//修改
+					editNumMsg += svo.getGoodsname()+",";									//提示信息
+				} else {
+					odNum = -1;
+					svoListremove.add(svo);
+					deleGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				}
+			}
+			
+			//检查秒杀商品的剩余数量
+			if(svo.getOrderdtype().equals("秒杀")){
+				List<Timegoods> tgList = selAll(Timegoods.class, "select * from timegoods tg where tg.timegoodscode = '"+
+						svo.getGoodscode()+"' and tg.timegoodsunits = '"+svo.getGoodsunits()+"'");
+				if(CommonUtil.isNotEmpty(tgList)){
+					Integer surnum = tgList.get(0).getSurplusnum();			//剩余数量
+					if(odNum != -1 && tgList.get(0).getAllnum() > 0){						//如果有设置总限购，并且订单商品没有被删除。
+						if(surnum <= 0){									//判断剩余数量
+							svoListremove.add(svoList.get(i));
+							deleGoodsMsg += svo.getGoodsname()+",";									//提示信息
+						} else if(odNum > surnum && odNum.equals(svo.getOrderdetnum())){				//如果没有被修改过,并且下单数量大于剩余数量
+							editNumMsg += svo.getGoodsname()+",";									//提示信息
+							odNum = surnum;
+							svoList.get(i).setOrderdetnum(odNum);
+						} else {											//如果有被修改过
+							odNum = surnum;
+						}
+					}
+				}
+			}
+		}
+		svoList.removeAll(svoListremove);
+		if(CommonUtil.isNotEmpty(editNumMsg)){
+			infoMap.put("editNumMsg", editNumMsg+" 数量已修改。");
+		}
+		if(CommonUtil.isNotEmpty(deleGoodsMsg)){
+			infoMap.put("deleGoodsMsg", deleGoodsMsg+ " 商品已卖完。");
+		}
+		infoMap.put("svoList", svoList);
+		return infoMap;
 	}
 	//验证商品是否已经下架
 	/*@SuppressWarnings("unchecked")

@@ -50,7 +50,7 @@ public class Orderd
    /**
     * 数量
     */
-   private int orderdnum;   
+   private Integer orderdnum;   
    /**
     * 下单金额
     */
@@ -234,7 +234,7 @@ public class Orderd
 	 *设置"数量"属性
 	 *@param orderdnum 实体的Orderdnum属性
 	 */
-	public void setOrderdnum(int orderdnum)
+	public void setOrderdnum(Integer orderdnum)
 	{
 		this.orderdnum = orderdnum;
 	}
@@ -242,7 +242,7 @@ public class Orderd
 	/**
 	 *获取"数量"属性
 	 */
-	public int getOrderdnum()
+	public Integer getOrderdnum()
 	{
 		return this.orderdnum;
 	}	   
@@ -295,7 +295,7 @@ public class Orderd
 	 	,String orderdprice
 	 	,String orderdunit
 	 	,String orderdclass
-	 	,int orderdnum
+	 	,Integer orderdnum
 	 	,String orderdmoney
 	 	,String orderdrightmoney
 		 ){

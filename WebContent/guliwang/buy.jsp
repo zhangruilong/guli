@@ -144,11 +144,18 @@ function sortingData(){
 			customerlevel:customer.customerlevel
 		},
 		success:function(resp){
-			alert(resp);
+			var respText = eval('('+resp+')');
+			if(respText.msg == ''){
+				window.localStorage.setItem("sdishes",JSON.stringify(respText.root));
+				buy();
+			} else {
+				alert(respText.msg);
+			}
 		},
 		error : function(resp) {
 			$("#buyall").attr('onclick','buy();');								//启用按钮
-			alert('购物车数据整理失败!');
+			var respText = eval('('+resp+')');
+			alert(respText.msg);
 		}
 	});
 }
@@ -158,6 +165,7 @@ function buy(){
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
 	var flag = 0;
 	$.each(scompany, function(y, mcompany) {
+		//alert(JSON.stringify(mcompany));
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
@@ -169,6 +177,7 @@ function buy(){
 		var orderdetjson = '[';
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
+			//alert(JSON.stringify(item));
 			if(item.orderdtype == '秒杀' && item.orderdetnum > item.surplusnum){
 				$(".meg").text("您购买的秒杀商品卖完了.......");
 				$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
@@ -194,83 +203,7 @@ function buy(){
 			return false;
 		}
 		orderdetjson = orderdetjson.substr(0, orderdetjson.length - 1) + ']';
-		/* $.ajax({
-			url:"OrderdAction.do?method=checkGoodsXJ",
-			type:"post",
-			data:{
-				json : orderdetjson,
-				customertype:customer.customertype,
-				customerlevel:customer.customerlevel
-			},
-			success : function(resp){
-				var data = JSON.parse(resp).root;							//返回的商品
-				var xjGIds = '您购买的：';
-				var xjFlag = 0;
-				$.each(data,function(i,item){
-					if(item.statue == '下架'){
-						xjFlag++;
-						var jsonOD = JSON.parse(orderdetjson);				//订单json
-						if(item.type == '商品'){
-							$.each(jsonOD,function(j,item2){				//找到商品名称和规格都吻合的订单
-								if(item2.orderdname == item.goodsview.goodsname && item2.orderdunits == item.goodsview.goodsunits){
-									jsonOD.splice(j,1);						//删除订单
-									return false;
-								}
-							});
-							xjGIds += item.goodsview.goodsname+'('+item.goodsview.goodsunits+'),'
-						} else if(item.type == '秒杀'){
-							$.each(jsonOD,function(j,item2){
-								if(item2.orderdname == item.tgview.timegoodsname && item2.orderdunits == item.tgview.timegoodsunits){
-									jsonOD.splice(j,1);	
-									return false;
-								}
-							});
-							xjGIds += item.tgview.timegoodsname+'('+item.tgview.timegoodsunits+'),'
-						} else if(item.type == '买赠'){
-							$.each(jsonOD,function(j,item2){
-								if(item2.orderdname == item.ggview.givegoodsname && item2.orderdunits == item.ggview.givegoodsunits){
-									jsonOD.splice(j,1);	
-									return false;
-								}
-							});
-							xjGIds += item.ggview.givegoodsname+'('+item.ggview.givegoodsunits+'),'
-						}
-						orderdetjson = JSON.stringify(jsonOD);
-					}
-				});
-				xjGIds = xjGIds.substr(0, xjGIds.length - 1);
-				xjGIds += ' 已下架或者超过了限购数量，是否要结算？';
-				var odjson = JSON.parse(orderdetjson);
-				if(odjson.length <= 0){
-					alert("您购买的商品全都下架了...");
-					return;
-				}
-				if(xjFlag > 0){
-					if(confirm(xjGIds) == false){
-						return ;
-					} else {
-						var omMoney = 0.0;
-						var omNum = 0;
-						$.each(odjson,function(i,item){
-							omMoney += parseFloat(item.orderdmoney);
-							omNum += parseInt(item.orderdnum);
-						});
-						var jsonOM = JSON.parse(ordermjson);
-						jsonOM[0].ordermmoney = omMoney;
-						jsonOM[0].ordermnum = omNum;
-						ordermjson = JSON.stringify(jsonOM);
-						saveOrder(ordermjson,orderdetjson);
-					}
-				} else {
-					saveOrder(ordermjson,orderdetjson);
-				}
-			},
-			error : function(resp) {
-				$("#buyall").attr('onclick','buy();');//启用按钮
-				alert('网络出现问题，请稍后再试');
-			}
-		}); */
-		
+		saveOrder(ordermjson,orderdetjson);
      });
 }
 //保存订单和订单详情
