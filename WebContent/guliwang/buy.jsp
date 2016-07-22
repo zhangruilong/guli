@@ -58,7 +58,7 @@
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
 			<p class="meg">您确定要货到付款?</p>
-            <a href="#" class="cd-popup-close">取消</a><a id="buyall" class="cd-popup-ok" onclick="buy();">确定</a>
+            <a href="#" class="cd-popup-close">取消</a><a id="buyall" class="cd-popup-ok" onclick="sortingData();">确定</a>
 		</div>
 	</div>
 </div>
@@ -131,9 +131,30 @@ function initDishes(data){
         	  '<font class="font-oringe">'+item.ordermmoney+'元</font></li>');
      });
 }
+//整理购物车数据
+function sortingData(){
+	$("#buyall").attr('onclick','');											//禁用按钮
+	$.ajax({
+		url:"OrderdAction.do?method=sortingSdiData",
+		type:"post",
+		data:{
+			json:window.localStorage.getItem("sdishes"),
+			customerid:customer.customerid,
+			customertype:customer.customertype,
+			customerlevel:customer.customerlevel
+		},
+		success:function(resp){
+			alert(resp);
+		},
+		error : function(resp) {
+			$("#buyall").attr('onclick','buy();');								//启用按钮
+			alert('购物车数据整理失败!');
+		}
+	});
+}
+//将购物车写入订单表
 function buy(){
-	$("#buyall").attr('onclick','');//禁用按钮
-	//将购物车写入订单表
+	$("#buyall").attr('onclick','');											//禁用按钮
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
 	var flag = 0;
 	$.each(scompany, function(y, mcompany) {
@@ -173,7 +194,7 @@ function buy(){
 			return false;
 		}
 		orderdetjson = orderdetjson.substr(0, orderdetjson.length - 1) + ']';
-		$.ajax({
+		/* $.ajax({
 			url:"OrderdAction.do?method=checkGoodsXJ",
 			type:"post",
 			data:{
@@ -248,7 +269,7 @@ function buy(){
 				$("#buyall").attr('onclick','buy();');//启用按钮
 				alert('网络出现问题，请稍后再试');
 			}
-		});
+		}); */
 		
      });
 }
@@ -275,7 +296,7 @@ function saveOrder(ordermjson,orderdetjson){
 			}
 		},
 		error : function(resp) {
-			$("#buyall").attr('onclick','buy();');//启用按钮
+			$("#buyall").attr('onclick','sortingData();');//启用按钮
 			alert('网络出现问题，请稍后再试');
 		}
 	});

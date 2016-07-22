@@ -122,6 +122,8 @@ function initMiaoshaPage(resp){
 					}
 				}
 				liObj+='</span><br>';
+				/* alert(item2.companydetail);
+				return; */
 				liObj += '<div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
 				' <em>￥'+item2.timegoodsprice+'</em></div>'+
 					'<div class="stock-num" name="'+item2.timegoodsid+'">'+
@@ -131,7 +133,7 @@ function initMiaoshaPage(resp){
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item2.timegoodsorgprice
 					   +',\''+item2.timegoodsname+'\',\''+item2.timegoodsunit+'\',\''+item2.timegoodsunits
 					   +'\',\''+item2.timegoodscode+'\',\''+item2.timegoodsclass
-					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail+
+					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
 					   +'\',\''+item2.surplusnum+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
 		        	'</div>';

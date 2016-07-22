@@ -28,8 +28,8 @@ color:#fff !important;
 .reg-wrapper{ background-color:#fff; border-bottom:solid 1px #ddd; border-top:solid 1px #ddd; margin-bottom:4%}
 .reg-wrapper li{ border-bottom:solid 1px #ddd; margin-left:4%; padding:4% 0; overflow:hidden}
 .reg-wrapper li:last-child{ border:none}
-.reg-wrapper li input,.reg-wrapper li select{ width:55%; padding: 0px 15px 0px 0px;float:right; height:30px; background:none; line-height:30px; border:none; text-align:right}
-.reg-wrapper li select{ height:31px; line-height:31px;direction:rtl}
+.reg-wrapper li input{ width:55%; padding: 0px 15px 0px 0px;float:right; height:30px; background:none; line-height:30px; border:none; text-align:right}
+.reg-wrapper li select{ height:31px; line-height:31px;direction:rtl; width:65%; padding: 0px 0px 0px 0px; height:30px; background:none; line-height:30px; border:none; text-align:right}
 .reg-dianpu-info li i:after{content: "\f3d3"; font-size:1.2em;height:31px; line-height:31px;  float:right; margin-right:2%; color:#999}
 .reg-wrapper li span{ width:25%; height:25px; line-height:25px; float:left; padding:1% 0}
 .reg-title{ font-size:1.2em; padding:4% 0; font-weight:normal; color:#666; padding-left:4%}

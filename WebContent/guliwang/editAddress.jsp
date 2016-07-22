@@ -68,6 +68,18 @@ function saveAddress(){
 	if($("[name='addressture']:checkbox").get(0).checked){
 		addressture = '1';
 	}
+	if(!$("input[name='addressconnect']").val()){
+		alert("联系人名不能为空!");
+		return;
+	}
+	if(!$("input[name='addressphone']").val()){
+		alert("手机号不能为空!");
+		return;
+	}
+	if(!$("input[name='addressaddress']").val()){
+		alert("详细地址不能为空!");
+		return;
+	}
 	$.ajax({
 		url:"AddressAction.do?method=updCusAdd",
 		type:"post",

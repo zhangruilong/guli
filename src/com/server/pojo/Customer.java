@@ -358,7 +358,7 @@ public class Customer
 	 	,String customerxian
 	 	,String customeraddress
 	 	,String customertype
-	 	,int customerlevel
+	 	,Integer customerlevel
 	 	,String openid
 	 	,String customerdetail
 	 	,String customerstatue

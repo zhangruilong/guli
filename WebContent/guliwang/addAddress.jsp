@@ -51,6 +51,18 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 		}
 		//alert($("input[name='addressconnect']").val());
 		//alert($("input[name='addressphone']").val());
+		if(!$("input[name='addressconnect']").val()){
+			alert("联系人名不能为空!");
+			return;
+		}
+		if(!$("input[name='addressphone']").val()){
+			alert("手机号不能为空!");
+			return;
+		}
+		if(!detaAddressa){
+			alert("详细地址不能为空!");
+			return;
+		}
 		$.ajax({
 			url:"AddressAction.do?method=insertCusAdd",
 			type:"post",

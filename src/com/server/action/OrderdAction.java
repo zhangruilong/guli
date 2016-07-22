@@ -14,6 +14,7 @@ import com.server.pojo.GoodsVo;
 import com.server.pojo.Goodsview;
 import com.server.pojo.HotOrderdSumVO;
 import com.server.pojo.Orderd;
+import com.server.pojo.SdishesVO;
 import com.server.pojo.Timegoods;
 import com.server.pojo.Timegoodsview;
 import com.system.tools.CommonConst;
@@ -245,32 +246,30 @@ public class OrderdAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//整理前端传来的购物车数据
+	public void sortingSdiData(HttpServletRequest request, HttpServletResponse response){
+		String json = request.getParameter("json");
+		String customerid = request.getParameter("customerid");
+		String customertype = request.getParameter("customertype");
+		String customerlevel = request.getParameter("customerlevel");
+		
+		System.out.println("json : " + json);
+		List<SdishesVO> svoList = null;
+		if(CommonUtil.isNotEmpty(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<Orderd>>() {}.getType());
+		Pageinfo pageinfo = new Pageinfo(svoList);
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}
 	//验证商品是否已经下架
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public void checkGoodsXJ(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
+		GoodsVo gvo = new GoodsVo();
 		for (Orderd item : cuss) {
-			GoodsVo gvo = new GoodsVo();
+			
 			if(item.getOrderdtype().equals("商品")){
-				List<Goodsview> tgviewList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
-							   "' and gv.goodsunits = '"+item.getOrderdunits()+
-							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
-							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
-							   " and gv.goodsstatue = '上架'");
-				if(tgviewList.size() > 0){
-					gvo.setType(item.getOrderdtype());
-					gvo.setGoodsview(tgviewList.get(0));
-					gvo.setNowGoodsNum(item.getOrderdnum());
-				} else {
-					Goodsview xjg = new Goodsview();
-					xjg.setGoodsname(item.getOrderdname());
-					xjg.setGoodsunits(item.getOrderdunits());
-					gvo.setType(item.getOrderdtype());
-					gvo.setGoodsview(xjg);
-					gvo.setStatue("下架");
-				}
-				gvoList.add(gvo);
+				gvoList.add(checkOdGoods(request,item.getOrderdcode(),item.getOrderdunits(),item.getOrderdnum(),item.getOrderdname()));
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
@@ -311,6 +310,29 @@ public class OrderdAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//验证普通商品是否下架,价格是否变化,客户等级是否变化
+	@SuppressWarnings("unchecked")
+	public GoodsVo checkOdGoods(HttpServletRequest request,String goodscode,String goodsunits,Integer goodsnum,String goodsname){
+		GoodsVo gvo = new GoodsVo();
+		List<Goodsview> tgviewList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+goodscode+
+				   "' and gv.goodsunits = '"+goodsunits+
+				   "' and gv.pricesclass = '"+request.getParameter("customertype")+
+				   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
+				   " and gv.goodsstatue = '上架'");
+		if(tgviewList.size() > 0){
+			gvo.setGoodsview(tgviewList.get(0));
+			gvo.setNowGoodsNum(goodsnum);
+		} else {
+			Goodsview xjg = new Goodsview();
+			xjg.setGoodsname(goodsname);
+			xjg.setGoodsunits(goodsunits);
+			gvo.setGoodsview(xjg);
+			gvo.setStatue("下架");
+		}
+		gvo.setType("商品");
+		return gvo;
+	}*/
+	
 }
 
 
