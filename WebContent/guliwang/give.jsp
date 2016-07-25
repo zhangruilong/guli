@@ -41,7 +41,7 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 var givegoodscode = '${param.givegoodscode}';
-$(function(){ 
+$(function(){
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
 			//如果点击的是'取消'或者除'确定'外的其他地方

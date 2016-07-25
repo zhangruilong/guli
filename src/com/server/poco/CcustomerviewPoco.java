@@ -1,7 +1,7 @@
 package com.server.poco;
 
 /**
- * 客户 实体类的常量
+ * ccustomerview 实体类的常量
  *@author ZhangRuiLong
  */
 public class CcustomerviewPoco
@@ -9,7 +9,7 @@ public class CcustomerviewPoco
    /**
     * 实体中文名
     */
-   public static String NAME = "客户";
+   public static String NAME = "ccustomerview";
    /**
     * 实体表名
     */
@@ -23,8 +23,10 @@ public class CcustomerviewPoco
     */
    public static String[] CHINESENAME = {
    		"ccustomerid",
+	 	"ccustomercompany",
 	 	"ccustomerdetail",
 	 	"createtime",
+	 	"creator",
 	 	"customerid",
 	 	"customercode",
 	 	"customername",
@@ -47,8 +49,10 @@ public class CcustomerviewPoco
 	 */
    public static final String[] FIELDNAME = {
    		"ccustomerid",
+	 	"ccustomercompany",
 	 	"ccustomerdetail",
 	 	"createtime",
+	 	"creator",
 	 	"customerid",
 	 	"customercode",
 	 	"customername",
@@ -75,8 +79,10 @@ public class CcustomerviewPoco
 	 */
    public static final String[] QUERYFIELDNAME = {
    		"ccustomerid",
+	 	"ccustomercompany",
 	 	"ccustomerdetail",
 	 	"createtime",
+	 	"creator",
 	 	"customerid",
 	 	"customercode",
 	 	"customername",

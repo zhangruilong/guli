@@ -45,11 +45,14 @@
 </div>
 <script src="../js/jquery-1.8.3.min.js"></script>
 <script>
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+var emp = JSON.parse(window.localStorage.getItem("emp"));
 var basePath = '<%=basePath%>';
 $(function(){
-	getJson(basePath+"CustomerAction.do",{method:"selAll"},initData,null);
+	getJson(basePath+"CcustomerviewAction.do",{method:"selAll",wheresql:"ccustomercompany='"+emp.empcompany+"'"},initData,null);
 });
 function initData(data){
+	alert(JSON.stringify(data));
     $("#customerlist").html("");
 	 $.each(data.root, function(i, item) {
 		$("#customerlist").append('<li><a class="cd-popup-trigger"><h2>'+

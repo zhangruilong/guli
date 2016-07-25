@@ -97,7 +97,7 @@ public class TimegoodsviewAction extends BaseActionDao {
 			wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' and timegoodscompany='"+companyid+"' ";
 		}
 		if(CommonUtil.isNotEmpty(timegoodscode)){
-			wheresql += "timegoodscode='"+timegoodscode+"'";
+			wheresql += "and timegoodscode='"+timegoodscode+"'";
 		}
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Timegoodsview.class);

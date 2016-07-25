@@ -287,6 +287,11 @@ public class OrderdAction extends BaseActionDao {
 				if(gList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				} else {
+					Float gp = gList.get(0).getPricesprice();
+					if(!gp.equals(svo.getPricesprice())){
+						svoListremove.get(i).setPricesprice(gp);							//修改价格
+					}
 				}
 			} else if(svo.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
@@ -307,7 +312,7 @@ public class OrderdAction extends BaseActionDao {
 			}
 		}
 		if(CommonUtil.isNotEmpty(xjGoodsMsg)){
-			infoMap.put("xjGoodsMsg", xjGoodsMsg+"商品已下架。");
+			infoMap.put("xjGoodsMsg", xjGoodsMsg+" 商品已下架。");
 		}
 		infoMap.put("svoList", svoList);
 		return infoMap;
@@ -378,79 +383,6 @@ public class OrderdAction extends BaseActionDao {
 		infoMap.put("svoList", svoList);
 		return infoMap;
 	}
-	//验证商品是否已经下架
-	/*@SuppressWarnings("unchecked")
-	public void checkGoodsXJ(HttpServletRequest request, HttpServletResponse response){
-		json2cuss(request);
-		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
-		GoodsVo gvo = new GoodsVo();
-		for (Orderd item : cuss) {
-			
-			if(item.getOrderdtype().equals("商品")){
-				gvoList.add(checkOdGoods(request,item.getOrderdcode(),item.getOrderdunits(),item.getOrderdnum(),item.getOrderdname()));
-			} else if(item.getOrderdtype().equals("秒杀")){
-				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
-								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
-								"' and tv.timegoodsstatue = '启用'");
-				if(tgviewList.size() >0){
-					gvo.setType(item.getOrderdtype());
-					gvo.setTgview(tgviewList.get(0));
-					gvo.setNowGoodsNum(item.getOrderdnum());
-				} else {
-					Timegoodsview xjg = new Timegoodsview();
-					xjg.setTimegoodsname(item.getOrderdname());
-					xjg.setTimegoodsunits(item.getOrderdunits());
-					gvo.setType(item.getOrderdtype());
-					gvo.setTgview(xjg);
-					gvo.setStatue("下架");
-				}
-				gvoList.add(gvo);
-			} else if(item.getOrderdtype().equals("买赠")){
-				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
-								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
-								"' and gv.givegoodsstatue = '启用'");
-				if(ggviewList.size() >0){
-					gvo.setType(item.getOrderdtype());
-					gvo.setGgview(ggviewList.get(0));
-					gvo.setNowGoodsNum(item.getOrderdnum());
-				} else {
-					Givegoodsview xjg = new Givegoodsview();
-					xjg.setGivegoodsname(item.getOrderdname());
-					xjg.setGivegoodsunits(item.getOrderdunits());
-					gvo.setType(item.getOrderdtype());
-					gvo.setGgview(xjg);
-					gvo.setStatue("下架");
-				}
-				gvoList.add(gvo);
-			}
-		}
-		Pageinfo pageinfo = new Pageinfo(gvoList);
-		result = CommonConst.GSON.toJson(pageinfo);
-		responsePW(response, result);
-	}
-	//验证普通商品是否下架,价格是否变化,客户等级是否变化
-	@SuppressWarnings("unchecked")
-	public GoodsVo checkOdGoods(HttpServletRequest request,String goodscode,String goodsunits,Integer goodsnum,String goodsname){
-		GoodsVo gvo = new GoodsVo();
-		List<Goodsview> tgviewList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+goodscode+
-				   "' and gv.goodsunits = '"+goodsunits+
-				   "' and gv.pricesclass = '"+request.getParameter("customertype")+
-				   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
-				   " and gv.goodsstatue = '上架'");
-		if(tgviewList.size() > 0){
-			gvo.setGoodsview(tgviewList.get(0));
-			gvo.setNowGoodsNum(goodsnum);
-		} else {
-			Goodsview xjg = new Goodsview();
-			xjg.setGoodsname(goodsname);
-			xjg.setGoodsunits(goodsunits);
-			gvo.setGoodsview(xjg);
-			gvo.setStatue("下架");
-		}
-		gvo.setType("商品");
-		return gvo;
-	}*/
-	
 }
 
 

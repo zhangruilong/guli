@@ -70,7 +70,7 @@ public class Goods
    /**
     * 顺序
     */
-   private int goodsorder;   
+   private Integer goodsorder;   
     //属性方法	    
      /**
 	 *设置主键"商品ID"属性
@@ -331,7 +331,7 @@ public class Goods
 	 *设置"顺序"属性
 	 *@param goodsorder 实体的Goodsorder属性
 	 */
-	public void setGoodsorder(int goodsorder)
+	public void setGoodsorder(Integer goodsorder)
 	{
 		this.goodsorder = goodsorder;
 	}
@@ -339,7 +339,7 @@ public class Goods
 	/**
 	 *获取"顺序"属性
 	 */
-	public int getGoodsorder()
+	public Integer getGoodsorder()
 	{
 		return this.goodsorder;
 	}	   
@@ -363,7 +363,7 @@ public class Goods
 	 	,String updor
 	 	,String goodsbrand
 	 	,String goodstype
-	 	,int goodsorder
+	 	,Integer goodsorder
 		 ){
 		super();
 		this.goodsid = goodsid;

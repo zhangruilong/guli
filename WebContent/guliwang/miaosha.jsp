@@ -71,7 +71,8 @@ $(function(){
 		data:{
 			companyid:companyid,
 			customerid:customer.customerid,
-			customertype:customer.customertype
+			customertype:customer.customertype,
+			timegoodscode:timegoodscode
 		},
 		success : initMiaoshaPage,
 		error: function(resp){

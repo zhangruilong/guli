@@ -22,11 +22,10 @@
 </div>
 <div class="personal-center-nav">
     <ul>
-        	<li class="active"><a href="index.jsp">
-        	<em class="icon-shouye2"></em>首页</a></li>
+        	<li><a href="index.jsp"><em class="icon-shouye1"></em>首页</a></li>
             <li><a href="goodsclass.jsp"><em class="icon-fenlei1"></em>商城</a></li>
             <li class="active"><a href="order.jsp"><em class="ion-clipboard"></em>订单</a></li>
-            <li class="active"><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
+            <li><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
     </ul>
 </div>
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>

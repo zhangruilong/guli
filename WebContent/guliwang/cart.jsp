@@ -48,7 +48,7 @@ $(function(){
 			var respText = eval('('+resp+')'); 
 			if(typeof(respText.root) == 'undefined' || !respText.root){
 				$(".popup_msg").text("还没有收货地址,请先添加收货地址。");				//修改弹窗文字信息
-				$(".ok").attr("href","index.jsp");
+				$(".popup_queding").attr("href","mine.jsp");
 				$(".cd-popup").addClass("is-visible");
 			}
 		},

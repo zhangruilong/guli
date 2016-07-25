@@ -2,7 +2,7 @@ package com.server.pojo;
 
 import java.sql.Date;
 /**
- * 客户 实体类
+ * ccustomerview 实体类
  *@author ZhangRuiLong
  */
 public class Ccustomerview
@@ -12,6 +12,10 @@ public class Ccustomerview
     */
    private String ccustomerid; 
    /**
+    * ccustomercompany
+    */
+   private String ccustomercompany;   
+   /**
     * ccustomerdetail
     */
    private String ccustomerdetail;   
@@ -19,6 +23,10 @@ public class Ccustomerview
     * createtime
     */
    private String createtime;   
+   /**
+    * creator
+    */
+   private String creator;   
    /**
     * customerid
     */
@@ -102,6 +110,23 @@ public class Ccustomerview
 	}
 
 	/**
+	 *设置"ccustomercompany"属性
+	 *@param ccustomercompany 实体的Ccustomercompany属性
+	 */
+	public void setCcustomercompany(String ccustomercompany)
+	{
+		this.ccustomercompany = ccustomercompany;
+	}
+	
+	/**
+	 *获取"ccustomercompany"属性
+	 */
+	public String getCcustomercompany()
+	{
+		return this.ccustomercompany;
+	}	   
+
+	/**
 	 *设置"ccustomerdetail"属性
 	 *@param ccustomerdetail 实体的Ccustomerdetail属性
 	 */
@@ -133,6 +158,23 @@ public class Ccustomerview
 	public String getCreatetime()
 	{
 		return this.createtime;
+	}	   
+
+	/**
+	 *设置"creator"属性
+	 *@param creator 实体的Creator属性
+	 */
+	public void setCreator(String creator)
+	{
+		this.creator = creator;
+	}
+	
+	/**
+	 *获取"creator"属性
+	 */
+	public String getCreator()
+	{
+		return this.creator;
 	}	   
 
 	/**
@@ -412,8 +454,10 @@ public class Ccustomerview
 	}
 	public Ccustomerview(
 		String ccustomerid
+	 	,String ccustomercompany
 	 	,String ccustomerdetail
 	 	,String createtime
+	 	,String creator
 	 	,String customerid
 	 	,String customercode
 	 	,String customername
@@ -433,8 +477,10 @@ public class Ccustomerview
 		 ){
 		super();
 		this.ccustomerid = ccustomerid;
+	 	this.ccustomercompany = ccustomercompany;
 	 	this.ccustomerdetail = ccustomerdetail;
 	 	this.createtime = createtime;
+	 	this.creator = creator;
 	 	this.customerid = customerid;
 	 	this.customercode = customercode;
 	 	this.customername = customername;

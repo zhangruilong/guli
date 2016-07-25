@@ -70,7 +70,7 @@ public class Goodsview
    /**
     * goodsorder
     */
-   private int goodsorder;   
+   private Integer goodsorder;   
    /**
     * goodsclassid
     */
@@ -126,11 +126,11 @@ public class Goodsview
    /**
     * priceslevel
     */
-   private int priceslevel;   
+   private Integer priceslevel;   
    /**
     * pricesprice
     */
-   private float pricesprice;   
+   private Float pricesprice;   
    /**
     * pricesunit
     */
@@ -138,7 +138,7 @@ public class Goodsview
    /**
     * pricesprice2
     */
-   private float pricesprice2;   
+   private Float pricesprice2;   
    /**
     * pricesunit2
     */
@@ -403,7 +403,7 @@ public class Goodsview
 	 *设置"goodsorder"属性
 	 *@param goodsorder 实体的Goodsorder属性
 	 */
-	public void setGoodsorder(int goodsorder)
+	public void setGoodsorder(Integer goodsorder)
 	{
 		this.goodsorder = goodsorder;
 	}
@@ -411,7 +411,7 @@ public class Goodsview
 	/**
 	 *获取"goodsorder"属性
 	 */
-	public int getGoodsorder()
+	public Integer getGoodsorder()
 	{
 		return this.goodsorder;
 	}	   
@@ -641,7 +641,7 @@ public class Goodsview
 	 *设置"priceslevel"属性
 	 *@param priceslevel 实体的Priceslevel属性
 	 */
-	public void setPriceslevel(int priceslevel)
+	public void setPriceslevel(Integer priceslevel)
 	{
 		this.priceslevel = priceslevel;
 	}
@@ -649,7 +649,7 @@ public class Goodsview
 	/**
 	 *获取"priceslevel"属性
 	 */
-	public int getPriceslevel()
+	public Integer getPriceslevel()
 	{
 		return this.priceslevel;
 	}	   
@@ -658,7 +658,7 @@ public class Goodsview
 	 *设置"pricesprice"属性
 	 *@param pricesprice 实体的Pricesprice属性
 	 */
-	public void setPricesprice(float pricesprice)
+	public void setPricesprice(Float pricesprice)
 	{
 		this.pricesprice = pricesprice;
 	}
@@ -666,7 +666,7 @@ public class Goodsview
 	/**
 	 *获取"pricesprice"属性
 	 */
-	public float getPricesprice()
+	public Float getPricesprice()
 	{
 		return this.pricesprice;
 	}	   
@@ -692,7 +692,7 @@ public class Goodsview
 	 *设置"pricesprice2"属性
 	 *@param pricesprice2 实体的Pricesprice2属性
 	 */
-	public void setPricesprice2(float pricesprice2)
+	public void setPricesprice2(Float pricesprice2)
 	{
 		this.pricesprice2 = pricesprice2;
 	}
@@ -700,7 +700,7 @@ public class Goodsview
 	/**
 	 *获取"pricesprice2"属性
 	 */
-	public float getPricesprice2()
+	public Float getPricesprice2()
 	{
 		return this.pricesprice2;
 	}	   
@@ -741,7 +741,7 @@ public class Goodsview
 	 	,String updor
 	 	,String goodsbrand
 	 	,String goodstype
-	 	,int goodsorder
+	 	,Integer goodsorder
 	 	,String goodsclassid
 	 	,String goodsclasscode
 	 	,String goodsclassname
@@ -755,10 +755,10 @@ public class Goodsview
 	 	,String companystatue
 	 	,String pricesid
 	 	,String pricesclass
-	 	,int priceslevel
-	 	,float pricesprice
+	 	,Integer priceslevel
+	 	,Float pricesprice
 	 	,String pricesunit
-	 	,float pricesprice2
+	 	,Float pricesprice2
 	 	,String pricesunit2
 		 ){
 		super();

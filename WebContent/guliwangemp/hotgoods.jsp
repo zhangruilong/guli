@@ -64,7 +64,7 @@ String dateString = formatter.format(currentTime);
 <script src="../js/jquery-dropdown.js"></script>
 <script src="../js/getDate.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var xian = '';
 var dateString = '<%=dateString%>';
 $(function(){ 
