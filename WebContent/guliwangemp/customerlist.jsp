@@ -52,7 +52,6 @@ $(function(){
 	getJson(basePath+"CcustomerviewAction.do",{method:"selAll",wheresql:"ccustomercompany='"+emp.empcompany+"'"},initData,null);
 });
 function initData(data){
-	alert(JSON.stringify(data));
     $("#customerlist").html("");
 	 $.each(data.root, function(i, item) {
 		$("#customerlist").append('<li><a class="cd-popup-trigger"><h2>'+

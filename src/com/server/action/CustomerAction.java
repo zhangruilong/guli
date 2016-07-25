@@ -148,8 +148,8 @@ public class CustomerAction extends BaseActionDao {
 				String newId = CommonUtil.getNewId();
 				temp.setCustomerid(newId);		//设置新id
 				temp.setCustomerstatue("启用");
-				temp.setCustomerlevel(3);
-				temp.setCustomertype("3");
+				temp.setCustomerlevel(3);							//默认等级
+				temp.setCustomertype("3");							//默认类型
 				temp.setCreatetime(DateUtils.getDateTime());
 				String sqlCustomer = getInsSingleSql(temp);
 				sqlList.add(sqlCustomer);
@@ -169,17 +169,27 @@ public class CustomerAction extends BaseActionDao {
 				comqueryinfo.setOrder(CompanyviewPoco.ORDER);
 				comqueryinfo.setWheresql("cityname='"+temp.getCustomerxian()+"'");
 				List<Companyview> cviewLi = selAll(comqueryinfo);
-				for (Companyview cview : cviewLi) {
-					//添加与唯一客户的关系
+				if(cviewLi.size() >0){
+					for (Companyview cview : cviewLi) {
+						//添加与唯一客户的关系
+						Ccustomer newccustomer = new Ccustomer();
+						newccustomer.setCcustomerid(CommonUtil.getNewId());
+						newccustomer.setCcustomercompany(cview.getCompanyid());
+						newccustomer.setCcustomercustomer(newId);
+						newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
+						String sqlCcustomer = getInsSingleSql(newccustomer);
+						sqlList.add(sqlCcustomer);
+					}
+				} else {
+					//添加与海盐天然的客户关系
 					Ccustomer newccustomer = new Ccustomer();
 					newccustomer.setCcustomerid(CommonUtil.getNewId());
-					newccustomer.setCcustomercompany(cview.getCompanyid());
+					newccustomer.setCcustomercompany("1");
 					newccustomer.setCcustomercustomer(newId);
 					newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
 					String sqlCcustomer = getInsSingleSql(newccustomer);
 					sqlList.add(sqlCcustomer);
 				}
-				
 				result = doAll(sqlList);
 				if(CommonConst.SUCCESS.equals(result)){
 					ArrayList<Customer> retCust = new ArrayList<Customer>();

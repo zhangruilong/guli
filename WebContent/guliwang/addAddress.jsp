@@ -51,6 +51,8 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 		}
 		//alert($("input[name='addressconnect']").val());
 		//alert($("input[name='addressphone']").val());
+		//alert(city);
+		//alert(xian);
 		if(!$("input[name='addressconnect']").val()){
 			alert("联系人名不能为空!");
 			return;
@@ -97,7 +99,11 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 				var paramcity = '';
 				$("#city option").remove();
 				$.each(data,function(i,item){
-					$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
+					if(item.cityname == customer.customercity){
+						$("#city").append('<option value="'+item.cityid+'" selected="selected">'+item.cityname+'</option>');
+					} else {
+						$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
+					}
 					if(i == 0){
 						paramcity = item.cityid;
 					}
@@ -112,7 +118,11 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 		  				   var data = JSON.parse(resp).root;
 		 				   $("#xian option").remove();
 		  				   $.each(data,function(i,item2){
-		  					   $("#xian").append('<option>'+item2.cityname+'</option>');
+		  					 if(item2.cityname == customer.customerxian){
+		  						$("#xian").append('<option selected="selected">'+item2.cityname+'</option>');
+		 					} else {
+		 						$("#xian").append('<option>'+item2.cityname+'</option>');
+		 					}
 		  				   });
 		  			   },
 		  			   error: function(resp){

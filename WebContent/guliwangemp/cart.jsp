@@ -48,7 +48,7 @@ $(function(){
 			var respText = eval('('+resp+')'); 
 			if(typeof(respText.root) == 'undefined' || !respText.root){
 				$(".popup_msg").text("还没有收货地址,请先添加收货地址。");				//修改弹窗文字信息
-				$(".ok").attr("href","index.jsp");
+				$(".popup_queding").attr("href","mine.jsp");
 				$(".cd-popup").addClass("is-visible");
 			}
 		},
@@ -103,12 +103,104 @@ function nextpage(){
 		}
 	});
 	if(flag == 0){
-		window.location.href = "buy.jsp";
+		//整理购物车数据
+			$("#buyall").attr('onclick','');											//禁用按钮
+			$.ajax({
+				url:"OrderdAction.do?method=sortingSdiData",
+				type:"post",
+				data:{
+					json:window.localStorage.getItem("sdishes"),
+					customerid:customer.customerid,
+					customertype:customer.customertype,
+					customerlevel:customer.customerlevel
+				},
+				success:function(resp){
+					var respText = eval('('+resp+')');
+					if(respText.msg == ''){
+						var jsds = respText.root;										//sdishes的json
+						var newcartnum = 0;
+						var totalmoney = 0.00;
+						var totalnum = 0;
+						$.each(jsds,function(i,item){
+							newcartnum += parseInt(item.orderdetnum);
+							totalmoney += parseFloat(item.pricesprice)*parseFloat(item.orderdetnum);
+							totalnum++;
+						});
+						window.localStorage.setItem("cartnum",newcartnum);
+						window.localStorage.setItem("totalmoney",totalmoney.toFixed(2));
+						window.localStorage.setItem("totalnum",totalnum);
+						alert(JSON.stringify(jsds));
+						window.localStorage.setItem("sdishes",JSON.stringify(jsds));
+						setscompany();													//设置供应商信息
+						window.location.href = "buy.jsp";
+					} else {
+						alert(respText.msg);
+					}
+				},
+				error : function(resp) {
+					$("#buyall").attr('onclick','buy();');								//启用按钮
+					var respText = eval('('+resp+')');
+					alert(respText.msg);
+				}
+			});
+		
 	} else {
 		alert("您购买的："+goodsname+" 超过了限购数量");
 	}
 }
-
+//检查客户是否可以购买秒杀商品
+/* function checkCusSecKill(){
+	if(!customer.customerid || customer.customerid == 'null' || typeof(customer.customerid) == 'undefined'){		//判断是否注册
+		$(".cd-popup").addClass("is-visible");
+		return ;
+	}
+	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
+	var outGoodsName = '';
+	$.post('queryCusSecKillOrderd.action',{'orderm.ordermcustomer':customer.customerid},function(data){
+		var count = 0;
+		if(data.msg == 'no'){																						//判断是否有地址
+			$(".popup_msg").text("还没有收货地址,请先添加收货地址。");
+			$(".popup_queding").attr("href","mine.jsp");
+			$(".cd-popup").addClass("is-visible");
+			return;
+		}
+		$.each(sdishes,function(i,item1){													//遍历购物车现有商品
+			if(item1.orderdtype == '秒杀'){						
+				//如果是限购商品
+				var restNum = parseInt(item1.timegoodsnum) - parseInt(item1.orderdetnum);
+				if(data){
+					$.each(data.miaoshaList,function(i,item2){								//遍历秒杀商品的订单详细集合
+						if(item2.orderdcode == item1.goodscode){
+							restNum -= parseInt(item2.orderdnum);
+						}
+					});
+				}
+				if(restNum < 0){		//买的秒杀商品数量超过了个人限量
+					count++;
+				}
+			}
+			if(item1.orderdtype == '买赠'){
+				//如果是买赠商品
+				var restNum = parseInt(item1.timegoodsnum) - parseInt(item1.orderdetnum);
+				if(data){
+					$.each(data.giveGoodsList,function(i,item2){							//遍历买赠商品的订单详细集合
+						if(item2.orderdcode == item1.goodscode){
+							restNum -= parseInt(item2.orderdnum);
+						}
+					});
+				}
+				if(restNum < 0){		//买的商品数量超过了限购数量
+					count++;
+				}
+			}
+		});
+		if(count > 0){
+			alert('您购买的商品超过了限购数量。');
+		} else {
+			nextpage();
+		}
+	},'json');
+} */
 //初始化的页面信息
 function initDishes(data){
 	var scompany = setscompany();

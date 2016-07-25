@@ -50,7 +50,7 @@
 		<ul>
 			<li>
 			<span>所在城市</span>
-			<input onclick="input_sele_city()" placeholder="所在城市" id="customercity" readonly="readonly" name="" type="text" style="background-color:#fff;"/>
+			<input onclick="input_sele_city()" placeholder="所在城市" id="customercity" name="" type="text" style="background-color:#fff;"/>
          <div id="divList" style="display: none; position: absolute ;width: 50%;height:30%;right:0px; left:50%; top:10%; border: 1px solid black; overflow: auto; position: absolute; background-color:#FFFFFF; "> 
                 <table width="100%" border="0" cellpadding="0" cellspacing="0"> 
                     <tr> 
@@ -67,7 +67,7 @@
 			</li>
         <li>
 			<span>所在地区</span>
-			<input onclick="" placeholder="所在地区" id="customerxian" name="customerxian" readonly="readonly" type="text" style="background-color:#fff;"/>
+			<input onclick="" placeholder="所在地区" id="customerxian" name="customerxian" type="text" style="background-color:#fff;"/>
          <div id="xianList" style="display: none; position: absolute ;width: 50%;height:30%;right:0px; left:50%; top:20%; border: 1px solid black; overflow: auto; position: absolute; background-color:#FFFFFF; "> 
                 <table width="100%" border="0" cellpadding="0" cellspacing="0"> 
                     <tr> 

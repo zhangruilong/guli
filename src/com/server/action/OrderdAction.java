@@ -230,7 +230,7 @@ public class OrderdAction extends BaseActionDao {
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
-								"' and tv.timegoodsstatue = '启用'");
+								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '"+request.getParameter("customertype")+"'");
 				if(tgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setTgview(tgviewList.get(0));
@@ -239,7 +239,7 @@ public class OrderdAction extends BaseActionDao {
 			} else if(item.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
 								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
-								"' and gv.givegoodsstatue = '启用'");
+								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '"+request.getParameter("customertype")+"'");
 				if(ggviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGgview(ggviewList.get(0));
@@ -266,7 +266,7 @@ public class OrderdAction extends BaseActionDao {
 		infoMap = checkSurplus(customerid,infoMap);							//检查剩余限量是否足够 并修改
 		@SuppressWarnings("unchecked")
 		Pageinfo pageinfo = new Pageinfo((List<SdishesVO>)infoMap.get("svoList"));
-		pageinfo.setMsg(TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+TypeUtil.objToString(infoMap.get("editNumMsg"))+TypeUtil.objToString(infoMap.get("deleGoodsMsg")));
+		pageinfo.setMsg("您购买的："+TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+TypeUtil.objToString(infoMap.get("editNumMsg"))+TypeUtil.objToString(infoMap.get("deleGoodsMsg")));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -275,7 +275,7 @@ public class OrderdAction extends BaseActionDao {
 	public Map<String, Object> checkXJ(Map<String, Object> infoMap,String customertype,String customerlevel){
 		List<SdishesVO> svoList = (List<SdishesVO>) infoMap.get("svoList");
 		List<SdishesVO> svoListremove = new ArrayList<SdishesVO>();
-		String xjGoodsMsg = null;
+		String xjGoodsMsg = "";
 		for (int i = 0; i < svoList.size(); i++) {
 			SdishesVO svo = svoList.get(i);
 			if(svo.getOrderdtype().equals("商品")){
@@ -290,7 +290,7 @@ public class OrderdAction extends BaseActionDao {
 				} else {
 					Float gp = gList.get(0).getPricesprice();
 					if(!gp.equals(svo.getPricesprice())){
-						svoListremove.get(i).setPricesprice(gp);							//修改价格
+						svoList.get(i).setPricesprice(gp);							//修改价格
 					}
 				}
 			} else if(svo.getOrderdtype().equals("秒杀")){
@@ -300,6 +300,11 @@ public class OrderdAction extends BaseActionDao {
 				if(tgviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				} else {
+					String tp = tgviewList.get(0).getTimegoodsorgprice();
+					if(!tp.equals(svo.getPricesprice())){
+						svoList.get(i).setPricesprice(Float.parseFloat(tp));							//修改价格
+					}
 				}
 			} else if(svo.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
@@ -308,6 +313,11 @@ public class OrderdAction extends BaseActionDao {
 				if(ggviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				} else {
+					String gp = ggviewList.get(0).getGivegoodsprice();
+					if(!gp.equals(svo.getPricesprice())){
+						svoList.get(i).setPricesprice(Float.parseFloat(gp));							//修改价格
+					}
 				}
 			}
 		}
@@ -326,8 +336,8 @@ public class OrderdAction extends BaseActionDao {
 				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
 				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) and om.ordermtime >= '"+DateUtils.getDate()+
 				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdcode,od.orderdtype,od.orderdunits");
-		String editNumMsg = null;
-		String deleGoodsMsg = null;
+		String editNumMsg = "";
+		String deleGoodsMsg = "";
 		for (int i=0; i < svoList.size(); i++) {
 			SdishesVO svo = svoList.get(i);
 			Integer odNum = svo.getOrderdetnum();				//订单中购买的数量

@@ -59,7 +59,6 @@ function regoumai(){
 			customerlevel: customer.customerlevel
 		},
 		success: function(resp){
-			
 			var jsonResp = JSON.parse(resp);
 			var data = jsonResp.root;
 			var xjGIds = '您购买的：';
@@ -84,6 +83,7 @@ function regoumai(){
 				}
 			}
 			$.each(data,function(i,item){
+				//alert(JSON.parse(item));
 				var now_GNum = parseInt(item.nowGoodsNum);
 				if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
 					//没有购物车
@@ -197,7 +197,6 @@ function regoumai(){
 								window.localStorage.setItem("cartnum",cartnum+now_GNum);
 							}
 						} else if(item.type == '秒杀' && item.statue != '下架'){
-							alert(JSON.stringify(item));
 							if( item1.goodsid == item.tgview.timegoodsid){
 								//如果商品id相同
 								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
@@ -286,19 +285,6 @@ function regoumai(){
 		error : function(resp2){
 			var respText2 = eval('('+resp2+')');
 			alert(respText2.msg);
-		}
-	});
-	return ;
-	$.ajax({
-		url: "queryREgoumaiGoods.action",
-		async:true,
-		data: {"orderdcodes":orderdcodes,"orderdtypes":orderdtypes,"customertype":customer.customertype,"customerlevel":customer.customerlevel},
-		dataType:"json",
-		success: function(data) {
-			
-		},
-		error:function() {
-			alert("网络问题请稍候再试");
 		}
 	});
 }

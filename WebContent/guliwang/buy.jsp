@@ -146,7 +146,19 @@ function sortingData(){
 		success:function(resp){
 			var respText = eval('('+resp+')');
 			if(respText.msg == ''){
-				window.localStorage.setItem("sdishes",JSON.stringify(respText.root));
+				var jsds = respText.root;										//sdishes的json
+				window.localStorage.setItem("sdishes",JSON.stringify(jsds));
+				var newcartnum = 0;
+				var totalmoney = 0.00;
+				var totalnum = 0;
+				$.each(jsds,function(i,item){
+					newcartnum += parseInt(item.orderdetnum);
+					totalmoney += (parseFloat(item.pricesprice) * parseFloat(item.orderdetnum)).toFixed(2);
+					totalnum++;
+				});
+				window.localStorage.setItem("cartnum",newcartnum);
+				window.localStorage.setItem("totalmoney",totalmoney);
+				window.localStorage.setItem("totalnum",totalnum);
 				buy();
 			} else {
 				alert(respText.msg);

@@ -41,10 +41,9 @@
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var timegoodscode = '${param.timegoodscode}';
 var emp = JSON.parse(window.localStorage.getItem("emp"));
-var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){ 
 	//购物车图标上的数量
 	if(!window.localStorage.getItem("cartnum")){
@@ -125,6 +124,8 @@ function initMiaoshaPage(resp){
 					}
 				}
 				liObj+='</span><br>';
+				/* alert(item2.companydetail);
+				return; */
 				liObj += '<div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
 				' <em>￥'+item2.timegoodsprice+'</em></div>'+
 					'<div class="stock-num" name="'+item2.timegoodsid+'">'+
@@ -134,7 +135,7 @@ function initMiaoshaPage(resp){
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item2.timegoodsorgprice
 					   +',\''+item2.timegoodsname+'\',\''+item2.timegoodsunit+'\',\''+item2.timegoodsunits
 					   +'\',\''+item2.timegoodscode+'\',\''+item2.timegoodsclass
-					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail+
+					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
 					   +'\',\''+item2.surplusnum+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
 		        	'</div>';

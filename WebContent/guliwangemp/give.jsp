@@ -39,10 +39,10 @@
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
+var customer = JSON.parse(window.localStorage.getItem("customer"));
 var givegoodscode = '${param.givegoodscode}';
 var emp = JSON.parse(window.localStorage.getItem("emp"));
-var customer = JSON.parse(window.localStorage.getItem("customeremp"));
-$(function(){ 
+$(function(){
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
 			//如果点击的是'取消'或者除'确定'外的其他地方

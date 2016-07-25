@@ -103,7 +103,47 @@ function nextpage(){
 		}
 	});
 	if(flag == 0){
-		window.location.href = "buy.jsp";
+		//整理购物车数据
+		function sortingData(){
+			$("#buyall").attr('onclick','');											//禁用按钮
+			$.ajax({
+				url:"OrderdAction.do?method=sortingSdiData",
+				type:"post",
+				data:{
+					json:window.localStorage.getItem("sdishes"),
+					customerid:customer.customerid,
+					customertype:customer.customertype,
+					customerlevel:customer.customerlevel
+				},
+				success:function(resp){
+					var respText = eval('('+resp+')');
+					if(respText.msg == ''){
+						var jsds = respText.root;										//sdishes的json
+						window.localStorage.setItem("sdishes",JSON.stringify(jsds));
+						var newcartnum = 0;
+						var totalmoney = 0.00;
+						var totalnum = 0;
+						$.each(jsds,function(i,item){
+							newcartnum += parseInt(item.orderdetnum);
+							totalmoney += (parseFloat(item.pricesprice) * parseFloat(item.orderdetnum)).toFixed(2);
+							totalnum++;
+						});
+						window.localStorage.setItem("cartnum",newcartnum);
+						window.localStorage.setItem("totalmoney",totalmoney);
+						window.localStorage.setItem("totalnum",totalnum);
+						window.location.href = "buy.jsp";
+					} else {
+						alert(respText.msg);
+					}
+				},
+				error : function(resp) {
+					$("#buyall").attr('onclick','buy();');								//启用按钮
+					var respText = eval('('+resp+')');
+					alert(respText.msg);
+				}
+			});
+		}
+		
 	} else {
 		alert("您购买的："+goodsname+" 超过了限购数量");
 	}
