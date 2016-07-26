@@ -64,7 +64,7 @@
 </div>
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script> 
-var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+var customer = JSON.parse(window.localStorage.getItem("customer"));
 jQuery(document).ready(function($){
 	//open popup 
 	$('.cd-popup-trigger').on('click', function(event){
@@ -145,19 +145,20 @@ function sortingData(){
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
-			if(respText.msg == ''){
+			if(respText.msg == '您购买的：'){
 				var jsds = respText.root;										//sdishes的json
 				window.localStorage.setItem("sdishes",JSON.stringify(jsds));
 				var newcartnum = 0;
 				var totalmoney = 0.00;
 				var totalnum = 0;
 				$.each(jsds,function(i,item){
+					var money = parseFloat(parseFloat(item.pricesprice) * parseFloat(item.orderdetnum)).toFixed(2);
 					newcartnum += parseInt(item.orderdetnum);
-					totalmoney += (parseFloat(item.pricesprice) * parseFloat(item.orderdetnum)).toFixed(2);
+					totalmoney = parseFloat(money) + totalmoney;
 					totalnum++;
 				});
 				window.localStorage.setItem("cartnum",newcartnum);
-				window.localStorage.setItem("totalmoney",totalmoney);
+				window.localStorage.setItem("totalmoney",totalmoney.toFixed(2));
 				window.localStorage.setItem("totalnum",totalnum);
 				buy();
 			} else {
