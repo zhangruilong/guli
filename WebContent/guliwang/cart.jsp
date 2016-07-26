@@ -104,7 +104,6 @@ function nextpage(){
 	});
 	if(flag == 0){
 		//整理购物车数据
-		function sortingData(){
 			$("#buyall").attr('onclick','');											//禁用按钮
 			$.ajax({
 				url:"OrderdAction.do?method=sortingSdiData",
@@ -117,7 +116,7 @@ function nextpage(){
 				},
 				success:function(resp){
 					var respText = eval('('+resp+')');
-					if(respText.msg == ''){
+					if(respText.msg == '您购买的：'){
 						var jsds = respText.root;										//sdishes的json
 						window.localStorage.setItem("sdishes",JSON.stringify(jsds));
 						var newcartnum = 0;
@@ -142,7 +141,6 @@ function nextpage(){
 					alert(respText.msg);
 				}
 			});
-		}
 		
 	} else {
 		alert("您购买的："+goodsname+" 超过了限购数量");
