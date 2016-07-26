@@ -139,9 +139,7 @@ function sortingData(){
 		type:"post",
 		data:{
 			json:window.localStorage.getItem("sdishes"),
-			customerid:customer.customerid,
-			customertype:customer.customertype,
-			customerlevel:customer.customerlevel
+			customerid:customer.customerid
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');

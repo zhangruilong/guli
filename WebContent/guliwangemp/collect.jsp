@@ -15,8 +15,8 @@
 <meta http-equiv="cache-control" content="no-cache">  
 <meta http-equiv="expires" content="0">  
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
 <style type="text/css">
 input {
 	float: left;
@@ -40,7 +40,7 @@ input {
 
 input:checked {
 	box-shadow: none;
-  background: url(images/price-rd.png) no-repeat;
+  background: url(../images/price-rd.png) no-repeat;
   background-size: 24px 24px;
 }
 #cwn_a_xiadan{
@@ -60,32 +60,47 @@ input:checked {
 			</ul>
 		</div>
 	</form>
-<script src="js/jquery-1.8.3.min.js"></script>
-<script src="js/jquery-dropdown.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
-	$.post("cusCollectInfoEmp.action",{"comid":customer.customerid,"pricesclass":customer.customertype},function(data){
-		if(typeof(data.collectList) != 'undefined'){
-			$.each(data.collectList,function(i,item){
-				var jsonitem = JSON.stringify(item.goods);
-				$(".shoucang-wrap ul").append(
-					'<li name="'+item.collectid+'"><span hidden="true">'+jsonitem+'</span>'+
-					'<a name="'+item.goods.goodsid+'" ><span class="fl">'+
-					'<img src="../'+item.goods.goodsimage+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
-						'<h1>'+item.goods.goodsname+'<span>（'+item.goods.goodsunits+'）</span>'+
-							'</h1>'+
-							'<p>'+
-										'<font>&nbsp;</font>'+
-									'</p>'+
-									'<p>'+
-										'<font>&nbsp;</font>'+
-									'</p>'+
-						'</a>'+
-					'</li>');
-			})
-		} else {
-			window.location.href = 'collectnothing.html';
+	$.ajax({
+		url:"CollectviewAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"collectcustomer='"+customer.customerid+"' and pricesclass='"+
+					customer.customertype+"' and priceslevel='"+customer.customerlevel+
+					"' "
+		},
+		success:function(resp){
+			var jsonResp = JSON.parse(resp);
+			var data = jsonResp.root;
+			if(typeof(data) != 'undefined' && data.length > 0){
+				$.each(data,function(i,item){
+					var jsonitem = JSON.stringify(item);
+					$(".shoucang-wrap ul").append(
+						'<li name="'+item.goodsid+'"><span hidden="true">'+jsonitem+'</span>'+
+						'<a name="'+item.goodsid+'" ><span class="fl">'+
+						'<img src="../'+item.goodsimage+'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
+							'<h1>'+item.goodsname+'<span>（'+item.goodsunits+'）</span>'+
+								'</h1>'+
+								'<p class="clct-GP-img">'+
+											'售价：<font>￥'+item.pricesprice+'</font>/'+item.pricesunit+
+										'</p>'+
+										/* '<p>'+
+											'<font>&nbsp;</font>'+
+										'</p>'+ */
+							'</a>'+
+						'</li>');
+				})
+			} else {
+				window.location.href = 'collectnothing.html';
+			}
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
 		}
 	});
 })
@@ -96,7 +111,7 @@ $(function(){
 		$("#cwn_a_xiadan").attr("onclick","collectDoCart()");
 		$("#cwn_a_bianji").attr("onclick","cancel()");
 		$.each($("li"),function(i,item){
-			$(item).prepend("<input type='checkbox' value='"+$(item).attr("name")+"' name='collectids'>");
+			$(item).prepend("<input type='checkbox' value='"+$(item).attr("name")+"' >");
 		})
 	}
 	//取消
@@ -123,14 +138,14 @@ $(function(){
 					//新增订单
 					var mdishes = new Object();
 					mdishes.goodsid = item.goodsid;
-					mdishes.goodsdetail = item.goodsdetail;
+					mdishes.goodsdetail = 'danpin';
 					mdishes.goodscompany = item.goodscompany;
-					mdishes.companyshop = item.goodsCompany.companyshop;
-					mdishes.companydetail = item.goodsCompany.companydetail;
+					mdishes.companyshop = item.companyshop;
+					mdishes.companydetail = item.companydetail;
 					mdishes.goodsclassname = item.goodsclass;
 					mdishes.goodscode = item.goodscode;
-					mdishes.pricesprice = item.pricesList[0].pricesprice;
-					mdishes.pricesunit = item.pricesList[0].pricesunit;
+					mdishes.pricesprice = item.pricesprice;
+					mdishes.pricesunit = item.pricesunit;
 					mdishes.goodsname = item.goodsname;
 					mdishes.goodsimage = item.goodsimage;
 					mdishes.orderdtype = '商品';
@@ -141,7 +156,7 @@ $(function(){
 					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 					
 					window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
-					window.localStorage.setItem("totalmoney", item.pricesList[0].pricesprice);	//总金额等于商品价
+					window.localStorage.setItem("totalmoney", item.pricesprice);	//总金额等于商品价
 					var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 					window.localStorage.setItem("cartnum",cartnum+1);
 				} else {
@@ -159,14 +174,14 @@ $(function(){
 							//新增订单
 							var mdishes = new Object();
 							mdishes.goodsid = item.goodsid;
-							mdishes.goodsdetail = item.goodsdetail;
+							mdishes.goodsdetail = 'danpin';
 							mdishes.goodscompany = item.goodscompany;
-							mdishes.companyshop = item.goodsCompany.companyshop;
-							mdishes.companydetail = item.goodsCompany.companydetail;
+							mdishes.companyshop = item.companyshop;
+							mdishes.companydetail = item.companydetail;
 							mdishes.goodsclassname = item.goodsclass;
 							mdishes.goodscode = item.goodscode;
-							mdishes.pricesprice = item.pricesList[0].pricesprice;
-							mdishes.pricesunit = item.pricesList[0].pricesunit;
+							mdishes.pricesprice = item.pricesprice;
+							mdishes.pricesunit = item.pricesunit;
 							mdishes.goodsname = item.goodsname;
 							mdishes.goodsimage = item.goodsimage;
 							mdishes.orderdtype = '商品';
@@ -177,7 +192,7 @@ $(function(){
 							window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 							window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
 							var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-							var newtmoney = (tmoney+parseFloat(item.pricesList[0].pricesprice)).toFixed(2);
+							var newtmoney = (tmoney+parseFloat(item.pricesprice)).toFixed(2);
 							window.localStorage.setItem("totalmoney",newtmoney);	
 							var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 							window.localStorage.setItem("cartnum",cartnum+1);
@@ -202,18 +217,29 @@ $(function(){
 	}
 	//删除收藏
 	function delCollects(){
-		var collectids = '';
+		var collectids = '[';
 		$.each($("[type='checkbox']"),function(i,item){
 			if(item.checked){
-				collectids += $(item).val()+',';
+				collectids += '{"collectcustomer":"'+customer.customerid+'","collectgoods":"'+$(item).val()+'"},';
 			}
 		});
-		if(collectids.length > 0){
-			$.post("delCollectEmp.action",{"collectids":collectids},function(data){
-				if(data == 'no'){
-					alert("删除失败!");
+		collectids = collectids.substr(0,collectids.length -1) + "]";
+		if(collectids.length > 2){
+			$.ajax({
+				url:"CollectAction.do?method=delAllByGoodsid",
+				type:"post",
+				data:{
+					json:collectids
+				},
+				success:function(resp){
+					var respText = eval('('+resp+')');
+					alert(respText.msg);
+					window.location.reload();
+				},
+				error : function(resp2){
+					var respText2 = eval('('+resp2+')');
+					alert(respText2.msg);
 				}
-				window.location.reload();
 			});
 		} else {
 			cancel();

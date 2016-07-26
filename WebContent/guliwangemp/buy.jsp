@@ -64,7 +64,7 @@
 </div>
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script> 
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 jQuery(document).ready(function($){
 	//open popup 
 	$('.cd-popup-trigger').on('click', function(event){
@@ -139,9 +139,7 @@ function sortingData(){
 		type:"post",
 		data:{
 			json:window.localStorage.getItem("sdishes"),
-			customerid:customer.customerid,
-			customertype:customer.customertype,
-			customerlevel:customer.customerlevel
+			customerid:customer.customerid
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
@@ -180,6 +178,7 @@ function buy(){
 	$.each(scompany, function(y, mcompany) {
 		//alert(JSON.stringify(mcompany));
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
+				+ '","ordermemp":"补单'
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney

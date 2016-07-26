@@ -115,7 +115,7 @@ $(function(){
 				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.timegoodsorgprice+'/'+data.timegoodsunit+'</span>');
 				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.timegoodsid+'">'+
 			            '<span class="jian min"  onclick="subnum(this,'+data.timegoodsorgprice+')"></span>'+
-			            '<input readonly="readonly" class="text_box shuliang" name="danpin" type="text" value="'+
+			            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 			             getcurrennumdanpin(data.timegoodsid)+'"> '+
 			            ' <span name="'+dailySur+'" class="jia add" onclick="addtimegoodsnum(this,'+data.timegoodsorgprice
 						   +',\''+data.timegoodsname+'\',\''+data.timegoodsunit+'\',\''+data.timegoodsunits

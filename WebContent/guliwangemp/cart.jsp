@@ -110,9 +110,7 @@ function nextpage(){
 				type:"post",
 				data:{
 					json:window.localStorage.getItem("sdishes"),
-					customerid:customer.customerid,
-					customertype:customer.customertype,
-					customerlevel:customer.customerlevel
+					customerid:customer.customerid
 				},
 				success:function(resp){
 					var respText = eval('('+resp+')');
@@ -236,6 +234,7 @@ function addnum(obj,dishesprice,goodscode,goodsclassname){
 			if(item.goodsid==$(obj).parent().attr('name')
 					&&item.goodsdetail==$(obj).prev().attr('name')){
 				item.orderdetnum = item.orderdetnum + 1;
+				alert(item.orderdetnum);
 				return false;
 			}
 		});

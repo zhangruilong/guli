@@ -61,23 +61,7 @@ function regoumai(){
 		success: function(resp){
 			var jsonResp = JSON.parse(resp);
 			var data = jsonResp.root;
-			var xjGIds = '您购买的：';
-			var xjFlag = 0;
-			$.each(data,function(i,item){
-				if(item.statue == '下架'){
-					xjFlag++;
-					if(item.type == '商品'){
-						xjGIds += item.goodsview.goodsname+'('+item.goodsview.goodsunits+'),'
-					} else if(item.type == '秒杀'){
-						xjGIds += item.tgview.timegoodsname+'('+item.tgview.timegoodsunits+'),'
-					} else if(item.type == '买赠'){
-						xjGIds += item.goodsview.givegoodsname+'('+item.goodsview.givegoodsunits+'),'
-					}
-				}
-			});
-			xjGIds = xjGIds.substr(0, xjGIds.length - 1);
-			xjGIds += ' 已下架或者超过了限购数量，是否要加入购物车？';
-			if(xjFlag > 0){
+			if(jsonResp.msg.length > 10){
 				if(confirm(xjGIds) == false){
 					return ;
 				}
@@ -94,7 +78,7 @@ function regoumai(){
 						//新增订单
 						var mdishes = new Object();
 						mdishes.goodsid = item.goodsview.goodsid;
-						mdishes.goodsdetail = item.goodsview.goodsdetail;
+						mdishes.goodsdetail = 'danpin';
 						mdishes.goodscompany = item.goodsview.goodscompany;
 						mdishes.companyshop = item.goodsview.companyshop;
 						mdishes.companydetail = item.goodsview.companydetail;
@@ -111,7 +95,7 @@ function regoumai(){
 					} else if(item.type == '秒杀' && item.statue != '下架'){
 						var mdishes = new Object();
 						mdishes.goodsid = item.tgview.timegoodsid;
-						mdishes.goodsdetail = item.tgview.timegoodsdetail;
+						mdishes.goodsdetail = 'miaosha';
 						mdishes.goodscompany = item.tgview.timegoodscompany;
 						mdishes.companyshop = item.tgview.companyshop;
 						mdishes.companydetail = item.tgview.companydetail;
@@ -174,7 +158,7 @@ function regoumai(){
 								//新增订单
 								var mdishes = new Object();
 								mdishes.goodsid = item.goodsview.goodsid;
-								mdishes.goodsdetail = item.goodsview.goodsdetail;
+								mdishes.goodsdetail = 'danpin';
 								mdishes.goodscompany = item.goodsview.goodscompany;
 								mdishes.companyshop = item.goodsview.companyshop;
 								mdishes.companydetail = item.goodsview.companydetail;
@@ -212,7 +196,7 @@ function regoumai(){
 								//新增订单
 								var mdishes = new Object();
 								mdishes.goodsid = item.tgview.timegoodsid;
-								mdishes.goodsdetail = item.tgview.timegoodsdetail;
+								mdishes.goodsdetail = 'miaosha';
 								mdishes.goodscompany = item.tgview.timegoodscompany;
 								mdishes.companyshop = item.tgview.companyshop;
 								mdishes.companydetail = item.tgview.companydetail;
