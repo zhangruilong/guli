@@ -234,7 +234,6 @@ function addnum(obj,dishesprice,goodscode,goodsclassname){
 			if(item.goodsid==$(obj).parent().attr('name')
 					&&item.goodsdetail==$(obj).prev().attr('name')){
 				item.orderdetnum = item.orderdetnum + 1;
-				alert(item.orderdetnum);
 				return false;
 			}
 		});

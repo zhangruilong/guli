@@ -101,11 +101,9 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 				$.each(data,function(i,item){
 					if(item.cityname == customer.customercity){
 						$("#city").append('<option value="'+item.cityid+'" selected="selected">'+item.cityname+'</option>');
+						paramcity = item.cityid;
 					} else {
 						$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
-					}
-					if(i == 0){
-						paramcity = item.cityid;
 					}
 				});
 				$.ajax({
