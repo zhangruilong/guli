@@ -33,10 +33,10 @@ input:focus{ outline:none}
     	<li><span>店铺名称</span> <input name="customershop" type="text" value="" placeholder="请输入店铺名称"></li>
         <li><span>联系人</span> <input name="customername" type="text" value="" placeholder="请输入联系人"></li>
         <li><span>联系电话</span> <input name="customerphone" type="text" value="" placeholder="请输入联系电话"></li>
-        <li><span>所在城市</span> <select name="customercity" id="city">
+        <!-- <li><span>所在城市</span> <select name="customercity" id="city">
 			</select><i></i></li>
         <li><span>所在区域</span> <select name="customerxian" id="xian">
-			</select><i></i></li>
+			</select><i></i></li> -->
         <li><span>店铺地址</span> <input name="customeraddress" type="text" value=""
          placeholder="请输入店铺地址"></li>
     </ul>
@@ -70,7 +70,7 @@ $(function(){
 			$("input[name='customershop']").val(data.root[0].customershop);
 			$("input[name='customername']").val(data.root[0].customername);
 			$("input[name='customerphone']").val(data.root[0].customerphone);
-			$.ajax({
+			/* $.ajax({
 				url:"CityAction.do?method=selAll",
 				type:"post",
 				data:{
@@ -93,7 +93,7 @@ $(function(){
 					var respText = eval('('+resp+')'); 
 					alert(respText.msg);
 				}
-			});
+			}); */
 			$("input[name='customeraddress']").val(data.root[0].customeraddress);
 		},
 		error : function(resp2){
@@ -112,7 +112,7 @@ $(function(){
 	}); */
 })
 //初始化县
-function initxian(){
+/* function initxian(){
 	$.ajax({
 		   url:"CityAction.do?method=selAll",
 		   type:"post",
@@ -131,9 +131,9 @@ function initxian(){
 				alert(respText.msg);
 		   }
 	   });
-}
+} */
 //绑定更换城市时的事件
-function cityChaEve(){
+/* function cityChaEve(){
 	$("#city").change(function(){
 		 $.ajax({
  			   url:"CityAction.do?method=selAll",
@@ -154,7 +154,7 @@ function cityChaEve(){
  			   }
  		   });
 	});
-}
+} */
 function doedit(){
 	var count = 0;
 	var alt;

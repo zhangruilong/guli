@@ -62,7 +62,7 @@ function regoumai(){
 			var jsonResp = JSON.parse(resp);
 			var data = jsonResp.root;
 			if(jsonResp.msg.length > 10){
-				if(confirm(xjGIds) == false){
+				if(confirm(jsonResp.msg) == false){
 					return ;
 				}
 			}

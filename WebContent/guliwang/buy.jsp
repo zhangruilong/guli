@@ -63,6 +63,7 @@
 	</div>
 </div>
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/buy3.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 jQuery(document).ready(function($){
@@ -158,9 +159,31 @@ function sortingData(){
 				window.localStorage.setItem("cartnum",newcartnum);
 				window.localStorage.setItem("totalmoney",totalmoney.toFixed(2));
 				window.localStorage.setItem("totalnum",totalnum);
+				setscompany();		//设置供应商信息
 				buy();
 			} else {
 				alert(respText.msg);
+				var jsds = respText.root;										//sdishes的json
+				window.localStorage.setItem("sdishes",JSON.stringify(jsds));
+				var newcartnum = 0;
+				var totalmoney = 0.00;
+				var totalnum = 0;
+				$.each(jsds,function(i,item){
+					var money = parseFloat(parseFloat(item.pricesprice) * parseFloat(item.orderdetnum)).toFixed(2);
+					newcartnum += parseInt(item.orderdetnum);
+					totalmoney = parseFloat(money) + totalmoney;
+					totalnum++;
+				});
+				window.localStorage.setItem("cartnum",newcartnum);
+				window.localStorage.setItem("totalmoney",totalmoney.toFixed(2));
+				window.localStorage.setItem("totalnum",totalnum);
+				setscompany();		//设置供应商信息
+				if(respText.root.length == 0){
+					alert("购物车中没有商品.");
+					window.location.href = "goods.jsp?searchclasses="+searchclassesvalue;
+					return;
+				}
+				buy();
 			}
 		},
 		error : function(resp) {

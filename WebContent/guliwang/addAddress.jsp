@@ -22,10 +22,10 @@
 </div>
 <div class="reg-wrapper reg-dianpu-info">
 	<ul>
-    	<li><span>所在城市</span> <select id="city">
+    	<!-- <li><span>所在城市</span> <select id="city">
 			</select><i></i></li>
         <li><span>所在区域</span> <select  id="xian">
-			</select><i></i></li>
+			</select><i></i></li> -->
         <li><span>详细地址</span> <input id="detaAddressa" type="text" placeholder="请输入详细地址"></li>
     </ul>
 </div>
@@ -42,8 +42,8 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function addAddress(){
-		var city = $("#city").children("option:selected").text();
-		var xian = $("#xian").children("option:selected").text();
+		//var city = $("#city").children("option:selected").text();
+		//var xian = $("#xian").children("option:selected").text();
 		var detaAddressa = $("#detaAddressa").val();
 		var addressture = "0";
 		if($("[name='addressture']:checkbox").get(0).checked){
@@ -71,7 +71,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			data:{
 				json:'[{"addressconnect":"'+$("input[name='addressconnect']").val()+
 				'","addressphone":"'+$("input[name='addressphone']").val()+
-				'","addressaddress":"'+city+xian+detaAddressa+
+				'","addressaddress":"'+detaAddressa+
 				'","addresscustomer":"'+customer.customerid+
 				'","addressture":"'+addressture+
 				'"}]'
@@ -88,7 +88,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 		});
 	}
 	$(function(){
-		$.ajax({
+		/* $.ajax({
 			url:"CityAction.do?method=selAll",
 			type:"post",
 			data:{
@@ -134,10 +134,10 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 				var respText = eval('('+resp+')'); 
 				alert(respText.msg);
 			}
-		});
+		}); */
 	})
 	//绑定更换城市时的事件
-	function cityChaEve(){
+	/* function cityChaEve(){
 		$("#city").change(function(){
 			 $.ajax({
   			   url:"CityAction.do?method=selAll",
@@ -158,7 +158,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
   			   }
   		   });
 		});
-	}
+	} */
 </script>
 </body>
 </html>

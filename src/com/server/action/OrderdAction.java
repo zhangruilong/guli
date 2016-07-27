@@ -339,6 +339,7 @@ public class OrderdAction extends BaseActionDao {
 		if(CommonUtil.isNotEmpty(xjGoodsMsg)){
 			infoMap.put("xjGoodsMsg", xjGoodsMsg+" 商品已下架。");
 		}
+		svoList.removeAll(svoListremove);
 		infoMap.put("svoList", svoList);
 		return infoMap;
 	}
@@ -400,10 +401,10 @@ public class OrderdAction extends BaseActionDao {
 		}
 		svoList.removeAll(svoListremove);
 		if(CommonUtil.isNotEmpty(editNumMsg)){
-			infoMap.put("editNumMsg", editNumMsg+" 数量已修改。");
+			infoMap.put("editNumMsg", editNumMsg+" 超过限购数量已调整。");
 		}
 		if(CommonUtil.isNotEmpty(deleGoodsMsg)){
-			infoMap.put("deleGoodsMsg", deleGoodsMsg+ " 商品已卖完。");
+			infoMap.put("deleGoodsMsg", deleGoodsMsg+ " 超过限购数量已去除。");
 		}
 		infoMap.put("svoList", svoList);
 		return infoMap;

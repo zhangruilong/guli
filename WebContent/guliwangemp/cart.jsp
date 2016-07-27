@@ -38,6 +38,7 @@
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../js/buy3.js"></script>
 <script> 
+var searchclassesvalue = window.localStorage.getItem("goodsclassname");
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	$.ajax({
@@ -90,7 +91,7 @@ $(function(){
 });
 //点击结算时执行的方法
 function nextpage(){
-	setscompany();		//设置供应商信息
+	/* setscompany();		//设置供应商信息
 	var flag = 0;
 	var goodsname = '';
 	$(".jia.add").each(function(i,item){
@@ -102,7 +103,7 @@ function nextpage(){
 			return false;
 		}
 	});
-	if(flag == 0){
+	if(flag == 0){ */
 		//整理购物车数据
 			$("#buyall").attr('onclick','');											//禁用按钮
 			$.ajax({
@@ -133,6 +134,27 @@ function nextpage(){
 						window.location.href = "buy.jsp";
 					} else {
 						alert(respText.msg);
+						var jsds = respText.root;										//sdishes的json
+						window.localStorage.setItem("sdishes",JSON.stringify(jsds));
+						var newcartnum = 0;
+						var totalmoney = 0.00;
+						var totalnum = 0;
+						$.each(jsds,function(i,item){
+							var money = parseFloat(parseFloat(item.pricesprice) * parseFloat(item.orderdetnum)).toFixed(2);
+							newcartnum += parseInt(item.orderdetnum);
+							totalmoney = parseFloat(money) + totalmoney;
+							totalnum++;
+						});
+						window.localStorage.setItem("cartnum",newcartnum);
+						window.localStorage.setItem("totalmoney",totalmoney.toFixed(2));
+						window.localStorage.setItem("totalnum",totalnum);
+						setscompany();		//设置供应商信息
+						if(respText.root.length == 0){
+							alert("购物车中没有商品.");
+							window.location.href = "goods.jsp?searchclasses="+searchclassesvalue;
+							return;
+						}
+						window.location.href = "buy.jsp";
 					}
 				},
 				error : function(resp) {
@@ -142,9 +164,9 @@ function nextpage(){
 				}
 			});
 		
-	} else {
+	/* } else {
 		alert("您购买的："+goodsname+" 超过了限购数量");
-	}
+	} */
 }
 //初始化的页面信息
 function initDishes(data){
