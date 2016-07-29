@@ -100,7 +100,7 @@
 	<div class="cd-popup-container">
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
-			<p class="meg">是否现在登录?</p>
+			<p class="meg">是否现在绑定经销商?</p>
             <a class="cd-popup-close">确定</a>
 		</div>
 	</div>
@@ -144,6 +144,7 @@ $("#xianList").css("top",xianListTop + "px");
 	function input_sele_city(){
 		$("#city").trigger("change");
 	}
+	//注册
 	function reg(){
 		var count = 0;
 		var alt;
@@ -185,11 +186,10 @@ $("#xianList").css("top",xianListTop + "px");
 			},
 			success: function(resp) {
 				var respText = eval('('+resp+')'); 
-				//window.localStorage.setItem("customer",JSON.stringify(respText.root));
-				$(".meg").text(respText.msg);
-				$(".cd-buttons a").attr("href","index.jsp");
+				$(".meg").text("注册成功!请绑定供应商。");
+				$(".cd-buttons a").attr("href","cusbinding.jsp");
 				$(document).click(function(){
-					window.location.href = "index.jsp";
+					window.location.href = "cusbinding.jsp";
 				});
 				$(".cd-popup").addClass("is-visible");	//弹出窗口
 			},
