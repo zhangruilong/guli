@@ -99,7 +99,7 @@ public class GoodsviewPoco
    /**
     * 实体排序
     */
-   public static final String ORDER = " goodsid desc ";
+   public static final String ORDER = " goodsorder desc,goodsname,goodsclass,goodsunits ";
    /**
 	 * 要模糊查询字段
 	 */
