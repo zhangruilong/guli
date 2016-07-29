@@ -2,7 +2,7 @@ package com.server.pojo;
 
 import java.sql.Date;
 /**
- * 经销商 实体类
+ * companyview 实体类
  *@author ZhangRuiLong
  */
 public class Companyview
@@ -83,6 +83,10 @@ public class Companyview
     * citystatue
     */
    private String citystatue;   
+   /**
+    * cityparentname
+    */
+   private String cityparentname;   
     //属性方法	    
      /**
 	 *设置主键"companyid"属性
@@ -406,6 +410,23 @@ public class Companyview
 	{
 		return this.citystatue;
 	}	   
+
+	/**
+	 *设置"cityparentname"属性
+	 *@param cityparentname 实体的Cityparentname属性
+	 */
+	public void setCityparentname(String cityparentname)
+	{
+		this.cityparentname = cityparentname;
+	}
+	
+	/**
+	 *获取"cityparentname"属性
+	 */
+	public String getCityparentname()
+	{
+		return this.cityparentname;
+	}	   
 	public Companyview() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -430,6 +451,7 @@ public class Companyview
 	 	,String cityparent
 	 	,String citydetail
 	 	,String citystatue
+	 	,String cityparentname
 		 ){
 		super();
 		this.companyid = companyid;
@@ -451,6 +473,7 @@ public class Companyview
 	 	this.cityparent = cityparent;
 	 	this.citydetail = citydetail;
 	 	this.citystatue = citystatue;
+	 	this.cityparentname = cityparentname;
 	}
 }
 

@@ -285,7 +285,15 @@ color:#fff !important;
 .budan-page li a:after{content: "\f3d3"; position:absolute; right:4%; top:45%}
 .budan-page li h2{ font-size:1em; font-weight:normal; padding:3% 0}
 .budan-page li span,.budan-page li a{  display:block}
-
+/*绑定经销商*/
+.bincompage .home-search-wrapper{ text-align:center}
+.bincompage .home-search-wrapper input{ float:none; margin:auto; width:87%; background-size:5%}
+.bincompage li{ overflow:hidden; position:relative; border-bottom:solid 1px #ddd; background-color:#fff; padding:4% ;}
+.bincompage li img{ float:left; width:26%; margin-right:4%}
+.bincompage li a:after{content: "\f3d3"; position:absolute; right:4%; top:45%}
+.bincompage .cdpa-bdqu{width: 70%;padding: 0px 0px 0px 0px;}
+.bincompage .cdpa-bdqu span{margin: 3px;display: inline-block;}
+.bincompage .cdpa-delsp{float: right;color: #FB0208;padding:5px;font-size: 1.1em;}
 /*footer*/
 .footer { width: 100%; position: fixed; bottom: 0; background-color: #fff; border-top:solid 1px #eee }
 .footer .jiesuan-foot-info { position: relative; width: 75%; float: left; text-align: center; font-size: 1em; padding-top: 4% }

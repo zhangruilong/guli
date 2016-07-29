@@ -163,7 +163,7 @@ public class CustomerAction extends BaseActionDao {
 				address.setAddressconnect(temp.getCustomername());
 				String sqlAddress = getInsSingleSql(address);
 				sqlList.add(sqlAddress);
-				Queryinfo comqueryinfo = new Queryinfo();
+				/*Queryinfo comqueryinfo = new Queryinfo();
 				comqueryinfo.setType(Companyview.class);
 				comqueryinfo.setQuery(getQuerysql(comqueryinfo.getQuery()));
 				comqueryinfo.setOrder(CompanyviewPoco.ORDER);
@@ -177,7 +177,7 @@ public class CustomerAction extends BaseActionDao {
 						newccustomer.setCcustomercompany(cview.getCompanyid());
 						newccustomer.setCcustomercustomer(newId);
 						newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
-						String sqlCcustomer = getInsSingleSql(newccustomer);
+						String sqlCcustomer = getInsSingleSql(newccustomer);						//得到插入的sql语句
 						sqlList.add(sqlCcustomer);
 					}
 				} else {
@@ -187,9 +187,9 @@ public class CustomerAction extends BaseActionDao {
 					newccustomer.setCcustomercompany("1");
 					newccustomer.setCcustomercustomer(newId);
 					newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
-					String sqlCcustomer = getInsSingleSql(newccustomer);
+					String sqlCcustomer = getInsSingleSql(newccustomer);						//得到插入的sql语句
 					sqlList.add(sqlCcustomer);
-				}
+				}*/
 				result = doAll(sqlList);
 				if(CommonConst.SUCCESS.equals(result)){
 					ArrayList<Customer> retCust = new ArrayList<Customer>();

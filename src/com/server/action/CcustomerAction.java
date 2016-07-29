@@ -107,4 +107,13 @@ public class CcustomerAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
+	//删除客户已经绑定的关系
+	public void delCusNexus(HttpServletRequest request, HttpServletResponse response){
+		json2cuss(request);
+		for(Ccustomer temp:cuss){
+			String[] primaryKeys = {"ccustomercompany","ccustomercustomer"};
+			result = delSingle(temp, primaryKeys);
+		}
+		responsePW(response, result);
+	}
 }

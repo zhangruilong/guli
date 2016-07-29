@@ -1,7 +1,7 @@
 package com.server.poco;
 
 /**
- * 经销商 实体类的常量
+ * companyview 实体类的常量
  *@author ZhangRuiLong
  */
 public class CompanyviewPoco
@@ -9,7 +9,7 @@ public class CompanyviewPoco
    /**
     * 实体中文名
     */
-   public static String NAME = "经销商";
+   public static String NAME = "companyview";
    /**
     * 实体表名
     */
@@ -41,6 +41,7 @@ public class CompanyviewPoco
 	 	"cityparent",
 	 	"citydetail",
 	 	"citystatue",
+	 	"cityparentname",
 	};
 	/**
 	 * 实体英文字段
@@ -65,6 +66,7 @@ public class CompanyviewPoco
 	 	"cityparent",
 	 	"citydetail",
 	 	"citystatue",
+	 	"cityparentname",
    };
    /**
     * 实体排序
@@ -93,6 +95,7 @@ public class CompanyviewPoco
 	 	"cityparent",
 	 	"citydetail",
 	 	"citystatue",
+	 	"cityparentname",
    };
 }
 

@@ -20,16 +20,16 @@
 </head>
 
 <body>
-<div class="gl-box budan-page">
+<div class="gl-box bincompage">
 	<div class="home-search-wrapper">
         <input type="text" placeholder="请输入客户名称" onkeydown="entersearch(this);">
     </div>
     <ul id="customerlist">
     	<!-- <li><span hidden="ture">2121</span>
-    	<a class="cd-popup-trigger"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
-        <li><a class="cd-popup-trigger"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
-        <li><a class="cd-popup-trigger"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
-        <li><a class="cd-popup-trigger"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li> -->
+    	<a class="cdpa-bdqu"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
+        <li><a class="cdpa-bdqu"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
+        <li><a class="cdpa-bdqu"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
+        <li><a class="cdpa-bdqu"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li> -->
     </ul>
 </div>
 
@@ -51,14 +51,40 @@ jQuery(document).ready(function($){
 		url:"CompanyviewAction.do?method=selAll",
 		type:"post",
 		data:{
-			wheresql:"cityname='"+customer.customercity+"'"
+			wheresql:"cityparentname='"+customer.customercity+"'"
 		},
 		success:function(resp){
 			var data = eval('('+resp+')');
 			$.each(data.root,function(i,item){
-				$(".budan-page ul li").remove();
-				$(".budan-page ul").append('<li><a class="cd-popup-trigger"><img src="images/mendian.jpg" > <h2>大福超市</h2><span>王大宝 15865456465</span></a></li>');
+				$(".bincompage ul").append('<li><span class="cdpa-bdqu" name="'+item.companyid+'"><span>'+
+					item.companyshop+'</span><br/><span>'+
+					item.username+' '+
+					item.companyphone+'</span></span></li>');
 			});
+			$.ajax({
+				url:"CcustomerAction.do?method=selAll",
+				type:"post",
+				data:{
+					wheresql:"ccustomercustomer='"+customer.customerid+"'"
+				},
+				success:function(resp2){
+					var data2 = eval('('+resp2+')');
+					$.each(data2.root,function(i,item){
+						$(".bincompage ul li").each(function(i2,item2){
+							if($(item2).children(".cdpa-bdqu").attr("name") == item.ccustomercompany){
+								$(item2).append('<span class="cdpa-delsp">删除<span>');
+							}
+						});
+					});
+					$(".bincompage ul li .cdpa-bdqu").click(bindcom);
+					$(".bincompage ul li .cdpa-delsp").click(remcombind);
+				},
+				error : function(resp2){
+					var respText = eval('('+resp2+')');
+					alert(respText.msg);
+				}
+			});
+			
 		},
 		error : function(resp){
 			var respText = eval('('+resp+')');
@@ -66,6 +92,44 @@ jQuery(document).ready(function($){
 		}
 	});
 });
+var remcombind = function(){
+	$.ajax({
+		url:"CcustomerAction.do?method=delCusNexus",
+		type:"post",
+		data:{
+			json:'[{"ccustomercompany":"'+$(this).prev().attr("name")+'","ccustomercustomer":"'+customer.customerid+'"}]'
+		},
+		success:function(resp){
+			var data = eval('('+resp+')');
+			alert(data.msg);
+			history.go(-1);
+		},
+		error : function(resp){
+			var respText = eval('('+resp+')');
+			alert(respText.msg);
+		}
+	});
+}
+var bindcom = function(){
+	$.ajax({
+		url:"CcustomerAction.do?method=insAll",
+		type:"post",
+		data:{
+			json:'[{"ccustomercompany":"'+$(this).attr("name")+'","ccustomercustomer":"'+customer.customerid+'","ccustomerdetail":"3","creator":"0"}]',
+		},
+		success:function(resp){
+			var data = eval('('+resp+')');
+			if(data.code == '202'){
+				alert("已成功绑定经销商!");
+				window.location.href="index.jsp";
+			}
+		},
+		error : function(resp){
+			var respText = eval('('+resp+')');
+			alert(respText.msg);
+		}
+	});
+}
 </script>
 </body>
 </html>
