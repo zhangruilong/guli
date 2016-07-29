@@ -107,9 +107,9 @@ $(function(){
 				$("#addressphone").text(item.addressphone);
 				$("#addressaddress").text(item.addressaddress);
 			},
-			error : function(resp2){
-				var respText2 = eval('('+resp2+')');
-				alert(respText2.msg);
+			error : function(resp){
+				var respText = eval('('+resp+')');
+				alert(respText.msg);
 			}
 		});
 	}
