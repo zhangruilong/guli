@@ -72,7 +72,7 @@ jQuery(document).ready(function($){
 					$.each(data2.root,function(i,item){
 						$(".bincompage ul li").each(function(i2,item2){
 							if($(item2).children(".cdpa-bdqu").attr("name") == item.ccustomercompany){
-								$(item2).append('<span class="cdpa-delsp">删除<span>');
+								$(item2).append('<span class="cdpa-delsp">已绑定<span>');
 							}
 						});
 					});
@@ -92,6 +92,7 @@ jQuery(document).ready(function($){
 		}
 	});
 });
+//解绑定
 var remcombind = function(){
 	$.ajax({
 		url:"CcustomerAction.do?method=delCusNexus",
@@ -110,6 +111,7 @@ var remcombind = function(){
 		}
 	});
 }
+//绑定
 var bindcom = function(){
 	$.ajax({
 		url:"CcustomerAction.do?method=insAll",
