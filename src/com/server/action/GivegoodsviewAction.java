@@ -86,10 +86,11 @@ public class GivegoodsviewAction extends BaseActionDao {
 			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
 			ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
 			if(Ccustomercuss.size()!=0){
-				wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' ";
+				wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' and (";
 				for (Ccustomer ccustomer : Ccustomercuss) {
-					wheresql += "and givegoodscompany='"+ccustomer.getCcustomercompany()+"' ";
+					wheresql += "givegoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
 				}
+				wheresql = wheresql.substring(0, wheresql.length()-3) +") ";
 			}
 		} else {
 			//如果是业务员补单

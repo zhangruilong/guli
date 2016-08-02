@@ -72,7 +72,7 @@ public class TimegoodsviewAction extends BaseActionDao {
 		responsePW(response, result);
 	}
 	
-	//买赠页
+	//秒杀页
 	@SuppressWarnings("unchecked")
 	public void cusTimeG(HttpServletRequest request, HttpServletResponse response){
 		String companyid = request.getParameter("companyid");
@@ -87,10 +87,11 @@ public class TimegoodsviewAction extends BaseActionDao {
 			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"' ");
 			ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
 			if(Ccustomercuss.size()!=0){
-				wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%' ";
+				wheresql = "timegoodsstatue='启用' and timegoodsscope like '%"+customertype+"%'  and (";
 				for (Ccustomer ccustomer : Ccustomercuss) {
-					wheresql += "and timegoodscompany='"+ccustomer.getCcustomercompany()+"' ";
+					wheresql += "timegoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
 				}
+				wheresql = wheresql.substring(0, wheresql.length()-3) +") ";
 			}
 		} else {
 			//如果是业务员补单

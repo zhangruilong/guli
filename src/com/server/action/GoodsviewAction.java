@@ -93,6 +93,7 @@ public class GoodsviewAction extends BaseActionDao {
 		responsePW(response, result);
 	}
 	//查询
+	@SuppressWarnings("unchecked")
 	public void mselAll(HttpServletRequest request, HttpServletResponse response){
 		String companyid = request.getParameter("companyid");
 		String customerid = request.getParameter("customerid");
@@ -109,9 +110,11 @@ public class GoodsviewAction extends BaseActionDao {
 			if(CommonUtil.isNotEmpty(companyid)){
 				wheresql += " and goodscompany='"+companyid+"'";
 			}else{
+				wheresql += " and (";
 				for(Ccustomer mCcustomer:Ccustomercuss){
-					wheresql += " and goodscompany ='"+mCcustomer.getCcustomercompany()+"'";
+					wheresql += "goodscompany ='"+mCcustomer.getCcustomercompany()+"' or ";
 				}
+				wheresql = wheresql.substring(0, wheresql.length()-3) +")";
 			}
 			if(CommonUtil.isNotEmpty(goodsclassname)){
 				wheresql += " and (goodsclassname='"+goodsclassname+
