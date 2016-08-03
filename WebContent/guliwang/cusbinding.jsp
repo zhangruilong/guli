@@ -22,7 +22,7 @@
 <body>
 <div class="gl-box bincompage">
 	<div class="home-search-wrapper">
-        <input type="text" placeholder="请输入客户名称" onkeydown="entersearch(this);">
+        <input type="text" placeholder="请输入客户名称" onkeydown="companysearch(this);">
     </div>
     <ul id="customerlist">
     	<!-- <li><span hidden="ture">2121</span>
@@ -47,21 +47,45 @@
 <script>
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 jQuery(document).ready(function($){
+	companyload();
+});
+//模糊查询
+function companysearch(obj){
+	var event = window.event || arguments.callee.caller.arguments[0];
+	 if(event.keyCode == 13){
+		 companyload(obj.value)
+	 }
+}
+//查询供应商
+function companyload(query){
+	 if(typeof(query)!='undefined' && query){
+		var data = {
+				wheresql:"cityparentname='"+customer.customercity+"'",
+				customerid:customer.customerid,
+				query:query
+			};
+	} else {
+		var data = { wheresql:"cityparentname='"+customer.customercity+"'",customerid:customer.customerid };
+	}
 	$.ajax({
-		url:"CompanyviewAction.do?method=selAll",
+		url:"CompanyviewAction.do?method=bdCityCom",
 		type:"post",
-		data:{
-			wheresql:"cityparentname='"+customer.customercity+"'"
-		},
+		data:data,
 		success:function(resp){
 			var data = eval('('+resp+')');
+			$("#customerlist li").remove();
 			$.each(data.root,function(i,item){
-				$(".bincompage ul").append('<li><span class="cdpa-bdqu" name="'+item.companyid+'"><span>'+
+				var bdstr = '点击绑定';
+				if(typeof(item.createtime) != "undefined" && item.createtime == '已绑定'){
+					bdstr = item.createtime;
+				}
+				$(".bincompage ul").append('<li name="'+item.companyid+'"><span class="cdpa-bdqu""><span>'+
 					item.companyshop+'</span><br/><span>'+
 					item.username+' '+
-					item.companyphone+'</span></span></li>');
+					item.companyphone+'</span></span><span class="cdpa-delsp">'+bdstr+'<span></li>');
 			});
-			$.ajax({
+			$(".bincompage ul li").click(bindcom);
+			/* $.ajax({
 				url:"CcustomerAction.do?method=selAll",
 				type:"post",
 				data:{
@@ -71,19 +95,19 @@ jQuery(document).ready(function($){
 					var data2 = eval('('+resp2+')');
 					$.each(data2.root,function(i,item){
 						$(".bincompage ul li").each(function(i2,item2){
-							if($(item2).children(".cdpa-bdqu").attr("name") == item.ccustomercompany){
-								$(item2).append('<span class="cdpa-delsp">已绑定<span>');
+							if($(item2).attr("name") == item.ccustomercompany){
+								$(item2).children("span:eq(1)").text("已绑定");
 							}
 						});
 					});
-					$(".bincompage ul li .cdpa-bdqu").click(bindcom);
-					$(".bincompage ul li .cdpa-delsp").click(remcombind);
+					$(".bincompage ul li").click(bindcom);
+					//$(".bincompage ul li .cdpa-delsp").click(remcombind);
 				},
 				error : function(resp2){
 					var respText = eval('('+resp2+')');
 					alert(respText.msg);
 				}
-			});
+			}); */
 			
 		},
 		error : function(resp){
@@ -91,14 +115,14 @@ jQuery(document).ready(function($){
 			alert(respText.msg);
 		}
 	});
-});
+}
 //解绑定
 var remcombind = function(){
 	$.ajax({
 		url:"CcustomerAction.do?method=delCusNexus",
 		type:"post",
 		data:{
-			json:'[{"ccustomercompany":"'+$(this).prev().attr("name")+'","ccustomercustomer":"'+customer.customerid+'"}]'
+			json:'[{"ccustomercompany":"'+$(this).parent().attr("name")+'","ccustomercustomer":"'+customer.customerid+'"}]'
 		},
 		success:function(resp){
 			var data = eval('('+resp+')');
@@ -113,7 +137,13 @@ var remcombind = function(){
 }
 //绑定
 var bindcom = function(){
+	var spobj = $(this).children("span:eq(1)");
+	if(spobj.text() == '已绑定'){
+		alert("已经绑定过了,不能重复绑定!");
+		return;
+	}
 	$.ajax({
+		
 		url:"CcustomerAction.do?method=insAll",
 		type:"post",
 		data:{

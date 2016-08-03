@@ -33,7 +33,7 @@ input:focus{ outline:none}
     <div style="width:100%; padding-top:2%; color:#fff; background:url(../images/minebg.jpg);">
     	<div id="uploadImg" style="margin:0 41% auto;">
                 <span id="result" style="">
-                  <img id="result_img" src="../images/default.jpg" onerror="javascript:this.src=\'../images/default.jpg\'" style="border-radius:50px;">
+                  <img id="result_img" src="../images/default.jpg" onerror="javascript:this.src=\'../images/default.jpg\'" style="border-radius:50px;"/>
                 </span>
             </div>
         <p id="myshopname" style="text-align: center;"></p>
@@ -45,7 +45,7 @@ input:focus{ outline:none}
         <a id="a_mycollect" href="collect.jsp" onclick="">我的收藏 <span class="sign"></span></a>
         <a onclick="notOnLine()">我的谷币 <span class="sign"></span></a>
         <a id="a_address" href="address.jsp" onclick="">收货地址 <span class="sign"></span></a>
-        <a id="a_address" href="cusbinding.jsp" onclick="">绑定经销商 <span class="sign"></span></a>
+        <a id="a_address" href="cusbinding.jsp" onclick="">我的供货商 <span class="sign"></span></a>
     </div>
     <div class="personal-center">
     	<a onclick="clearlocalstore();">清除缓存 <span class="sign"></span></a>

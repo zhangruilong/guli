@@ -87,7 +87,7 @@ function gotogoodsDetail(jsonitem){
 }
 //初始化页面
 function initMiaoshaPage(resp){
-	var data = JSON.parse(resp);
+	var data = eval('('+resp+')');
 	$.ajax({
 		url:"OrderdAction.do?method=selCusXGOrderd",
 		type:"post",
@@ -96,6 +96,9 @@ function initMiaoshaPage(resp){
 		success : function(data2){
 			var cusOrder = JSON.parse(data2);
 			$(".home-hot-commodity").html("");
+			if(typeof(data.root) == 'undefined' ||　!data.root){
+				return;
+			}
 			$.each(data.root,function(j,item2){
 				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.timegoodsnum);

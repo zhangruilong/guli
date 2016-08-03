@@ -83,7 +83,7 @@ function gotogoodsDetail(jsonitem,dailySur){
 }
 //初始化页面
 function initMiaoshaPage(resp){
-	var data = JSON.parse(resp);														//将返回的字符串转换为json
+	var data = eval('('+resp+')');														//将返回的字符串转换为json
 	$(".home-hot-commodity").html("");													//清空商品列表
 	$.ajax({
 		url:"OrderdAction.do?method=selCusXGOrderd",
@@ -93,6 +93,9 @@ function initMiaoshaPage(resp){
 			var cusOrder = JSON.parse(data2);
 			if(cusOrder.msg == '操作失败'){
 				alert("未知错误,请联系管理员.");
+			}
+			if(typeof(data.root) == 'undefined' ||　!data.root){
+				return;
 			}
 			$.each(data.root,function(i,item1){
 				var dailySur = parseInt(item1.givegoodsnum);
