@@ -21,9 +21,7 @@
 
 <body>
 <div class="gl-box bincompage">
-	<div class="home-search-wrapper">
-        <input type="text" placeholder="请输入客户名称" onkeydown="companysearch(this);">
-    </div>
+	<div class="wapper-nav">我的供货商</div>
     <ul id="customerlist">
     	<!-- <li><span hidden="ture">2121</span>
     	<a class="cdpa-bdqu"><h2>大福超市</h2><span>王大宝 15865456465</span></a></li>
@@ -34,7 +32,7 @@
 </div>
 
 <!--弹框-->
-<div class="cd-popup" role="alert">
+<!-- <div class="cd-popup" role="alert">
 	<div class="cd-popup-container">
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
@@ -42,7 +40,7 @@
             <a href="#" class="cd-popup-close">取消</a><a href="goodsclass.jsp">确定</a>
 		</div>
 	</div>
-</div>
+</div> -->
 <script src="../js/jquery-1.8.3.min.js"></script>
 <script>
 var customer = JSON.parse(window.localStorage.getItem("customer"));

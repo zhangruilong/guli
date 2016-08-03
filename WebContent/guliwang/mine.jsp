@@ -40,17 +40,17 @@ input:focus{ outline:none}
     </div>
     </form>
 	<div class="personal-center">
-        <a id="a_myshop" href="myshop.jsp" onclick="">我的店铺 <span class="sign"></span></a>
-        <a id="a_mycollect" href="order.jsp" onclick="">我的订单 <span class="sign"></span></a>
-        <a id="a_mycollect" href="collect.jsp" onclick="">我的收藏 <span class="sign"></span></a>
+        <a id="a_myshop" onclick="acpage('myshop.jsp')" >我的店铺 <span class="sign"></span></a>
+        <a id="a_mycollect" onclick="acpage('order.jsp')" >我的订单 <span class="sign"></span></a>
+        <a id="a_mycollect" onclick="acpage('collect.jsp')" >我的收藏 <span class="sign"></span></a>
         <a onclick="notOnLine()">我的谷币 <span class="sign"></span></a>
-        <a id="a_address" href="address.jsp" onclick="">收货地址 <span class="sign"></span></a>
-        <a id="a_address" href="cusbinding.jsp" onclick="">我的供货商 <span class="sign"></span></a>
+        <a id="a_address" onclick="acpage('address.jsp')" >收货地址 <span class="sign"></span></a>
+        <a id="a_address" onclick="acpage('cusbinding.jsp')" >我的供货商 <span class="sign"></span></a>
     </div>
     <div class="personal-center">
     	<a onclick="clearlocalstore();">清除缓存 <span class="sign"></span></a>
     	<a href="#">谷粒客服 <span class="sign"></span></a>
-        <a href="objection.jsp">意见反馈 <span class="sign"></span></a>
+        <a onclick="acpage('objection.jsp')" >意见反馈 <span class="sign"></span></a>
     </div>
 </div>
 <div class="personal-center-nav">
@@ -68,7 +68,7 @@ input:focus{ outline:none}
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
 			<p class="meg">尚无账号，立即注册？</p>
-            <a class="cd-popup-close">取消</a><a class="ok" href="doReg.action" style="display: inline-block;">确定</a>
+            <a class="cd-popup-close">取消</a><a class="ok" href="reg.jsp" style="display: inline-block;">确定</a>
 		</div>
 	</div>
 </div>
@@ -108,6 +108,14 @@ $(function(){
 		}
 	})
 })
+//跳转页面
+function acpage(url){
+	if(!customer.customerid){
+		$(".cd-popup").addClass("is-visible");
+	} else {
+		window.location.href = url;
+	}
+}
 //到购物车页面
 function docart(obj){
 	if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车

@@ -68,7 +68,7 @@ public class CompanyviewAction extends BaseActionDao {
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
-	//查询所有
+	//查询我的供应商
 	@SuppressWarnings("unchecked")
 	public void bdCityCom(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
@@ -77,7 +77,7 @@ public class CompanyviewAction extends BaseActionDao {
 		queryinfo.setOrder(CompanyviewPoco.ORDER);
 		List<Companyview> comvList = selAll(queryinfo);
 		String customerid = request.getParameter("customerid");
-		if(comvList.size() >0 && CommonUtil.isNotEmpty(customerid)){
+		if(comvList.size() >0 && CommonUtil.isNotEmpty(customerid) && !customerid.equals("undefined")){
 			List<Ccustomer> ccustomers = selAll(Ccustomer.class, "select * from ccustomer where ccustomercustomer='"+customerid+"'");
 			if(ccustomers.size() >0){
 				for (Ccustomer cc : ccustomers) {

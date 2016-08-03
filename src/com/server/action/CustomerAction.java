@@ -141,7 +141,8 @@ public class CustomerAction extends BaseActionDao {
 		json2cuss(request);
 		for(Customer temp:cuss){
 			ArrayList<String> sqlList = new ArrayList<String>();							//sql语句的list集合
-			ArrayList<Customer> cusList = (ArrayList<Customer>) selAll(Customer.class, "select * from customer c where c.customerphone='"+temp.getCustomerphone()+"'");
+			ArrayList<Customer> cusList = (ArrayList<Customer>) selAll(Customer.class, "select * from customer c where c.customerphone='"+
+					temp.getCustomerphone()+"' or c.openid='"+temp.getOpenid()+"'");
 			if(cusList != null && cusList.size() > 0){
 				result = "{success:false,code:400,msg:'手机已经注册过了。'}";
 			}else{

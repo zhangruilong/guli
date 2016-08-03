@@ -101,7 +101,7 @@
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
 			<p class="meg">恭喜您注册成功,绑定供货商后即可购买商品!</p>
-            <a class="cd-popup-close">确定</a>
+            <a class="cd-popup-close" href="cusbinding.jsp">确定</a>
 		</div>
 	</div>
 </div>
@@ -185,14 +185,18 @@ $("#xianList").css("top",xianListTop + "px");
 				'}]'
 			},
 			success: function(resp) {
-				var respText = eval('('+resp+')'); 
-				window.localStorage.setItem("customer",JSON.stringify(respText.root[0]));
-				//$(".meg").text("恭喜您注册成功,绑定经销商后即可购买商品!");
-				//$(".cd-buttons a").attr("href","cusbinding.jsp");
-				$(document).click(function(){
-					window.location.href = "cusbinding.jsp";
-				});
-				$(".cd-popup").addClass("is-visible");	//弹出窗口
+				var respText = eval('('+resp+')');
+				if(respText.msg == '操作成功'){
+					window.localStorage.setItem("customer",JSON.stringify(respText.root[0]));
+					//$(".meg").text("恭喜您注册成功,绑定经销商后即可购买商品!");
+					//$(".cd-buttons a").attr("href","cusbinding.jsp");
+					$(document).click(function(){
+						window.location.href = "cusbinding.jsp";
+					});
+					$(".cd-popup").addClass("is-visible");	//弹出窗口
+				} else {
+					alert(respText.msg);
+				}
 			},
 			error:function(data) {
 				var dataJson = JSON.parse(data);
