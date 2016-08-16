@@ -239,7 +239,7 @@ public class OrderdAction extends BaseActionDao {
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
-								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '"+request.getParameter("customertype")+"'");
+								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '%"+request.getParameter("customertype")+"%'");
 				if(tgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setTgview(tgviewList.get(0));
@@ -248,7 +248,7 @@ public class OrderdAction extends BaseActionDao {
 			} else if(item.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
 								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
-								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '"+request.getParameter("customertype")+"'");
+								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '%"+request.getParameter("customertype")+"%'");
 				if(ggviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGgview(ggviewList.get(0));
@@ -311,7 +311,7 @@ public class OrderdAction extends BaseActionDao {
 			} else if(svo.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 						svo.getGoodscode()+"' and tv.timegoodsunits = '"+svo.getGoodsunits()+
-						"' and tv.timegoodsstatue = '启用' and timegoodsscope like '"+customertype+"'");
+						"' and tv.timegoodsstatue = '启用' and timegoodsscope like '%"+customertype+"%'");
 				if(tgviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
@@ -324,7 +324,7 @@ public class OrderdAction extends BaseActionDao {
 			} else if(svo.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
 						svo.getGoodscode()+"' and gv.givegoodsunits = '"+svo.getGoodsunits()+
-						"' and gv.givegoodsstatue = '启用' and givegoodsscope like '"+customertype+"'");
+						"' and gv.givegoodsstatue = '启用' and givegoodsscope like '%"+customertype+"%'");
 				if(ggviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息

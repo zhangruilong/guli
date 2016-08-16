@@ -292,9 +292,13 @@ function initOrderm(data){
  		$(".order-detail-info").append('<p name="'+item.companyphone+'">'+item.companyshop+'</p>'+
  				'<p>联系电话：'+item.companyphone+'</p>'+
  				'<p>'+item.companydetail+'</p>');
- 		$(".pdl-b8").append('<p>收货人：'+item.ordermconnect+item.ordermphone+'</p>'+
- 				'<p>收货地址：'+item.ordermaddress+'</p>'+
- 				'<p>支付方式：'+item.ordermway+'</p>');
+ 		var odmmsg = '<p>收货人：'+item.ordermconnect+item.ordermphone+'</p>'+
+			'<p>收货地址：'+item.ordermaddress+'</p>'+
+				'<p>支付方式：'+item.ordermway+'</p>';
+		if(item.ordermdetail){
+			odmmsg += '<p>订单留言：'+item.ordermdetail+'</p>';
+		}
+ 		$(".pdl-b8").append(odmmsg);
  		 $(".order-detail-wrapper").append('<p>订单金额: <span>'+item.ordermmoney+'元</span></p>'+
  	 		    '<p>优惠金额: <span>'+(item.ordermmoney-item.ordermrightmoney)+'元</span></p>'+
  	 		    '<p>实付金额: <span>'+item.ordermrightmoney+'元</span></p>');

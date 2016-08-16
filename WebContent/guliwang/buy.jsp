@@ -12,6 +12,7 @@
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,8 @@
             	<br>买家留言:<input> </li>
             </ul> -->
             <ul>
-            	<li><textarea class="liuy-info-ta" onpropertychange= "this.style.posHeight=this.scrollHeight"></textarea></li>
+            	<li><textarea placeholder="关于订单商品、配送时间等，可给供货商留言..." class="liuy-info-ta" onpropertychange= "this.style.posHeight=this.scrollHeight" ></textarea>
+    			</li>
             </ul>
             
         </div>
@@ -73,7 +75,7 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+
 <script type="text/javascript" src="../js/buy3.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customer"));
