@@ -56,15 +56,7 @@ function companysearch(obj){
 }
 //查询供应商
 function companyload(query){
-	 if(typeof(query)!='undefined' && query){
-		var data = {
-				wheresql:"cityparentname='"+customer.customercity+"'",
-				customerid:customer.customerid,
-				query:query
-			};
-	} else {
-		var data = { wheresql:"cityparentname='"+customer.customercity+"'",customerid:customer.customerid };
-	}
+	var data = { wheresql:"createtime like '%"+customer.customerxian+"%'",customerid:customer.customerid };
 	$.ajax({
 		url:"CompanyviewAction.do?method=bdCityCom",
 		type:"post",
@@ -72,6 +64,11 @@ function companyload(query){
 		success:function(resp){
 			var data = eval('('+resp+')');
 			$("#customerlist li").remove();
+			//alert(resp);
+			if(data.msg != '操作成功'){
+				alert('没有可以绑定的经销商.');
+				return;
+			}
 			$.each(data.root,function(i,item){
 				var bdstr = '点击绑定';
 				if(typeof(item.createtime) != "undefined" && item.createtime == '已绑定'){
@@ -83,29 +80,6 @@ function companyload(query){
 					item.companyphone+'</span></span><span class="cdpa-delsp">'+bdstr+'<span></li>');
 			});
 			$(".bincompage ul li").click(bindcom);
-			/* $.ajax({
-				url:"CcustomerAction.do?method=selAll",
-				type:"post",
-				data:{
-					wheresql:"ccustomercustomer='"+customer.customerid+"'"
-				},
-				success:function(resp2){
-					var data2 = eval('('+resp2+')');
-					$.each(data2.root,function(i,item){
-						$(".bincompage ul li").each(function(i2,item2){
-							if($(item2).attr("name") == item.ccustomercompany){
-								$(item2).children("span:eq(1)").text("已绑定");
-							}
-						});
-					});
-					$(".bincompage ul li").click(bindcom);
-					//$(".bincompage ul li .cdpa-delsp").click(remcombind);
-				},
-				error : function(resp2){
-					var respText = eval('('+resp2+')');
-					alert(respText.msg);
-				}
-			}); */
 			
 		},
 		error : function(resp){

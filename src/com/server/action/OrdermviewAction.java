@@ -78,7 +78,7 @@ public class OrdermviewAction extends BaseActionDao {
 		String beginmoney = request.getParameter("beginmoney");
 		String endmoney = request.getParameter("endmoney");
 		String companyname = request.getParameter("companyname");
-		String wheresql = "openid='"+openid+"'";
+		String wheresql = "openid='"+openid+"' and ordermstatue!='已删除'";
 		if(CommonUtil.isNotNull(begindate)){
 			wheresql += " and ordermtime>='"+begindate+"'";
 		}

@@ -30,8 +30,19 @@
         	<h1>结算信息</h1>
         	<ul id="companylist">
             	<li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font></li>
-                <li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font></li>
+                <!-- <li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font></li> -->
             </ul>
+        </div>
+        <div class="jiesuan-info">
+        	<h1>留言信息</h1>
+        	<!-- <ul id="companylist">
+            	<li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font>
+            	<br>买家留言:<input> </li>
+            </ul> -->
+            <ul>
+            	<li><textarea class="liuy-info-ta" onpropertychange= "this.style.posHeight=this.scrollHeight"></textarea></li>
+            </ul>
+            
         </div>
         <div class="jiesuan-info">
         	<h1>支付方式</h1>
@@ -70,6 +81,14 @@ jQuery(document).ready(function($){
 	//open popup 
 	$('.cd-popup-trigger').on('click', function(event){
 		event.preventDefault();
+		/* $('#companylist li').each(function(i,item){
+			if($(item).children('input').val() && ){
+				
+			}
+		});
+		if($(this).){
+			
+		} */
 		$('.cd-popup').addClass('is-visible');			//弹窗
 	});
 	
@@ -207,6 +226,7 @@ function buy(){
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
+				+ '","ordermdetail":"' + $(".liuy-info-ta").val()
 				+ '","ordermway":"货到付款"}]';
 		var orderdetjson = '[';
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));

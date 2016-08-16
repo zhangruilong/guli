@@ -160,8 +160,9 @@ color:#fff !important;
 .jiesuan .shouhuo-wrap a .add { display: block; color: #999; margin-top: 3% }
 .jiesuan .jiesuan-info { position: relative; margin-top: 4%; background-color: #fff }
 .jiesuan .jiesuan-info h1 { position: relative; font-size: 1.2em; font-weight: normal; padding: 2%; border-bottom:solid 1px #eee }
-.jiesuan .jiesuan-info li { position: relative; margin-left: 4%; padding: 2% 0; line-height: 2em;border-bottom:solid 1px #eee }
+.jiesuan .jiesuan-info li { position: relative; margin-left: 4%; margin-right: 4%; padding: 2% 0; line-height: 2em;border-bottom:solid 1px #eee }
 .jiesuan .jiesuan-info li:last-child { border: none }
+.jiesuan .jiesuan-info .liuy-info-ta{width:100%;/*自动适应父布局宽度*/overflow:auto;word-break:break-all;font-size: 14px;}
 .jiesuan-submit { position: fixed; bottom: 0; width: 100%; height: 40px; line-height: 40px; background-color: #fff; color: #ccc; font-size: 1.2em }
 .jiesuan-submit span { float: left; width: 75%; text-align: center; color: #666 }
 .jiesuan-submit a { float: right; width: 25%; text-align: center; background-color: #eb3c07; color: #fff }

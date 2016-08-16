@@ -83,7 +83,7 @@ public class CompanyviewAction extends BaseActionDao {
 				for (Ccustomer cc : ccustomers) {
 					for (Companyview company : comvList) {
 						if(company.getCompanyid().equals(cc.getCcustomercompany())){
-							company.setCreatetime("已绑定");;
+							company.setCreatetime("已绑定");
 						}
 					}
 				}
@@ -94,3 +94,15 @@ public class CompanyviewAction extends BaseActionDao {
 		responsePW(response, result);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
