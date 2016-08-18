@@ -101,7 +101,7 @@
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
 			<p class="meg">恭喜您注册成功,绑定供货商后即可购买商品!</p>
-            <a class="cd-popup-close" href="cusbinding.jsp">确定</a>
+            <a class="cd-popup-close">确定</a>
 		</div>
 	</div>
 </div>
@@ -146,6 +146,7 @@ $("#xianList").css("top",xianListTop + "px");
 	}
 	//注册
 	function reg(){
+		$('.confirm-reg-btn').attr('onclick','');						//禁用按钮
 		var count = 0;
 		var alt;
 		$("input").each(function(i,item){
@@ -158,16 +159,19 @@ $("#xianList").css("top",xianListTop + "px");
 		if(count > 0){
 			$(".meg").text(alt);			//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
+			$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
 			return;
 		}
 		if($("#customercity").val() == null || $("#customercity").val() == ''){
 			$(".meg").text("请选择城市");		//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
+			$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
 			return;
 		}
 		if($("#customerxian").val() == null || $("#customerxian").val() == ''){
 			$(".meg").text("请选择地区");		//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
+			$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
 			return;
 		}
 		$.ajax({
@@ -188,14 +192,15 @@ $("#xianList").css("top",xianListTop + "px");
 				var respText = eval('('+resp+')');
 				if(respText.msg == '操作成功'){
 					window.localStorage.setItem("customer",JSON.stringify(respText.root[0]));
-					//$(".meg").text("恭喜您注册成功,绑定经销商后即可购买商品!");
-					//$(".cd-buttons a").attr("href","cusbinding.jsp");
+					$(".meg").text("恭喜您注册成功,绑定经销商后即可购买商品!");
+					$(".cd-buttons a").attr("href","cusbinding.jsp");
 					$(document).click(function(){
 						window.location.href = "cusbinding.jsp";
 					});
 					$(".cd-popup").addClass("is-visible");	//弹出窗口
 				} else {
 					alert(respText.msg);
+					$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
 				}
 			},
 			error:function(data) {
