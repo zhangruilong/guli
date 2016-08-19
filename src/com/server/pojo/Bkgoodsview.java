@@ -38,11 +38,11 @@ public class Bkgoodsview
    /**
     * bkgoodsprice
     */
-   private String bkgoodsprice;   
+   private Float bkgoodsprice;   
    /**
     * bkgoodsorgprice
     */
-   private String bkgoodsorgprice;   
+   private Float bkgoodsorgprice;   
    /**
     * bkgoodsnum
     */
@@ -255,7 +255,7 @@ public class Bkgoodsview
 	 *设置"bkgoodsprice"属性
 	 *@param bkgoodsprice 实体的Bkgoodsprice属性
 	 */
-	public void setBkgoodsprice(String bkgoodsprice)
+	public void setBkgoodsprice(Float bkgoodsprice)
 	{
 		this.bkgoodsprice = bkgoodsprice;
 	}
@@ -263,7 +263,7 @@ public class Bkgoodsview
 	/**
 	 *获取"bkgoodsprice"属性
 	 */
-	public String getBkgoodsprice()
+	public Float getBkgoodsprice()
 	{
 		return this.bkgoodsprice;
 	}	   
@@ -272,7 +272,7 @@ public class Bkgoodsview
 	 *设置"bkgoodsorgprice"属性
 	 *@param bkgoodsorgprice 实体的Bkgoodsorgprice属性
 	 */
-	public void setBkgoodsorgprice(String bkgoodsorgprice)
+	public void setBkgoodsorgprice(Float bkgoodsorgprice)
 	{
 		this.bkgoodsorgprice = bkgoodsorgprice;
 	}
@@ -280,7 +280,7 @@ public class Bkgoodsview
 	/**
 	 *获取"bkgoodsorgprice"属性
 	 */
-	public String getBkgoodsorgprice()
+	public Float getBkgoodsorgprice()
 	{
 		return this.bkgoodsorgprice;
 	}	   
@@ -670,8 +670,8 @@ public class Bkgoodsview
 	 	,String bkgoodsdetail
 	 	,String bkgoodsunits
 	 	,String bkgoodsunit
-	 	,String bkgoodsprice
-	 	,String bkgoodsorgprice
+	 	,Float bkgoodsprice
+	 	,Float bkgoodsorgprice
 	 	,Integer bkgoodsnum
 	 	,String bkgoodsclass
 	 	,String bkgoodsimage

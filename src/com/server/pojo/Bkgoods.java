@@ -38,15 +38,15 @@ public class Bkgoods
    /**
     * 原价
     */
-   private String bkgoodsprice;   
+   private Float bkgoodsprice;   
    /**
     * 现价
     */
-   private String bkgoodsorgprice;   
+   private Float bkgoodsorgprice;   
    /**
     * 限量
     */
-   private int bkgoodsnum;   
+   private Integer bkgoodsnum;   
    /**
     * 小类名称
     */
@@ -70,7 +70,7 @@ public class Bkgoods
    /**
     * 顺序
     */
-   private int bkgoodsseq;   
+   private Integer bkgoodsseq;   
    /**
     * 客户范围
     */
@@ -199,7 +199,7 @@ public class Bkgoods
 	 *设置"原价"属性
 	 *@param bkgoodsprice 实体的Bkgoodsprice属性
 	 */
-	public void setBkgoodsprice(String bkgoodsprice)
+	public void setBkgoodsprice(Float bkgoodsprice)
 	{
 		this.bkgoodsprice = bkgoodsprice;
 	}
@@ -207,7 +207,7 @@ public class Bkgoods
 	/**
 	 *获取"原价"属性
 	 */
-	public String getBkgoodsprice()
+	public Float getBkgoodsprice()
 	{
 		return this.bkgoodsprice;
 	}	   
@@ -216,7 +216,7 @@ public class Bkgoods
 	 *设置"现价"属性
 	 *@param bkgoodsorgprice 实体的Bkgoodsorgprice属性
 	 */
-	public void setBkgoodsorgprice(String bkgoodsorgprice)
+	public void setBkgoodsorgprice(Float bkgoodsorgprice)
 	{
 		this.bkgoodsorgprice = bkgoodsorgprice;
 	}
@@ -224,7 +224,7 @@ public class Bkgoods
 	/**
 	 *获取"现价"属性
 	 */
-	public String getBkgoodsorgprice()
+	public Float getBkgoodsorgprice()
 	{
 		return this.bkgoodsorgprice;
 	}	   
@@ -233,7 +233,7 @@ public class Bkgoods
 	 *设置"限量"属性
 	 *@param bkgoodsnum 实体的Bkgoodsnum属性
 	 */
-	public void setBkgoodsnum(int bkgoodsnum)
+	public void setBkgoodsnum(Integer bkgoodsnum)
 	{
 		this.bkgoodsnum = bkgoodsnum;
 	}
@@ -241,7 +241,7 @@ public class Bkgoods
 	/**
 	 *获取"限量"属性
 	 */
-	public int getBkgoodsnum()
+	public Integer getBkgoodsnum()
 	{
 		return this.bkgoodsnum;
 	}	   
@@ -335,7 +335,7 @@ public class Bkgoods
 	 *设置"顺序"属性
 	 *@param bkgoodsseq 实体的Bkgoodsseq属性
 	 */
-	public void setBkgoodsseq(int bkgoodsseq)
+	public void setBkgoodsseq(Integer bkgoodsseq)
 	{
 		this.bkgoodsseq = bkgoodsseq;
 	}
@@ -343,7 +343,7 @@ public class Bkgoods
 	/**
 	 *获取"顺序"属性
 	 */
-	public int getBkgoodsseq()
+	public Integer getBkgoodsseq()
 	{
 		return this.bkgoodsseq;
 	}	   
@@ -376,15 +376,15 @@ public class Bkgoods
 	 	,String bkgoodsdetail
 	 	,String bkgoodsunits
 	 	,String bkgoodsunit
-	 	,String bkgoodsprice
-	 	,String bkgoodsorgprice
-	 	,int bkgoodsnum
+	 	,Float bkgoodsprice
+	 	,Float bkgoodsorgprice
+	 	,Integer bkgoodsnum
 	 	,String bkgoodsclass
 	 	,String bkgoodsimage
 	 	,String bkgoodsstatue
 	 	,String bkcreatetime
 	 	,String bkcreator
-	 	,int bkgoodsseq
+	 	,Integer bkgoodsseq
 	 	,String bkgoodsscope
 		 ){
 		super();
