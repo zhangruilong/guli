@@ -174,6 +174,24 @@ $(function(){
 		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
+	} else if(type == '预定'){
+		$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.bkgoodsname+'（'+data.bkgoodsunits+'）<br><span style="color: #666;">'+data.bkgoodsdetail+'</span></span>');
+		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsorgprice+'/'+data.bkgoodsunit+'</span>');
+		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.bkgoodsid+'">'+
+	            '<span class="jian min"  onclick="subnum(this,'+data.bkgoodsorgprice+')"></span>'+
+	            '<input readonly="readonly" class="text_box shuliang" name="'+data.bkgoodsdetail+'" type="text" value="'+
+	             getcurrennumdanpin(data.bkgoodsid)+'"> '+
+	            ' <span class="jia add" onclick="addbkgoodsnum(this,'+data.bkgoodsorgprice
+				   +',\''+data.bkgoodsname+'\',\''+data.bkgoodsunit+'\',\''+data.bkgoodsunits
+				   +'\',\''+data.bkgoodscode+'\',\''+data.bkgoodsclass
+				   +'\',\''+data.bkgoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
+				   +'\')"></span>'+
+				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
+	        	'</div>');
+		$("#goods_det_img1").attr("src",'../'+data.bkgoodsimage);
+		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		$(".gd-lower-liebiao span:eq(0)").text(data.bkgoodsunits);
+		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodsclass);
 	}
 	//弹窗
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
@@ -199,6 +217,78 @@ function docart(){
 	} else {
 		window.location.href = "cart.jsp";
 	}
+}
+//加号(预定商品)
+function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
+	if(!customer.customerid || customer.customerid == '' || typeof(customer.customerid) == 'undefined'){
+		$(".cd-popup").addClass("is-visible");
+		return;
+	}
+	var item = JSON.parse($(obj).next().text());				//得到商品信息
+		//数量
+		var numt = $(obj).prev(); 
+		var num = parseInt(numt.val());
+		//var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
+		/* if((parseInt(cusMSOrderNum) - num) <= 0){
+			alert('您购买的商品超过了限购数量。');
+			return;
+		} else { */
+			if(!window.localStorage.getItem("totalmoney")){
+				window.localStorage.setItem("totalmoney","0")
+			}
+			//总价
+			var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));		//总价
+			var newtmoney = (tmoney+pricesprice).toFixed(2);						//总价加上商品价格得到新价格
+			window.localStorage.setItem("totalmoney",newtmoney);					//设置总价格到缓存
+			//数量
+			var numt = $(obj).prev();
+			var num = parseInt(numt.val());						//得到input的值,商品数
+			numt.val(num+1);									//input的值加一
+			//订单
+			if(window.localStorage.getItem("sdishes")==null || !window.localStorage.getItem("sdishes")){
+				window.localStorage.setItem("sdishes","[]");
+			}
+			sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//得到现有订单
+			if(num == 0){					
+				//如果数量是0
+				$("#totalnum").show();
+				//新增订单
+				var mdishes = new Object();
+				mdishes.goodsid = item.bkgoodsid;
+				mdishes.goodsdetail = item.bkgoodsdetail;
+				mdishes.goodscompany = goodscompany;
+				mdishes.companyshop = companyshop;
+				mdishes.companydetail = companydetail;
+				mdishes.goodsclassname = goodsclassname;
+				mdishes.goodscode = goodscode;
+				mdishes.pricesprice = pricesprice;
+				mdishes.pricesunit = pricesunit;
+				mdishes.goodsname = goodsname;
+				mdishes.goodsunits = goodsunits;
+				mdishes.orderdetnum = num + 1;
+				mdishes.goodsimage = item.bkgoodsimage;
+				mdishes.orderdtype = '预定';
+				sdishes.push(mdishes);
+				//种类数
+				var tnum = parseInt(window.localStorage.getItem("totalnum"));
+				window.localStorage.setItem("totalnum",tnum+1);
+			}else{							
+				//如果数量不是0
+				//修改订单
+				$.each(sdishes, function(i, item3) {
+					if(item3.goodsid==item.bkgoodsid
+							&&item3.goodsclassname==item.bkgoodsclass){
+						item3.orderdetnum = item3.orderdetnum + 1;
+						return false;
+					}
+				});
+			}
+			window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
+			
+			var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+			$("#totalnum").text(cartnum+1);
+			window.localStorage.setItem("cartnum",cartnum+1);
+		//}
 }
 //加号(秒杀商品)
 function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){

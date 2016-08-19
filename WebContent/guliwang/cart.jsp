@@ -186,7 +186,7 @@ function initDishes(data){
 		    			var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
 							//alert(item.orderdtype +" == "+ item3.orderdtype +" && "+ item3.orderdcode +" == "+ item.goodscode);
-							if(item.orderdtype == item3.orderdtype && item3.orderdcode == item.goodscode){
+							if(item.orderdtype == item3.orderdtype && item3.orderdcode == item.goodscode && item3.orderdunits == item.goodsunits){
 								itemGoodsCount += parseInt(item3.orderdclass);
 							}
 						});

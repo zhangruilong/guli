@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.GoodsviewPoco;
 import com.server.poco.OrderdPoco;
+import com.server.pojo.Bkgoodsview;
 import com.server.pojo.Customer;
 import com.server.pojo.Givegoodsview;
 import com.server.pojo.Goods;
@@ -153,12 +154,6 @@ public class OrderdAction extends BaseActionDao {
 					gvo.setGoodsview(gList.get(0));
 					gvo.setNowGoodsNum(item.getOrderdnum());
 				} else {
-					/*Goodsview xjg = new Goodsview();
-					xjg.setGoodsname(item.getOrderdname());
-					xjg.setGoodsunits(item.getOrderdunits());
-					gvo.setType(item.getOrderdtype());
-					gvo.setGoodsview(xjg);
-					gvo.setStatue("下架");*/
 					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
 				}
 				gvoList.add(gvo);
@@ -171,12 +166,6 @@ public class OrderdAction extends BaseActionDao {
 					gvo.setTgview(tgviewList.get(0));
 					gvo.setNowGoodsNum(item.getOrderdnum());
 				} else {
-					/*Timegoodsview xjg = new Timegoodsview();
-					xjg.setTimegoodsname(item.getOrderdname());
-					xjg.setTimegoodsunits(item.getOrderdunits());
-					gvo.setType(item.getOrderdtype());
-					gvo.setTgview(xjg);
-					gvo.setStatue("下架");*/
 					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
 				}
 				gvoList.add(gvo);
@@ -189,12 +178,18 @@ public class OrderdAction extends BaseActionDao {
 					gvo.setGgview(ggviewList.get(0));
 					gvo.setNowGoodsNum(item.getOrderdnum());
 				} else {
-					/*Givegoodsview xjg = new Givegoodsview();
-					xjg.setGivegoodsname(item.getOrderdname());
-					xjg.setGivegoodsunits(item.getOrderdunits());
+					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
+				}
+				gvoList.add(gvo);
+			} else if(item.getOrderdtype().equals("预定")){
+				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodscode = '"+
+						item.getOrderdcode()+"' and bv.bkgoodsunits = '"+item.getOrderdunits()+
+						"' and bv.bkgoodsstatue = '启用'");
+				if(bgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
-					gvo.setGgview(xjg);
-					gvo.setStatue("下架");*/
+					gvo.setBgview(bgviewList.get(0));
+					gvo.setNowGoodsNum(item.getOrderdnum());
+				} else {
 					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
 				}
 				gvoList.add(gvo);
@@ -280,7 +275,8 @@ public class OrderdAction extends BaseActionDao {
 			infoMap = checkSurplus(customerid,infoMap);							//检查剩余限量是否足够 并修改
 			@SuppressWarnings("unchecked")
 			Pageinfo pageinfo = new Pageinfo((List<SdishesVO>)infoMap.get("svoList"));
-			pageinfo.setMsg("您购买的："+TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+TypeUtil.objToString(infoMap.get("editNumMsg"))+TypeUtil.objToString(infoMap.get("deleGoodsMsg")));
+			pageinfo.setMsg("您购买的："+TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+
+					TypeUtil.objToString(infoMap.get("editNumMsg"))+TypeUtil.objToString(infoMap.get("deleGoodsMsg")));
 			result = CommonConst.GSON.toJson(pageinfo);
 		}
 		responsePW(response, result);
@@ -332,6 +328,19 @@ public class OrderdAction extends BaseActionDao {
 					String gp = ggviewList.get(0).getGivegoodsprice();
 					if(!gp.equals(svo.getPricesprice())){
 						svoList.get(i).setPricesprice(Float.parseFloat(gp));							//修改价格
+					}
+				}
+			} else if(svo.getOrderdtype().equals("预定")){
+				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodscode = '"+
+						svo.getGoodscode()+"' and bv.bkgoodsunits = '"+svo.getGoodsunits()+
+						"' and bv.bkgoodsstatue = '启用' and bv.bkgoodsscope like '%"+customertype+"%'");
+				if(bgviewList.size() == 0){
+					svoListremove.add(svo);
+					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+				} else {
+					Float gp = bgviewList.get(0).getBkgoodsorgprice();
+					if(!gp.equals(svo.getPricesprice())){
+						svoList.get(i).setPricesprice(gp);							//修改价格
 					}
 				}
 			}

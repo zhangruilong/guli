@@ -47,7 +47,7 @@ $(function(){
 		getJson(basePath+"OrderdAction.do",{method:"selAll",wheresql:"orderdorderm='"+ordermid+"'"},initOrderd,null);
 	}
 })
-//从新购买
+//重新购买
 function regoumai(){
 	var orderds = $("#orderd_data").text();
 	$.ajax({
@@ -129,6 +129,23 @@ function regoumai(){
 						mdishes.orderdetnum = item.nowGoodsNum;
 						mdishes.timegoodsnum = item.ggview.givegoodsnum;
 						money = (parseFloat(item.ggview.givegoodsprice) * now_GNum).toFixed(2);
+					} else if(item.type == '预定' && item.statue != '下架'){
+						var mdishes = new Object();
+						mdishes.goodsid = item.bgview.bkgoodsid;
+						mdishes.goodsdetail = item.bgview.bkgoodsdetail;
+						mdishes.goodscompany = item.bgview.bkgoodscompany;
+						mdishes.companyshop = item.bgview.companyshop;
+						mdishes.companydetail = item.bgview.companydetail;
+						mdishes.goodsclassname = item.bgview.bkgoodsclass;
+						mdishes.goodscode = item.bgview.bkgoodscode;
+						mdishes.pricesprice = item.bgview.bkgoodsorgprice;
+						mdishes.pricesunit = item.bgview.bkgoodsunit;
+						mdishes.goodsname = item.bgview.bkgoodsname;
+						mdishes.goodsimage = item.bgview.bkgoodsimage;
+						mdishes.orderdtype = item.type;
+						mdishes.goodsunits = item.bgview.bkgoodsunits;
+						mdishes.orderdetnum = item.nowGoodsNum;
+						money = (parseFloat(item.bgview.bkgoodsorgprice) * now_GNum).toFixed(2);
 					}
 					sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
 					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
@@ -256,6 +273,44 @@ function regoumai(){
 								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
 								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
 								var newtmoney = ( tmoney + parseFloat(item.ggview.givegoodsprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+							}
+						} else if(item.type == '预定' && item.statue != '下架'){
+							if( item1.goodsid == item.bgview.givegoodsid){
+								//如果商品id相同
+								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.bgview.givegoodsprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+								return false;
+							} else if(j == (tnum-1)){
+								//如果最后一次进入时goodsid不相同
+								//新增订单
+								var mdishes = new Object();
+								mdishes.goodsid = item.bgview.bkgoodsid;
+								mdishes.goodsdetail = item.bgview.bkgoodsdetail;
+								mdishes.goodscompany = item.bgview.bkgoodscompany;
+								mdishes.companyshop = item.bgview.companyshop;
+								mdishes.companydetail = item.bgview.companydetail;
+								mdishes.goodsclassname = item.bgview.bkgoodsclass;
+								mdishes.goodscode = item.bgview.bkgoodscode;
+								mdishes.pricesprice = item.bgview.bkgoodsorgprice;
+								mdishes.pricesunit = item.bgview.bkgoodsunit;
+								mdishes.goodsname = item.bgview.bkgoodsname;
+								mdishes.goodsimage = item.bgview.bkgoodsimage;
+								mdishes.orderdtype = item.type;
+								mdishes.goodsunits = item.bgview.bkgoodsunits;
+								mdishes.orderdetnum = item.nowGoodsNum;
+								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.bgview.bkgoodsorgprice) * now_GNum ).toFixed(2);
 								window.localStorage.setItem("totalmoney",newtmoney);	
 								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 								window.localStorage.setItem("cartnum",cartnum+now_GNum);

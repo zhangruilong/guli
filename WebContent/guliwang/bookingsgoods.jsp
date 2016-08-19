@@ -20,7 +20,7 @@
 <body>
 <div class="gl-box">
     <div class="wapper-nav"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	买赠商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
+	预定商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
     <div class="goods-wrapper">
         <ul class="home-hot-commodity">
         </ul>
@@ -77,67 +77,34 @@ $(function(){
 	});
 });
 //到商品详情页
-function gotogoodsDetail(jsonitem,dailySur){
-	window.location.href = 'goodsDetail.jsp?type=买赠&goods='+jsonitem;
+function gotogoodsDetail(jsonitem){
+	window.location.href = 'goodsDetail.jsp?type=预定&goods='+jsonitem;
 }
 //初始化页面
 function initBKGoodsPage(resp){
 	var data = eval('('+resp+')');														//将返回的字符串转换为json
-	alert(resp);
 	$(".home-hot-commodity").html("");													//清空商品列表
-	$.ajax({
-		url:"OrderdAction.do?method=selCusXGOrderd",
-		type:"post",
-		data:{customerid:customer.customerid},
-		success : function(data2){
-			var cusOrder = JSON.parse(data2);
-			if(cusOrder.msg == '操作失败'){
-				alert("未知错误,请联系管理员.");
-			}
-			if(typeof(data.root) == 'undefined' ||　!data.root){
-				return;
-			}
-			$.each(data.root,function(i,item1){
-				var dailySur = parseInt(item1.givegoodsnum);
-				var jsonitem = JSON.stringify(item1);
-				var liObj = '<li><span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="fl"> <img src="../'
-					+item1.givegoodsimage+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
-					'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');">'+item1.givegoodsname+
-						'<span>（'+item1.givegoodsunits+'）</span>'+
-					'</h1><div class="block"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
-					+item1.givegoodsdetail+'</span><br> <span class="givegoods_li_priceANDunit"> <strong>￥'+item1.givegoodsprice+'/'+item1.givegoodsunit+
-					'</strong> ';
-				if(cusOrder){
-					var giveGoodsCount = 0;
-					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '买赠' && item3.orderdcode == item1.givegoodscode){
-							giveGoodsCount += item3.orderdclass;
-						}
-					});
-					dailySur = parseInt(item1.givegoodsnum) - giveGoodsCount;																//每日限购剩余数量
-					liObj += '<font>限购'+item1.givegoodsnum+item1.givegoodsunit+'</font><br/>';
-				} else {
-					liObj += '<font>限购'+item1.givegoodsnum+item1.givegoodsunit+'</font><br/>';
-				}
-				liObj += '</span><span hidden="ture" style="display:none;">'+JSON.stringify(item1)+'</span>';
-				liObj += '<div class="stock-num" name="'+item1.givegoodsid+'">'+
-		            '<span class="jian min"  onclick="subnum(this,'+item1.givegoodsprice+')"></span>'+
-		            '<input readonly="readonly" class="text_box shuliang" name="'+item1.givegoodsdetail+'" type="text" value="'+
-		             getcurrennumdanpin(item1.givegoodsid)+'"> '+
-		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item1.givegoodsprice
-					   +',\''+item1.givegoodsname+'\',\''+item1.givegoodsunit+'\',\''+item1.givegoodsunits
-					   +'\',\''+item1.givegoodscode+'\',\''+item1.givegoodsclass
-					   +'\',\''+item1.givegoodscompany+'\',\''+item1.companyshop+'\',\''+item1.companydetail
-					   +'\')"></span>'+
-		        	'</div></div>';
-		        liObj += '</li>';
-				$(".home-hot-commodity").append(liObj);
-			});
-		},
-		error: function(resp){
-			var respText = eval('('+resp+')'); 
-			alert(respText.msg);
-		}
+	$.each(data.root,function(i,item1){
+		var jsonitem = JSON.stringify(item1);
+		var liObj = '<li><span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"> <img src="../'
+			+item1.bkgoodsimage+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
+			'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');">'+item1.bkgoodsname+
+				'<span>（'+item1.bkgoodsunits+'）</span>'+
+			'</h1><div class="block"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');" style="font-size: 16px;">'
+			+item1.bkgoodsdetail+'</span><br> <div class="bkg_li_price_div"><strong>￥'+item1.bkgoodsorgprice+'/'+item1.bkgoodsunit+'</strong>'+
+			' <em>￥'+item1.bkgoodsprice+'</em></div>'
+		 + '</span><span hidden="ture" style="display:none;">'+jsonitem+'</span>'
+		 + '<div class="stock-num" name="'+item1.bkgoodsid+'">'+
+            '<span class="jian min"  onclick="subnum(this,'+item1.bkgoodsprice+')"></span>'+
+            '<input readonly="readonly" class="text_box shuliang" name="'+item1.bkgoodsdetail+'" type="text" value="'+
+             getcurrennumdanpin(item1.bkgoodsid)+'"> '+
+            ' <span class="jia add" onclick="addnum(this,'+item1.bkgoodsorgprice
+			   +',\''+item1.bkgoodsname+'\',\''+item1.bkgoodsunit+'\',\''+item1.bkgoodsunits
+			   +'\',\''+item1.bkgoodscode+'\',\''+item1.bkgoodsclass
+			   +'\',\''+item1.bkgoodscompany+'\',\''+item1.companyshop+'\',\''+item1.companydetail
+			   +'\')"></span>'+
+        	'</div></div></li>';
+		$(".home-hot-commodity").append(liObj);
 	});
 }
 //到购物车页面
@@ -156,11 +123,11 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		//数量
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
-		var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
-		if((parseInt(cusMSOrderNum) - num) <= 0){
+		//var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
+		/* if((parseInt(cusMSOrderNum) - num) <= 0){
 			alert('您购买的商品超过了限购数量。');
 			return;
-		} else {
+		} else { */
 			if(!window.localStorage.getItem("totalmoney")){
 				window.localStorage.setItem("totalmoney","0")
 			}
@@ -182,8 +149,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				$("#totalnum").show();
 				//新增订单
 				var mdishes = new Object();
-				mdishes.goodsid = $(obj).parent().attr('name');
-				mdishes.goodsdetail = $(obj).prev().attr('name');
+				mdishes.goodsid = item.bkgoodsid;
+				mdishes.goodsdetail = item.bkgoodsdetail;
 				mdishes.goodscompany = goodscompany;
 				mdishes.companyshop = companyshop;
 				mdishes.companydetail = companydetail;
@@ -194,9 +161,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				mdishes.goodsimage = item.givegoodsimage;
-				mdishes.orderdtype = '买赠';
-				mdishes.timegoodsnum = item.givegoodsnum;
+				mdishes.goodsimage = item.bkgoodsimage;
+				mdishes.orderdtype = '预定';
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -205,8 +171,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				//如果数量不是0
 				//修改订单
 				$.each(sdishes, function(i, item3) {
-					if(item3.goodsid==$(obj).parent().attr('name')
-							&&item3.goodsdetail==$(obj).prev().attr('name')){
+					if(item3.goodsid==item.bkgoodsid
+							&&item3.goodsclassname==item.bkgoodsclass){
 						item3.orderdetnum = item3.orderdetnum + 1;
 						return false;
 					}
@@ -217,12 +183,13 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 			var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 			$("#totalnum").text(cartnum+1);
 			window.localStorage.setItem("cartnum",cartnum+1);
-		}
+		//}
 }
 //减号
 function subnum(obj,pricesprice){
 	var numt = $(obj).next(); 			//得到减号后面一个元素(input元素)
 	var num = parseInt(numt.val());		//数量
+	var goodsitem = JSON.parse($(obj).parent().prev().text());				//得到商品信息
 	if(num > 0){
 		//总价
 		var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));
@@ -248,8 +215,8 @@ function subnum(obj,pricesprice){
 		}else{
 			//修改订单
 			$.each(sdishes, function(i, item) {
-				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsdetail==$(obj).next().attr('name')){
+				if(item.goodsid==goodsitem.bkgoodsid
+						&&item.goodsclassname==goodsitem.bkgoodsclass){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}
@@ -272,7 +239,7 @@ function getcurrennumdanpin(dishesid){
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==dishesid
-					&&item.goodsclassname=="买赠商品"){
+					&&item.goodsclassname=="预订商品"){
 				orderdetnum = item.orderdetnum;
 				return false;
 			}

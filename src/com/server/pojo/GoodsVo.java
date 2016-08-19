@@ -22,9 +22,21 @@ public class GoodsVo {
 	 */
 	private Givegoodsview ggview;
 	/**
+	 * 预定商品
+	 */
+	private Bkgoodsview bgview;
+	/**
 	 * 是否已下架
 	 */
 	private String statue;
+
+	public Bkgoodsview getBgview() {
+		return bgview;
+	}
+
+	public void setBgview(Bkgoodsview bgview) {
+		this.bgview = bgview;
+	}
 
 	public String getStatue() {
 		return statue;

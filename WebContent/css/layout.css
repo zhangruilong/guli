@@ -63,6 +63,10 @@ color:#fff !important;
 .miaosha_li_price_div em{ color: #666;font-style: normal; text-decoration: line-through; font-size: .6em }
 /*买赠商品*/
 .home-hot-commodity .block .givegoods_li_priceANDunit{float: left;}
+/*预购商品*/
+.bkg_li_price_div{float: left;margin: 4% 0% 0% 0%;}
+.bkg_li_price_div strong{color: #f64320}
+.bkg_li_price_div em{ color: #666;font-style: normal; text-decoration: line-through; font-size: .6em }
 /*地址管理*/
 .add-admin { position: relative }
 .add-admin a { position: relative; margin-bottom: 4%; font-size: .8em; color: #666; background-color: #fff; display: block; padding: 4% }
