@@ -40,7 +40,7 @@
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
-var givegoodscode = '${param.givegoodscode}';
+var bkgoodscode = '${param.bkgoodscode}';
 $(function(){
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
@@ -67,9 +67,9 @@ $(function(){
 		data:{
 			companyid:companyid,
 			customerid:customer.customerid,
-			givegoodscode:givegoodscode
+			bkgoodscode:bkgoodscode
 		},
-		success : initMiaoshaPage,
+		success : initBKGoodsPage,
 		error: function(resp){
 			var respText = eval('('+resp+')'); 
 			alert(respText.msg);
@@ -81,8 +81,9 @@ function gotogoodsDetail(jsonitem,dailySur){
 	window.location.href = 'goodsDetail.jsp?type=买赠&goods='+jsonitem;
 }
 //初始化页面
-function initMiaoshaPage(resp){
+function initBKGoodsPage(resp){
 	var data = eval('('+resp+')');														//将返回的字符串转换为json
+	alert(resp);
 	$(".home-hot-commodity").html("");													//清空商品列表
 	$.ajax({
 		url:"OrderdAction.do?method=selCusXGOrderd",

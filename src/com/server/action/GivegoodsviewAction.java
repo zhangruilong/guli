@@ -91,6 +91,9 @@ public class GivegoodsviewAction extends BaseActionDao {
 					wheresql += "givegoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
 				}
 				wheresql = wheresql.substring(0, wheresql.length()-3) +") ";
+				if(CommonUtil.isNotEmpty(givegoodscode)){
+					wheresql += "and givegoodscode='"+givegoodscode+"' ";
+				}
 				Queryinfo queryinfo = getQueryinfo(request);
 				queryinfo.setType(Givegoodsview.class);
 				queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
@@ -103,6 +106,9 @@ public class GivegoodsviewAction extends BaseActionDao {
 		} else {
 			//如果是业务员补单
 			wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' and givegoodscompany='"+companyid+"' ";
+			if(CommonUtil.isNotEmpty(givegoodscode)){
+				wheresql += "and givegoodscode='"+givegoodscode+"' ";
+			}
 			Queryinfo queryinfo = getQueryinfo(request);
 			queryinfo.setType(Givegoodsview.class);
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
@@ -111,9 +117,6 @@ public class GivegoodsviewAction extends BaseActionDao {
 			cuss = (ArrayList<Givegoodsview>) selAll(queryinfo);
 			Pageinfo pageinfo = new Pageinfo(0, cuss);
 			result = CommonConst.GSON.toJson(pageinfo);
-		}
-		if(CommonUtil.isNotEmpty(givegoodscode)){
-			wheresql += "and givegoodscode='"+givegoodscode+"' ";
 		}
 		
 		responsePW(response, result);

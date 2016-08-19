@@ -46,7 +46,7 @@ public class Bkgoodsview
    /**
     * bkgoodsnum
     */
-   private int bkgoodsnum;   
+   private Integer bkgoodsnum;   
    /**
     * bkgoodsclass
     */
@@ -70,7 +70,7 @@ public class Bkgoodsview
    /**
     * bkgoodsseq
     */
-   private int bkgoodsseq;   
+   private Integer bkgoodsseq;   
    /**
     * bkgoodsscope
     */
@@ -289,7 +289,7 @@ public class Bkgoodsview
 	 *设置"bkgoodsnum"属性
 	 *@param bkgoodsnum 实体的Bkgoodsnum属性
 	 */
-	public void setBkgoodsnum(int bkgoodsnum)
+	public void setBkgoodsnum(Integer bkgoodsnum)
 	{
 		this.bkgoodsnum = bkgoodsnum;
 	}
@@ -297,7 +297,7 @@ public class Bkgoodsview
 	/**
 	 *获取"bkgoodsnum"属性
 	 */
-	public int getBkgoodsnum()
+	public Integer getBkgoodsnum()
 	{
 		return this.bkgoodsnum;
 	}	   
@@ -391,7 +391,7 @@ public class Bkgoodsview
 	 *设置"bkgoodsseq"属性
 	 *@param bkgoodsseq 实体的Bkgoodsseq属性
 	 */
-	public void setBkgoodsseq(int bkgoodsseq)
+	public void setBkgoodsseq(Integer bkgoodsseq)
 	{
 		this.bkgoodsseq = bkgoodsseq;
 	}
@@ -399,7 +399,7 @@ public class Bkgoodsview
 	/**
 	 *获取"bkgoodsseq"属性
 	 */
-	public int getBkgoodsseq()
+	public Integer getBkgoodsseq()
 	{
 		return this.bkgoodsseq;
 	}	   
@@ -672,13 +672,13 @@ public class Bkgoodsview
 	 	,String bkgoodsunit
 	 	,String bkgoodsprice
 	 	,String bkgoodsorgprice
-	 	,int bkgoodsnum
+	 	,Integer bkgoodsnum
 	 	,String bkgoodsclass
 	 	,String bkgoodsimage
 	 	,String bkgoodsstatue
 	 	,String bkcreatetime
 	 	,String bkcreator
-	 	,int bkgoodsseq
+	 	,Integer bkgoodsseq
 	 	,String bkgoodsscope
 	 	,String companycode
 	 	,String username
