@@ -51,6 +51,7 @@
 	<bean id="TimegoodsAction" class="com.server.action.TimegoodsAction" />
 	<bean id="GivegoodsAction" class="com.server.action.GivegoodsAction" />
 	<bean id="FeedbackAction" class="com.server.action.FeedbackAction" />
+	<bean id="BkgoodsAction" class="com.server.action.BkgoodsAction" />
 	
 	<bean id="OrdermviewAction" class="com.server.action.OrdermviewAction" />
 	<bean id="CompanyviewAction" class="com.server.action.CompanyviewAction" />
@@ -60,4 +61,5 @@
 	<bean id="CcustomerviewAction" class="com.server.action.CcustomerviewAction" />
 	<bean id="GivegoodsviewAction" class="com.server.action.GivegoodsviewAction" />
 	<bean id="TimegoodsviewAction" class="com.server.action.TimegoodsviewAction" />
+	<bean id="BkgoodsviewAction" class="com.server.action.BkgoodsviewAction" />
 </beans>
