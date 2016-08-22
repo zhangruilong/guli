@@ -147,13 +147,15 @@ function regoumai(){
 						mdishes.orderdetnum = item.nowGoodsNum;
 						money = (parseFloat(item.bgview.bkgoodsorgprice) * now_GNum).toFixed(2);
 					}
-					sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
-					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-					
-					window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
-					window.localStorage.setItem("totalmoney", money);				//总金额等于商品价
-					var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-					window.localStorage.setItem("cartnum",cartnum+now_GNum);
+					if(typeof(mdishes)!='undefined' && mdishes){
+						sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
+						window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+						
+						window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
+						window.localStorage.setItem("totalmoney", money);				//总金额等于商品价
+						var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+						window.localStorage.setItem("cartnum",cartnum+now_GNum);
+					}
 				} else {
 					//有购物车
 					var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//将缓存中的sdishes(字符串)转换为json对象

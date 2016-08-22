@@ -38,6 +38,7 @@ color:#fff !important;
 .confirm-reg .confirm-reg-btn{ border-radius:5px; background-color:#2c77e6; font-size:1em; color:#fff; display:block; text-decoration:none; padding:4% 0; width:90%; margin:0 auto 2%}
 /*商品详情goodsDetail.jsp*/
 .goods-detail-wrapper{background-color:#fff; border-bottom:solid 1px #ddd; border-top:solid 1px #ddd; margin-bottom:4%}
+.goods-detail-wrapper .gd-gimg-li{ border-bottom:solid 1px #ddd;margin:0;padding:0; overflow:hidden}
 .goods-detail-wrapper li{ border-bottom:solid 1px #ddd; margin-left:4%; padding:4% 0; overflow:hidden}
 .goods-detail-wrapper li:last-child{ border:none}
 .gd-lower-liebiao span{position: absolute; left: 30%;}

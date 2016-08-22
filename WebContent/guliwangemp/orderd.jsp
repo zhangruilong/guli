@@ -47,7 +47,7 @@ $(function(){
 		getJson(basePath+"OrderdAction.do",{method:"selAll",wheresql:"orderdorderm='"+ordermid+"'"},initOrderd,null);
 	}
 })
-//从新购买
+//重新购买
 function regoumai(){
 	var orderds = $("#orderd_data").text();
 	$.ajax({
@@ -62,7 +62,7 @@ function regoumai(){
 			var jsonResp = JSON.parse(resp);
 			var data = jsonResp.root;
 			if(jsonResp.msg.length > 10){
-				if(confirm(xjGIds) == false){
+				if(confirm(jsonResp.msg) == false){
 					return ;
 				}
 			}
@@ -129,14 +129,33 @@ function regoumai(){
 						mdishes.orderdetnum = item.nowGoodsNum;
 						mdishes.timegoodsnum = item.ggview.givegoodsnum;
 						money = (parseFloat(item.ggview.givegoodsprice) * now_GNum).toFixed(2);
+					} else if(item.type == '预定' && item.statue != '下架'){
+						var mdishes = new Object();
+						mdishes.goodsid = item.bgview.bkgoodsid;
+						mdishes.goodsdetail = item.bgview.bkgoodsdetail;
+						mdishes.goodscompany = item.bgview.bkgoodscompany;
+						mdishes.companyshop = item.bgview.companyshop;
+						mdishes.companydetail = item.bgview.companydetail;
+						mdishes.goodsclassname = item.bgview.bkgoodsclass;
+						mdishes.goodscode = item.bgview.bkgoodscode;
+						mdishes.pricesprice = item.bgview.bkgoodsorgprice;
+						mdishes.pricesunit = item.bgview.bkgoodsunit;
+						mdishes.goodsname = item.bgview.bkgoodsname;
+						mdishes.goodsimage = item.bgview.bkgoodsimage;
+						mdishes.orderdtype = item.type;
+						mdishes.goodsunits = item.bgview.bkgoodsunits;
+						mdishes.orderdetnum = item.nowGoodsNum;
+						money = (parseFloat(item.bgview.bkgoodsorgprice) * now_GNum).toFixed(2);
 					}
-					sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
-					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-					
-					window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
-					window.localStorage.setItem("totalmoney", money);				//总金额等于商品价
-					var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-					window.localStorage.setItem("cartnum",cartnum+now_GNum);
+					if(typeof(mdishes)!='undefined' && mdishes){
+						sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
+						window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+						
+						window.localStorage.setItem("totalnum", 1); 					//设置缓存中的种类数量等于一 
+						window.localStorage.setItem("totalmoney", money);				//总金额等于商品价
+						var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+						window.localStorage.setItem("cartnum",cartnum+now_GNum);
+					}
 				} else {
 					//有购物车
 					var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//将缓存中的sdishes(字符串)转换为json对象
@@ -260,6 +279,44 @@ function regoumai(){
 								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 								window.localStorage.setItem("cartnum",cartnum+now_GNum);
 							}
+						} else if(item.type == '预定' && item.statue != '下架'){
+							if( item1.goodsid == item.bgview.givegoodsid){
+								//如果商品id相同
+								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.bgview.givegoodsprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+								return false;
+							} else if(j == (tnum-1)){
+								//如果最后一次进入时goodsid不相同
+								//新增订单
+								var mdishes = new Object();
+								mdishes.goodsid = item.bgview.bkgoodsid;
+								mdishes.goodsdetail = item.bgview.bkgoodsdetail;
+								mdishes.goodscompany = item.bgview.bkgoodscompany;
+								mdishes.companyshop = item.bgview.companyshop;
+								mdishes.companydetail = item.bgview.companydetail;
+								mdishes.goodsclassname = item.bgview.bkgoodsclass;
+								mdishes.goodscode = item.bgview.bkgoodscode;
+								mdishes.pricesprice = item.bgview.bkgoodsorgprice;
+								mdishes.pricesunit = item.bgview.bkgoodsunit;
+								mdishes.goodsname = item.bgview.bkgoodsname;
+								mdishes.goodsimage = item.bgview.bkgoodsimage;
+								mdishes.orderdtype = item.type;
+								mdishes.goodsunits = item.bgview.bkgoodsunits;
+								mdishes.orderdetnum = item.nowGoodsNum;
+								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
+								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
+								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
+								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
+								var newtmoney = ( tmoney + parseFloat(item.bgview.bkgoodsorgprice) * now_GNum ).toFixed(2);
+								window.localStorage.setItem("totalmoney",newtmoney);	
+								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+								window.localStorage.setItem("cartnum",cartnum+now_GNum);
+							}
 						}
 					});
 				}
@@ -292,9 +349,13 @@ function initOrderm(data){
  		$(".order-detail-info").append('<p name="'+item.companyphone+'">'+item.companyshop+'</p>'+
  				'<p>联系电话：'+item.companyphone+'</p>'+
  				'<p>'+item.companydetail+'</p>');
- 		$(".pdl-b8").append('<p>收货人：'+item.ordermconnect+item.ordermphone+'</p>'+
- 				'<p>收货地址：'+item.ordermaddress+'</p>'+
- 				'<p>支付方式：'+item.ordermway+'</p>');
+ 		var odmmsg = '<p>收货人：'+item.ordermconnect+item.ordermphone+'</p>'+
+			'<p>收货地址：'+item.ordermaddress+'</p>'+
+				'<p>支付方式：'+item.ordermway+'</p>';
+		if(item.ordermdetail){
+			odmmsg += '<p>订单留言：'+item.ordermdetail+'</p>';
+		}
+ 		$(".pdl-b8").append(odmmsg);
  		 $(".order-detail-wrapper").append('<p>订单金额: <span>'+item.ordermmoney+'元</span></p>'+
  	 		    '<p>优惠金额: <span>'+(item.ordermmoney-item.ordermrightmoney)+'元</span></p>'+
  	 		    '<p>实付金额: <span>'+item.ordermrightmoney+'元</span></p>');

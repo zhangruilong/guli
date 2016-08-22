@@ -36,7 +36,7 @@
 <body>
 <div class="goods-detail-wrapper">
 	<ul>
-    	<li><span><img id="goods_det_img1" alt="" src=""></span></li>
+    	<li class="gd-gimg-li"><span><img id="goods_det_img1" alt="" src=""></span></li>
         <li id="gdw_t_li2">
         	<!-- <span id="goods_ti"></span>
         	<span class="gdw_tli2span_collect"></span> -->
