@@ -8,7 +8,7 @@ public class GoodsVo {
 	/**
 	 * 商品数量
 	 */
-	private int nowGoodsNum;
+	private Integer nowGoodsNum;
 	/**
 	 * 商品
 	 */
@@ -46,11 +46,11 @@ public class GoodsVo {
 		this.statue = statue;
 	}
 
-	public int getNowGoodsNum() {
+	public Integer getNowGoodsNum() {
 		return nowGoodsNum;
 	}
 
-	public void setNowGoodsNum(int nowGoodsNum) {
+	public void setNowGoodsNum(Integer nowGoodsNum) {
 		this.nowGoodsNum = nowGoodsNum;
 	}
 
