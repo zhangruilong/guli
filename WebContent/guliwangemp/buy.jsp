@@ -202,6 +202,7 @@ function buy(){
 		//alert(JSON.stringify(mcompany));
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
+				+ '","ordermemp":"补单'
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermconnect":"' + $("#addressconnect").text()
@@ -263,7 +264,7 @@ function saveOrder(ordermjson,orderdetjson){
 			}
 		},
 		error : function(resp) {
-			$("#buyall").attr('onclick','sortingData();');//启用按钮
+			$("#buyall").attr('onclick','sortingData();');			//启用按钮
 			alert('网络出现问题，请稍后再试');
 		}
 	});
