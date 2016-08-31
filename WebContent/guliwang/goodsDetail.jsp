@@ -74,8 +74,10 @@ $(function(){
 	var type = '${param.type}';
 	var data = JSON.parse('${param.goods}');
 	if(type == '商品'){
+		if(data.goodscompany == '1'){
+			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		}
 		$("#goods_det_img1").attr("src",'../'+data.goodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
 	    $("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.goodsname+'（'+data.goodsunits+'）</span>');
 		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.pricesprice+'/'+data.pricesunit+'</span>');
 		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.goodsid+'">'+
@@ -131,7 +133,9 @@ $(function(){
 			}
 		});
 		$("#goods_det_img1").attr("src",'../'+data.timegoodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		if(data.timegoodscompany == '1'){
+			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		}
 		$(".gd-lower-liebiao span:eq(0)").text(data.timegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.timegoodsclass);
 	} else if(type == '买赠'){
@@ -171,7 +175,9 @@ $(function(){
 			}
 		});
 		$("#goods_det_img1").attr("src",'../'+data.givegoodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		if(data.givegoodscompany == '1'){
+			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		}
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
 	} else if(type == '预定'){
@@ -188,8 +194,10 @@ $(function(){
 				   +'\')"></span>'+
 				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
 	        	'</div>');
+		if(data.bkgoodscompany == '1'){
+			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		}
 		$("#goods_det_img1").attr("src",'../'+data.bkgoodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
 		$(".gd-lower-liebiao span:eq(0)").text(data.bkgoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodsclass);
 	}
