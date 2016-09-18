@@ -74,9 +74,7 @@ $(function(){
 	var type = '${param.type}';
 	var data = JSON.parse('${param.goods}');
 	if(type == '商品'){
-		if(data.goodscompany == '1'){
-			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
-		}
+		comImage(data.goodscompany);									//广告图
 		$("#goods_det_img1").attr("src",'../'+data.goodsimage);
 	    $("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.goodsname+'（'+data.goodsunits+'）</span>');
 		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.pricesprice+'/'+data.pricesunit+'</span>');
@@ -132,10 +130,8 @@ $(function(){
 				alert(respText2.msg);
 			}
 		});
+		comImage(data.timegoodscompany);									//广告图
 		$("#goods_det_img1").attr("src",'../'+data.timegoodsimage);
-		if(data.timegoodscompany == '1'){
-			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
-		}
 		$(".gd-lower-liebiao span:eq(0)").text(data.timegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.timegoodsclass);
 	} else if(type == '买赠'){
@@ -175,9 +171,7 @@ $(function(){
 			}
 		});
 		$("#goods_det_img1").attr("src",'../'+data.givegoodsimage);
-		if(data.givegoodscompany == '1'){
-			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
-		}
+		comImage(data.givegoodscompany);									//广告图
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
 	} else if(type == '预定'){
@@ -194,9 +188,7 @@ $(function(){
 				   +'\')"></span>'+
 				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
 	        	'</div>');
-		if(data.bkgoodscompany == '1'){
-			$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
-		}
+		comImage(data.bkgoodscompany);									//广告图
 		$("#goods_det_img1").attr("src",'../'+data.bkgoodsimage);
 		$(".gd-lower-liebiao span:eq(0)").text(data.bkgoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodsclass);
@@ -212,12 +204,33 @@ $(function(){
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
 		$("#totalnum").text(0);
-	}else{
+	} else {
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	if(window.localStorage.getItem("totalnum")==0)
 		$("#totalnum").hide();
 });
+//经销商图片
+function comImage(comid){
+	$.ajax({
+		url:"System_attachAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"code='detail' and classify='经销商' and fid like '"+comid+"%'"
+		},
+		success:function(resp){
+			var data = eval('('+resp+')');
+			alert(resp);
+			if(data.root && data.root.length>0){
+				$("#goods_det_img2").attr("src",basePath+data.root[0].name);
+			}
+		},
+		error:function(resp){
+			var data = eval('('+resp+')');
+			alert(data.msg);
+		}
+	});
+}
 //到购物车
 function docart(){
 	if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
