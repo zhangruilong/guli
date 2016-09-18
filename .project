@@ -27,4 +27,16 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>adminsrc</name>
+			<type>2</type>
+			<location>D:/j2eeWorkspace/guliadmin/src</location>
+		</link>
+		<link>
+			<name>zrlextsrc</name>
+			<type>2</type>
+			<location>D:/j2eeWorkspace/zrlext/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
