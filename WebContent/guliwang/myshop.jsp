@@ -32,7 +32,7 @@ input:focus{ outline:none}
 	<ul>
     	<li><span>店铺名称</span> <input name="customershop" type="text" value="" placeholder="请输入店铺名称"></li>
         <li><span>联系人</span> <input name="customername" type="text" value="" placeholder="请输入联系人"></li>
-        <li><span>联系电话</span> <input name="customerphone" type="text" value="" placeholder="请输入联系电话"></li>
+        <li><span>手机号码</span> <input name="customerphone" type="text" value="" placeholder="请输入联系电话"></li>
         <!-- <li><span>所在城市</span> <select name="customercity" id="city">
 			</select><i></i></li>
         <li><span>所在区域</span> <select name="customerxian" id="xian">
@@ -107,9 +107,9 @@ $(function(){
 		$("#xian").val("");
 		$("#customerxian").val(xian);
 	}); */
-	/* $(".cd-popup").on("click",function(event){		//绑定点击事件
+	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
-	}); */
+	});
 })
 //初始化县
 /* function initxian(){
@@ -175,13 +175,20 @@ function doedit(){
 	});
 	strjson = strjson.substr(0, strjson.length - 1);
 	strjson += "}]";
+	//var reg = /^[0-9]{11}$/;
+	var reg = new RegExp('[0-9]{11}','g');
+	if(!reg.test($("[name='customerphone']").val())){
+		$(".meg").text('请填写正确的手机号码。');						//修改弹窗信息
+		$(".cd-popup").addClass("is-visible");						//弹出窗口
+		return;
+	}
 	if(count > 0){
-		$(".meg").text(alt);		//修改弹窗信息
-		$(".cd-popup").addClass("is-visible");	//弹出窗口
+		$(".meg").text(alt);										//修改弹窗信息
+		$(".cd-popup").addClass("is-visible");						//弹出窗口
 		return;
 	}
 	$.ajax({
-		url:"CustomerAction.do?method=updAll",
+		url:"GLCustomerAction.do?method=updAll",
 		type:"post",
 		data:{
 			json:strjson

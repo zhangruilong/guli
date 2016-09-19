@@ -88,8 +88,8 @@
 				placeholder="请输入店铺地址"></li>
 			<li><span>联系人</span><input name="customername" type="text" id="customername"
 				placeholder="请输入名字"></li>
-			<li><span>联系电话</span><input name="customerphone" type="text" id="customerphone"
-				placeholder="请输入联系人号码"></li>
+			<li><span>手机号</span><input name="customerphone" type="text" id="customerphone"
+				placeholder="请输入手机号码"></li>
 		</ul>
 	</div>
 	<div class="confirm-reg">
@@ -119,7 +119,7 @@ $("#xianList").css("top",xianListTop + "px");
 			return;
 		}
 		$(".cd-popup").on("click",function(event){		//绑定点击事件
-				$(this).removeClass("is-visible");	//移除'is-visible' class
+			$(this).removeClass("is-visible");			//移除'is-visible' class
 		});
 		$.ajax({
 			url:"GLCityAction.do?method=selAll",
@@ -158,6 +158,14 @@ $("#xianList").css("top",xianListTop + "px");
 		});
 		if(count > 0){
 			$(".meg").text(alt);			//修改弹窗信息
+			$(".cd-popup").addClass("is-visible");	//弹出窗口
+			$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
+			return;
+		}
+		//var reg = /^[0-9]{11}$/;
+		var reg = new RegExp('[0-9]{11}','g');
+		if(!reg.test($("#customerphone").val())){
+			$(".meg").text('请填写正确的手机号码。');			//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
 			$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
 			return;
