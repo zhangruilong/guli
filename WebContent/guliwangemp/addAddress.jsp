@@ -50,7 +50,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			addressture = '1';
 		}
 		$.ajax({
-			url:"AddressAction.do?method=insertCusAdd",
+			url:"GLAddressAction.do?method=insertCusAdd",
 			type:"post",
 			data:{
 				json:'[{"addressconnect":"'+$("input[name='addressconnect']").val()+
@@ -73,7 +73,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 	}
 	$(function(){
 		$.ajax({
-			url:"CityAction.do?method=selAll",
+			url:"GLCityAction.do?method=selAll",
 			type:"post",
 			data:{
 				wheresql:"cityparent='root'"
@@ -96,7 +96,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function cityChaEve(){
 		$("#city").change(function(){
 			 $.ajax({
-  			   url:"CityAction.do?method=selAll",
+  			   url:"GLCityAction.do?method=selAll",
   			   type:"post",
   			   data:{
   				   wheresql:"cityparent='"+$(this).val()+"'"

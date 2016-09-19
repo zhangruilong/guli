@@ -60,7 +60,7 @@ input:focus{ outline:none}
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$.ajax({
-		url:"CustomerAction.do?method=selAll",
+		url:"GLCustomerAction.do?method=selAll",
 		type:"post",
 		data:{
 			wheresql:"customerid='"+customer.customerid+"'"

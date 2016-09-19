@@ -122,7 +122,7 @@ $("#xianList").css("top",xianListTop + "px");
 				$(this).removeClass("is-visible");	//移除'is-visible' class
 		});
 		$.ajax({
-			url:"CityAction.do?method=selAll",
+			url:"GLCityAction.do?method=selAll",
 			type:"post",
 			data:{
 				wheresql:"cityparent='root'"
@@ -175,7 +175,7 @@ $("#xianList").css("top",xianListTop + "px");
 			return;
 		}
 		$.ajax({
-			url: "CustomerAction.do?method=regCustomer",
+			url: "GLCustomerAction.do?method=regCustomer",
 			type:"post",
 			data: {
 				json:'[{'+
@@ -236,7 +236,7 @@ $("#xianList").css("top",xianListTop + "px");
    		$("#cusCityDiv ul li").click(function(){
     		   $(oRegion).val($(this).text());
     		   $.ajax({
-    			   url:"CityAction.do?method=selAll",
+    			   url:"GLCityAction.do?method=selAll",
     			   type:"post",
     			   data:{
     				   wheresql:"cityparent='"+$(this).attr("name")+"'"

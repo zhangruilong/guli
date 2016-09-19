@@ -44,14 +44,14 @@ var ordermid = '<%=ordermid%>';
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){ 
 	if(ordermid!="null"&&ordermid!=""){
-		getJson(basePath+"OrderdAction.do",{method:"selAll",wheresql:"orderdorderm='"+ordermid+"'"},initOrderd,null);
+		getJson(basePath+"GLOrderdAction.do",{method:"selAll",wheresql:"orderdorderm='"+ordermid+"'"},initOrderd,null);
 	}
 })
 //重新购买
 function regoumai(){
 	var orderds = $("#orderd_data").text();
 	$.ajax({
-		url:"OrderdAction.do?method=queryREgoumaiGoods",
+		url:"GLOrderdAction.do?method=queryREgoumaiGoods",
 		type:"post",
 		data:{
 			json:orderds,
@@ -340,7 +340,7 @@ function initOrderd(data){
  				item.orderdnum +'</span><span class="fr"> '+item.orderdmoney+'元</span></li>');
      });
  	$(".order-detail-wrapper").append('</ul>');
- 	getJson(basePath+"OrdermviewAction.do",{method:"selAll",wheresql:"ordermid='"+ordermid+"'"},initOrderm,null);
+ 	getJson(basePath+"GLOrdermviewAction.do",{method:"selAll",wheresql:"ordermid='"+ordermid+"'"},initOrderm,null);
 }
 function initOrderm(data){
      $(".order-detail-info").html("");

@@ -62,7 +62,7 @@ $(function(){
 		companyid = emp.empcompany;
 	}
 	$.ajax({
-		url:"BkgoodsviewAction.do?method=cusBookingsG",
+		url:"GLBkgoodsviewAction.do?method=cusBookingsG",
 		type:"post",
 		data:{
 			companyid:companyid,

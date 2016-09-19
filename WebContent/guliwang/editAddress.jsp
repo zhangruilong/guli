@@ -41,7 +41,7 @@
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$.ajax({
-		url:"AddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=selAll",
 		type:"post",
 		data:{
 			wheresql:"addressid='${param.id}'"
@@ -81,7 +81,7 @@ function saveAddress(){
 		return;
 	}
 	$.ajax({
-		url:"AddressAction.do?method=updCusAdd",
+		url:"GLAddressAction.do?method=updCusAdd",
 		type:"post",
 		data:{
 			json:'[{"addressid":"'+$("input[name='addressid']").val()+
@@ -106,7 +106,7 @@ function saveAddress(){
 //删除地址
 function delAddress(){
 	$.ajax({
-		url:"AddressAction.do?method=delAll",
+		url:"GLAddressAction.do?method=delAll",
 		type:"post",
 		data:{
 			json:'[{"addressid":"'+$("input[name='addressid']").val()+'"}]'

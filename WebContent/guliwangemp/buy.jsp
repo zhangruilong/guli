@@ -92,7 +92,7 @@ $(function(){
 		$("#addressaddress").text(item.addressaddress);
 	} else {
 		$.ajax({
-			url:"AddressAction.do?method=selAll",
+			url:"GLAddressAction.do?method=selAll",
 			type:"post",
 			data:{
 				wheresql:"addresscustomer='"+customer.customerid+"'",
@@ -136,7 +136,7 @@ function initDishes(data){
 function sortingData(){
 	$("#buyall").attr('onclick','');											//禁用按钮
 	$.ajax({
-		url:"OrderdAction.do?method=sortingSdiData",
+		url:"GLOrderdAction.do?method=sortingSdiData",
 		type:"post",
 		data:{
 			json:window.localStorage.getItem("sdishes"),
@@ -244,7 +244,7 @@ function buy(){
 //保存订单和订单详情
 function saveOrder(ordermjson,orderdetjson){
 	$.ajax({
-		url : 'OrdermAction.do?method=addOrder',
+		url : 'GLOrdermAction.do?method=addOrder',
 		type:"post",
 		data : {
 			json : ordermjson,

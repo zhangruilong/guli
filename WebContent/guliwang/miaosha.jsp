@@ -66,7 +66,7 @@ $(function(){
 		companyid = emp.empcompany;
 	}
 	$.ajax({
-		url:"TimegoodsviewAction.do?method=cusTimeG",
+		url:"GLTimegoodsviewAction.do?method=cusTimeG",
 		type:"post",
 		data:{
 			companyid:companyid,
@@ -89,7 +89,7 @@ function gotogoodsDetail(jsonitem){
 function initMiaoshaPage(resp){
 	var data = eval('('+resp+')');
 	$.ajax({
-		url:"OrderdAction.do?method=selCusXGOrderd",
+		url:"GLOrderdAction.do?method=selCusXGOrderd",
 		type:"post",
 		data:{customerid:customer.customerid,
 			wheresql: "surplusnum>'0'"},

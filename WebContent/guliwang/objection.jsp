@@ -51,7 +51,7 @@ function subform(){
 }
 function submitform(){
 	$.ajax({
-		url:"FeedbackAction.do?method=insAll",
+		url:"GLFeedbackAction.do?method=insAll",
 		type:"post",
 		data:{json:'[{"feedbackdetail":"'+$("#feedbackdetail").val()+'","feedbackcustomer":"'+customer.customerid+'"}]'},
 		success : function(resp){

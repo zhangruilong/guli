@@ -42,7 +42,7 @@ var searchclassesvalue = window.localStorage.getItem("goodsclassname");
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$.ajax({
-		url:"AddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=selAll",
 		type:"post",
 		data:{wheresql:"address.addresscustomer='"+customer.customerid+"'"},
 		success : function(resp){
@@ -107,7 +107,7 @@ function nextpage(){
 		//整理购物车数据
 			$("#buyall").attr('onclick','');											//禁用按钮
 			$.ajax({
-				url:"OrderdAction.do?method=sortingSdiData",
+				url:"GLOrderdAction.do?method=sortingSdiData",
 				type:"post",
 				data:{
 					json:window.localStorage.getItem("sdishes"),
@@ -172,7 +172,7 @@ function nextpage(){
 function initDishes(data){
 	var scompany = setscompany();
 	$.ajax({
-		url:"OrderdAction.do?method=selCusXGOrderd",
+		url:"GLOrderdAction.do?method=selCusXGOrderd",
 		type:"post",
 		data:{customerid:customer.customerid},
 		success : function(data2){

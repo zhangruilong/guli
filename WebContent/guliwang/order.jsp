@@ -39,14 +39,14 @@ $(function(){
 		getOpenid();
 		window.localStorage.setItem("openid",getParamValue("openid"));
 	}else{
-		getJson(basePath+"OrdermviewAction.do",{method:"mselQuery",
+		getJson(basePath+"GLOrdermviewAction.do",{method:"mselQuery",
 			openid : window.localStorage.getItem("openid"),
 			begindate : "<%=request.getParameter("begindate")%>",
 			enddate : "<%=request.getParameter("enddate")%>",
 			beginmoney : "<%=request.getParameter("beginmoney")%>",
 			endmoney : "<%=request.getParameter("endmoney")%>",
 			companyname : "<%=request.getParameter("companyname")%>"},initData,null);
-		getJson(basePath+"CustomerAction.do",{method:"selCustomer",
+		getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
 			wheresql : "openid='"+window.localStorage.getItem("openid")+"'"},initCustomer,null);		//得到openid
 	}
 });

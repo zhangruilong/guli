@@ -1,32 +1,23 @@
 package com.server.action;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.reflect.TypeToken;
 import com.server.poco.GivegoodsviewPoco;
-import com.server.poco.GoodsviewPoco;
 import com.server.pojo.Ccustomer;
 import com.server.pojo.Givegoodsview;
-import com.server.pojo.Goodsview;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
-import com.system.tools.util.FileUtil;
 
 /**
  * 买赠商品 逻辑层
  *@author ZhangRuiLong
  */
-public class GivegoodsviewAction extends BaseActionDao {
-	public String result = CommonConst.FAILURE;
-	public ArrayList<Givegoodsview> cuss = null;
-	public Type TYPE = new TypeToken<ArrayList<Givegoodsview>>() {}.getType();
+public class GLGivegoodsviewAction extends GivegoodsviewAction {
 	
 	/**
     * 模糊查询语句
@@ -42,35 +33,6 @@ public class GivegoodsviewAction extends BaseActionDao {
     	}
 		return querysql.substring(0, querysql.length() - 4);
 	};
-	//导出
-	public void expAll(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		Queryinfo queryinfo = getQueryinfo(request);
-		queryinfo.setType(Givegoodsview.class);
-		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setOrder(GivegoodsviewPoco.ORDER);
-		cuss = (ArrayList<Givegoodsview>) selAll(queryinfo);
-		FileUtil.expExcel(response,cuss,GivegoodsviewPoco.CHINESENAME,GivegoodsviewPoco.NAME);
-	}
-	//查询所有
-	public void selAll(HttpServletRequest request, HttpServletResponse response){
-		Queryinfo queryinfo = getQueryinfo(request);
-		queryinfo.setType(Givegoodsview.class);
-		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setOrder(GivegoodsviewPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
-		result = CommonConst.GSON.toJson(pageinfo);
-		responsePW(response, result);
-	}
-	//分页查询
-	public void selQuery(HttpServletRequest request, HttpServletResponse response){
-		Queryinfo queryinfo = getQueryinfo(request);
-		queryinfo.setType(Givegoodsview.class);
-		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setOrder(GivegoodsviewPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), selQuery(queryinfo));
-		result = CommonConst.GSON.toJson(pageinfo);
-		responsePW(response, result);
-	}
 	//买赠页
 	@SuppressWarnings("unchecked")
 	public void cusGiveG(HttpServletRequest request, HttpServletResponse response){
@@ -81,7 +43,7 @@ public class GivegoodsviewAction extends BaseActionDao {
 		String wheresql = null;
 		if(CommonUtil.isEmpty(companyid)){
 			//如果不是业务员补单
-			Queryinfo Ccustomerqueryinfo = getQueryinfo();
+			Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
 			Ccustomerqueryinfo.setType(Ccustomer.class);
 			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
 			ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);

@@ -34,7 +34,7 @@ var basePath = '<%=basePath%>';
 $(function(){
 	var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 	var openid = customer.openid;
-	getJson(basePath+"OrdermviewAction.do",{method:"mselQuery",
+	getJson(basePath+"GLOrdermviewAction.do",{method:"mselQuery",
 		openid : openid,
 		begindate : "<%=request.getParameter("begindate")%>",
 		enddate : "<%=request.getParameter("enddate")%>",

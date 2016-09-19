@@ -131,7 +131,7 @@
 			initIndexPage();
 		} */ else {
 			//得到页面数据
-			getJson(basePath+"CustomerAction.do",{method:"selCustomer",
+			getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
 				wheresql : "openid='"+window.localStorage.getItem("openid")+"'"},initCustomer,null);		//得到openid
 		}
 		

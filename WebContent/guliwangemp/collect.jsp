@@ -66,7 +66,7 @@ input:checked {
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	$.ajax({
-		url:"CollectviewAction.do?method=selAll",
+		url:"GLCollectviewAction.do?method=selAll",
 		type:"post",
 		data:{
 			wheresql:"collectcustomer='"+customer.customerid+"' and pricesclass='"+
@@ -226,7 +226,7 @@ $(function(){
 		collectids = collectids.substr(0,collectids.length -1) + "]";
 		if(collectids.length > 2){
 			$.ajax({
-				url:"CollectAction.do?method=delAllByGoodsid",
+				url:"GLCollectAction.do?method=delAllByGoodsid",
 				type:"post",
 				data:{
 					json:collectids

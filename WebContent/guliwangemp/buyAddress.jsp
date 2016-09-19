@@ -31,7 +31,7 @@
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	$.ajax({
-		url:"AddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=selAll",
 		type:"post",
 		data:{
 			wheresql:"addresscustomer='"+customer.customerid+"'",

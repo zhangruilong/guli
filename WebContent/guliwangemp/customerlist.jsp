@@ -49,7 +49,7 @@ var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var emp = JSON.parse(window.localStorage.getItem("emp"));
 var basePath = '<%=basePath%>';
 $(function(){
-	getJson(basePath+"CcustomerviewAction.do",{method:"selAll",wheresql:"ccustomercompany='"+emp.empcompany+"'"},initData,null);
+	getJson(basePath+"GLCcustomerviewAction.do",{method:"selAll",wheresql:"ccustomercompany='"+emp.empcompany+"'"},initData,null);
 });
 function initData(data){
     $("#customerlist").html("");
@@ -79,7 +79,7 @@ function entersearch(obj){
     var event = window.event || arguments.callee.caller.arguments[0];
     if (event.keyCode == 13)
     {
-    	getJson(basePath+"CustomerAction.do",{method:"selAll",query:$(obj).val()},initData,null);
+    	getJson(basePath+"GLCustomerAction.do",{method:"selAll",query:$(obj).val()},initData,null);
     }
 }
 function successCB(r, cb) {

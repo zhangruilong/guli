@@ -62,7 +62,7 @@ $(function(){
 		companyid = emp.empcompany;
 	}
 	$.ajax({
-		url:"GivegoodsviewAction.do?method=cusGiveG",
+		url:"GLGivegoodsviewAction.do?method=cusGiveG",
 		type:"post",
 		data:{
 			companyid:companyid,
@@ -86,7 +86,7 @@ function initMiaoshaPage(resp){
 	var data = eval('('+resp+')');														//将返回的字符串转换为json
 	$(".home-hot-commodity").html("");													//清空商品列表
 	$.ajax({
-		url:"OrderdAction.do?method=selCusXGOrderd",
+		url:"GLOrderdAction.do?method=selCusXGOrderd",
 		type:"post",
 		data:{customerid:customer.customerid},
 		success : function(data2){

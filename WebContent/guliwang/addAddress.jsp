@@ -42,17 +42,11 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 	function addAddress(){
-		//var city = $("#city").children("option:selected").text();
-		//var xian = $("#xian").children("option:selected").text();
 		var detaAddressa = $("#detaAddressa").val();
 		var addressture = "0";
 		if($("[name='addressture']:checkbox").get(0).checked){
 			addressture = '1';
 		}
-		//alert($("input[name='addressconnect']").val());
-		//alert($("input[name='addressphone']").val());
-		//alert(city);
-		//alert(xian);
 		if(!$("input[name='addressconnect']").val()){
 			alert("联系人名不能为空!");
 			return;
@@ -66,7 +60,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			return;
 		}
 		$.ajax({
-			url:"AddressAction.do?method=insertCusAdd",
+			url:"GLAddressAction.do?method=insertCusAdd",
 			type:"post",
 			data:{
 				json:'[{"addressconnect":"'+$("input[name='addressconnect']").val()+
@@ -87,78 +81,6 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			}
 		});
 	}
-	$(function(){
-		/* $.ajax({
-			url:"CityAction.do?method=selAll",
-			type:"post",
-			data:{
-				wheresql:"cityparent='root'"
-			},
-			success:function(resp){
-				var data = JSON.parse(resp).root;
-				var paramcity = '';
-				$("#city option").remove();
-				$.each(data,function(i,item){
-					if(item.cityname == customer.customercity){
-						$("#city").append('<option value="'+item.cityid+'" selected="selected">'+item.cityname+'</option>');
-						paramcity = item.cityid;
-					} else {
-						$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
-					}
-				});
-				$.ajax({
-		  			   url:"CityAction.do?method=selAll",
-		  			   type:"post",
-		  			   data:{
-		  				   wheresql:"cityparent='"+paramcity+"'"
-		  			   },
-		  			   success:function(resp){
-		  				   var data = JSON.parse(resp).root;
-		 				   $("#xian option").remove();
-		  				   $.each(data,function(i,item2){
-		  					 if(item2.cityname == customer.customerxian){
-		  						$("#xian").append('<option selected="selected">'+item2.cityname+'</option>');
-		 					} else {
-		 						$("#xian").append('<option>'+item2.cityname+'</option>');
-		 					}
-		  				   });
-		  			   },
-		  			   error: function(resp){
-		  					var respText = eval('('+resp+')'); 
-		  					alert(respText.msg);
-		  			   }
-		  		});
-				cityChaEve();
-			},
-			error: function(resp){
-				var respText = eval('('+resp+')'); 
-				alert(respText.msg);
-			}
-		}); */
-	})
-	//绑定更换城市时的事件
-	/* function cityChaEve(){
-		$("#city").change(function(){
-			 $.ajax({
-  			   url:"CityAction.do?method=selAll",
-  			   type:"post",
-  			   data:{
-  				   wheresql:"cityparent='"+$(this).val()+"'"
-  			   },
-  			   success:function(resp){
-  				   var data = JSON.parse(resp).root;
- 				   $("#xian option").remove();
-  				   $.each(data,function(i,item){
-  					   $("#xian").append('<option>'+item.cityname+'</option>');
-  				   });
-  			   },
-  			   error: function(resp){
-  					var respText = eval('('+resp+')'); 
-  					alert(respText.msg);
-  			   }
-  		   });
-		});
-	} */
 </script>
 </body>
 </html>

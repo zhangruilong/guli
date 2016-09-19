@@ -58,7 +58,7 @@ function companysearch(obj){
 function companyload(query){
 	var data = { wheresql:"createtime like '%"+customer.customerxian+"%'",customerid:customer.customerid };
 	$.ajax({
-		url:"CompanyviewAction.do?method=bdCityCom",
+		url:"GLCompanyviewAction.do?method=bdCityCom",
 		type:"post",
 		data:data,
 		success:function(resp){
@@ -91,7 +91,7 @@ function companyload(query){
 //解绑定
 var remcombind = function(){
 	$.ajax({
-		url:"CcustomerAction.do?method=delCusNexus",
+		url:"GLCcustomerAction.do?method=delCusNexus",
 		type:"post",
 		data:{
 			json:'[{"ccustomercompany":"'+$(this).parent().attr("name")+'","ccustomercustomer":"'+customer.customerid+'"}]'
@@ -116,7 +116,7 @@ var bindcom = function(){
 	}
 	$.ajax({
 		
-		url:"CcustomerAction.do?method=insAll",
+		url:"GLCcustomerAction.do?method=insAll",
 		type:"post",
 		data:{
 			json:'[{"ccustomercompany":"'+$(this).attr("name")+'","ccustomercustomer":"'+customer.customerid+'","ccustomerdetail":"3","creator":"0"}]',

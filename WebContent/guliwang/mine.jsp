@@ -28,7 +28,7 @@ input:focus{ outline:none}
 <body>
 <div class="gl-box">
 	<div class="wapper-nav">我的</div>
-	<form action="System_attachAction.do?other=getch&method=upload">
+	<form action="GLSystem_attachAction.do?other=getch&method=upload">
 	<input type="hidden" name="json" id="json" value="">
     <div style="width:100%; padding-top:2%; color:#fff; background:url(../images/minebg.jpg);">
     	<div id="uploadImg" style="margin:0 41% auto;">
@@ -78,7 +78,7 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$("#myshopname").text(customer.customershop);
 	$.ajax({
-		url:"System_attachAction.do?method=selAll",
+		url:"GLSystem_attachAction.do?method=selAll",
 		type:"post",
 		data:{
 			wheresql:"classify='客户' and fid = '"+customer.customerid+",'"

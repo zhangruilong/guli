@@ -101,7 +101,7 @@ function thisMonthHotGoods(obj){
 //页面信息
 function pageInfo(staTime,endTime){
 	$.ajax({
-		url:"OrderdAction.do?method=hotgoodssel",
+		url:"GLOrderdAction.do?method=hotgoodssel",
 		type:"post",
 		data:{
 			"customerxian":customer.customerxian,

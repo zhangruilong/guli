@@ -96,7 +96,7 @@ $(function(){
 	     		'<label for="'+data.goodsid+'checkbox" onclick="checkedgoods(\''+data.goodsid+'\');"></label></span>');
 	} else if (type == '秒杀'){
 		$.ajax({
-			url:"OrderdAction.do?method=selCusXGOrderd",
+			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
 			data:{customerid:customer.customerid},
 			success : function(data2){
@@ -136,7 +136,7 @@ $(function(){
 		$(".gd-lower-liebiao span:eq(2)").text(data.timegoodsclass);
 	} else if(type == '买赠'){
 		$.ajax({
-			url:"OrderdAction.do?method=selCusXGOrderd",
+			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
 			data:{customerid:customer.customerid},
 			success : function(data2){
@@ -213,7 +213,7 @@ $(function(){
 //经销商图片
 function comImage(comid){
 	$.ajax({
-		url:"System_attachAction.do?method=selAll",
+		url:"GLSystem_attachAction.do?method=selAll",
 		type:"post",
 		data:{
 			wheresql:"code='detail' and classify='经销商' and fid like '"+comid+"%'"
@@ -583,7 +583,7 @@ function checkedgoods(goodsid){
 		$(".cd-popup").addClass("is-visible");
 		return;
 	}
-	var url = 'CollectAction.do?method=';
+	var url = 'GLCollectAction.do?method=';
 	if($("#"+goodsid+"checkbox").is(':checked')){
 		url +='delAllByGoodsid';
 	}else{
