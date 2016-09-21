@@ -220,7 +220,6 @@ function comImage(comid){
 		},
 		success:function(resp){
 			var data = eval('('+resp+')');
-			alert(resp);
 			if(data.root && data.root.length>0){
 				$("#goods_det_img2").attr("src",basePath+data.root[0].name);
 			}
