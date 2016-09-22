@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.GoodsclassPoco;
+import com.server.pojo.Ccustomer;
+import com.server.pojo.Company;
+import com.server.pojo.Customer;
 import com.server.pojo.Goodsclass;
 import com.system.tools.CommonConst;
 import com.system.tools.pojo.Pageinfo;
@@ -87,13 +91,25 @@ public class GLGoodsclassAction extends GoodsclassAction {
 		}
 	};
 	//查询所有
+	@SuppressWarnings("unchecked")
 	public void mselAll(HttpServletRequest request, HttpServletResponse response){
-		Queryinfo queryinfo = getQueryinfo(request);
-		queryinfo.setType(Goodsclass.class);
-		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setOrder(GoodsclassPoco.ORDER);
-		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
-		result = CommonConst.GSON.toJson(pageinfo);
+		String cusid = request.getParameter("cusid");
+		List<Ccustomer> comLi = selAll(Ccustomer.class,"select * from ccustomer cc where cc.ccustomercustomer='"+cusid+"'");
+		if(comLi.size()>0){
+			String addSql = request.getParameter("wheresql")+" and (";
+			for (Ccustomer cc : comLi) {
+				addSql += "goodsclasscompany like '%"+cc.getCcustomercompany()+"%' or ";
+			}
+			addSql = addSql.substring(0,addSql.length()-3)+")";
+			
+			Queryinfo queryinfo = getQueryinfo(request);
+			queryinfo.setWheresql(addSql);
+			queryinfo.setType(Goodsclass.class);
+			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
+			queryinfo.setOrder("goodsclassorder desc");
+			Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
+			result = CommonConst.GSON.toJson(pageinfo);
+		}
 		mresponsePW(request, response, result);
 	}
 }

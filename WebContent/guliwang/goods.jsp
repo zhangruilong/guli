@@ -93,7 +93,7 @@ $(function(){
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	//通过ajax查询大类
-	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
+	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
 	if(searchdishesvalue!="null"&&searchdishesvalue!=""){
 		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",query:searchdishesvalue,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
 	}else if(searchclassesvalue!="null"&&searchclassesvalue!=""){
@@ -127,7 +127,7 @@ function initGoodsclass(data){																								//初始化商品大小类
 	 $.each(data.root, function(i, item) {				//遍历 data 中的 root 
 		if(item.goodsclassid==window.localStorage.getItem("goodsclassparent")){
 			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
-			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
+			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 		}else{
 			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 		}
@@ -136,7 +136,7 @@ function initGoodsclass(data){																								//初始化商品大小类
 		$(this).click(function(){
 			$(this).addClass('active').siblings().removeClass('active');	//当前元素被点击时添加 class 'active' 同时把其他同级元素 去除  class 'active'
 			//ajax查询小类并初始化
-			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent = '"+$(this).attr('name')+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
+			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+$(this).attr('name')+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 			window.localStorage.setItem("goodsclassparent",$(this).attr('name'));
 		})
 	});
@@ -169,7 +169,7 @@ function initDishes(data){
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+item.goodsimage+
  	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
  	         	'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');">'+item.goodsname+'<span>('+item.goodsunits+')</span></h1>'+
- 	           '  <div class="block" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');"> '+
+ 	           '  <div class="block"> '+
  	               '  <span>'+
  	                   '  <input type="radio" id="'+item.goodsid+'radio2" name="'+item.goodsid+'radio" class="regular-radio" />'+
  	               '      <label for="'+item.goodsid+'radio2">套装价:<font class="font-oringe">￥'+item.pricesprice2+'</font>/'+item.pricesunit2+'</label>'+
