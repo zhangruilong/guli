@@ -1,22 +1,14 @@
 package com.server.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.system.action.System_attachAction;
-import com.system.dao.System_attachDao;
-import com.system.poco.System_attachPoco;
 import com.system.pojo.System_attach;
-import com.system.pojo.System_user;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseAction;
 import com.system.tools.pojo.Fileinfo;
-import com.system.tools.pojo.Pageinfo;
-import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;
@@ -42,7 +34,7 @@ public class GLSystem_attachAction extends System_attachAction {
 			System_attach temp = cuss.get(0);
 			String delsql = "delete from system_attach where classify='"+temp.getClassify()
 			+"' and fid='"+ temp.getFid()+"'";
-			result = DAO.doSingle(delsql);
+			result = doSingle(delsql);
 			
 			temp.setId(CommonUtil.getNewId());
 	        temp.setName(fileinfo.getFullname());
@@ -50,7 +42,7 @@ public class GLSystem_attachAction extends System_attachAction {
 	        temp.setType(fileinfo.getType());
 	        //temp.setCreator(creator);
 	        temp.setCreatetime(DateUtils.getDateTime());
-			result = DAO.insSingle(temp);
+			result = insSingle(temp);
 		//}
 			if(CommonConst.SUCCESS.equals(result)){
 				try {
