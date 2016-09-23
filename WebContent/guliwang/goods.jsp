@@ -167,7 +167,7 @@ function initDishes(data){
  		//alert(goods);
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+item.goodsimage+
- 	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
+ 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
  	         	'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');">'+item.goodsname+'<span>('+item.goodsunits+')</span></h1>'+
  	           '  <div class="block"> '+
  	               '  <span>'+
