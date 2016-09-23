@@ -179,12 +179,12 @@ function doedit(){
 	//var reg = new RegExp('[0-9]{11}','g');
 	if(!reg.test($("[name='customerphone']").val())){
 		$(".meg").text('请填写正确的手机号码。');						//修改弹窗信息
-		$(".cd-popup").addClass("is-visible");						//弹出窗口
+		$(".cd-popup").addClass("is-visible");							//弹出窗口
 		return;
 	}
 	if(count > 0){
-		$(".meg").text(alt);										//修改弹窗信息
-		$(".cd-popup").addClass("is-visible");						//弹出窗口
+		$(".meg").text(alt);															//修改弹窗信息
+		$(".cd-popup").addClass("is-visible");							//弹出窗口
 		return;
 	}
 	$.ajax({
