@@ -162,7 +162,7 @@ $("#xianList").css("top",xianListTop + "px");
 			$('.confirm-reg-btn').attr('onclick','reg()');				//启用按钮
 			return;
 		}
-		var reg = /^[0-9]{11}$/;
+		var reg = /^[1][0-9]{10}$/;
 		//var reg = new RegExp('[0-9]{11}','g');
 		if(!reg.test($("#customerphone").val())){
 			$(".meg").text('请填写正确的手机号码。');			//修改弹窗信息

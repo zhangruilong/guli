@@ -182,7 +182,7 @@ function initDishes(data){
  	           '  <div class="stock-num" name="'+item.goodsid+'">'+
  	                ' <span class="jian min" onclick="subnum(this,'+item.pricesprice
 					   +')"></span>'+
- 	                 '<input class="text_box shuliang" name="danpin" type="number" value="'+
+ 	                 '<input readonly="readonly" class="text_box shuliang" name="danpin" type="number" value="'+
  	                 getcurrennumdanpin(item.goodsid)+'"> '+
  	                ' <span class="jia add" onclick="addnum(this,'+item.pricesprice
 					   +',\''+item.goodsname+'\',\''+item.pricesunit+'\',\''+item.goodsunits
@@ -218,7 +218,7 @@ function initDishes(data){
 		t2.prev().toggle();
 		t2.next().toggle();
 	});
- 	$('.shuliang').change(function(){
+ 	/* $('.shuliang').blur(function(){
  		var goodsnumObj = this;
  		var reg = new RegExp(/^[1-9][0-9]*$/,'g');
  		if(reg.test(goodsnumObj.value)){
@@ -226,7 +226,7 @@ function initDishes(data){
  		} else {
  			alert('请输入正确的数字。');
  		}
- 	});
+ 	}); */
 }
 //输入了正确数字后
 function setGoodsNum(obj){

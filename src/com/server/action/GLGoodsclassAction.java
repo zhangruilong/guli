@@ -106,7 +106,7 @@ public class GLGoodsclassAction extends GoodsclassAction {
 			queryinfo.setWheresql(addSql);
 			queryinfo.setType(Goodsclass.class);
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-			queryinfo.setOrder("goodsclassorder desc");
+			queryinfo.setOrder("goodsclassorder,goodsclassid desc");
 			Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 			result = CommonConst.GSON.toJson(pageinfo);
 		}

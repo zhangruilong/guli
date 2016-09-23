@@ -65,6 +65,7 @@ $(function(){
 //保存地址
 function saveAddress(){
 	var addressture = "0";
+	var reg = /^[1][0-9]{10}$/;
 	if($("[name='addressture']:checkbox").get(0).checked){
 		addressture = '1';
 	}
@@ -74,6 +75,9 @@ function saveAddress(){
 	}
 	if(!$("input[name='addressphone']").val()){
 		alert("手机号不能为空!");
+		return;
+	} else if(!reg.test($("input[name='addressphone']").val())) {
+		alert('请填写正确的手机号。');
 		return;
 	}
 	if(!$("input[name='addressaddress']").val()){

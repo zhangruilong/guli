@@ -51,8 +51,12 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			alert("联系人名不能为空!");
 			return;
 		}
+		var reg = /^[1][0-9]{10}$/;
 		if(!$("input[name='addressphone']").val()){
 			alert("手机号不能为空!");
+			return;
+		} else if(!reg.test($("input[name='addressphone']").val())){
+			alert('请填写正确的手机号码。');
 			return;
 		}
 		if(!detaAddressa){
