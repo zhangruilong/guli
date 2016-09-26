@@ -222,6 +222,9 @@ function initDishes(data){
  		var goodsnumObj = this;
  		var reg = /^[0-9]*$/;
  		if(reg.test(goodsnumObj.value)){
+ 			if(goodsnumObj.value==''){
+ 				goodsnumObj.value='0';
+ 			}
  			setGoodsNum($(goodsnumObj).next().get(0));
  		} else {
  			alert('请输入正确的数字。');
@@ -231,29 +234,16 @@ function initDishes(data){
 //输入了正确数字后
 function setGoodsNum(obj){
 	var item = JSON.parse($(obj).next().text());
-	var flag = true;													//是否新增订单商品
 	var odNum = 0;														//之前的商品数量
 	//订单
 	if(window.localStorage.getItem("sdishes")==null){
 		window.localStorage.setItem("sdishes","[]");
 	}
 	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
-	$.each(sdishes, function(i, item2) {
-		if(item2.goodsid==$(obj).parent().attr('name')
-				&&item2.goodsdetail==$(obj).prev().attr('name')){
-			odNum = item2.orderdetnum;
-			flag = false;
-			return false;
-		}
-	});
 	//数量
 	var numt = $(obj).prev(); 
 	var num = parseInt(numt.val());
-	//总价
-	var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));
-	var newtmoney = (tmoney+(item.pricesprice*(num-odNum))).toFixed(2);
-	window.localStorage.setItem("totalmoney",newtmoney);
-	if(flag){
+	if(sdishes.length==0){
 		$("#totalnum").show();
 		//新增订单
 		var mdishes = new Object();
@@ -275,19 +265,56 @@ function setGoodsNum(obj){
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));
 		window.localStorage.setItem("totalnum",tnum+1);
-	}else{
-		//修改订单
-		$.each(sdishes, function(i, item) {
-			if(item.goodsid==$(obj).parent().attr('name')
-					&&item.goodsdetail==$(obj).prev().attr('name')){
-				item.orderdetnum = num;									//订单数量等于输入的数量
+	} else {
+		$.each(sdishes, function(i, item2) {
+			if(item2.goodsid==$(obj).parent().attr('name')
+					&&item2.goodsdetail==$(obj).prev().attr('name')){
+				odNum = item2.orderdetnum;
+				//修改订单
+				if(num==0){
+					//删除订单
+					sdishes.splice(i,1);
+					//种类数
+					var tnum = parseInt(window.localStorage.getItem("totalnum"));
+					window.localStorage.setItem("totalnum",tnum-1);
+					if(tnum == 1)
+					$("#totalnum").hide();
+				}else{
+					item2.orderdetnum = num;									//订单数量等于输入的数量
+				}
 				return false;
+			} else if(i==sdishes.length-1 && num != 0){
+				$("#totalnum").show();
+				//新增订单
+				var mdishes = new Object();
+				mdishes.goodsid = $(obj).parent().attr('name');
+				mdishes.goodsdetail = $(obj).prev().attr('name');
+				mdishes.goodscompany = item.goodscompany;
+				mdishes.companyshop = item.companyshop;
+				mdishes.companydetail = item.companydetail;
+				mdishes.goodsclassname = item.goodsclassname;
+				mdishes.goodscode = item.goodscode;
+				mdishes.pricesprice = item.pricesprice;
+				mdishes.pricesunit = item.pricesunit;
+				mdishes.goodsname = item.goodsname;
+				mdishes.goodsunits = item.goodsunits;
+				mdishes.orderdetnum = num;
+				mdishes.goodsimage = item.goodsimage;
+				mdishes.orderdtype = '商品';
+				sdishes.push(mdishes);
+				//种类数
+				var tnum = parseInt(window.localStorage.getItem("totalnum"));
+				window.localStorage.setItem("totalnum",tnum+1);
 			}
 		});
 	}
+	//总价
+	var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));
+	var newtmoney = (tmoney+(item.pricesprice*(num-odNum))).toFixed(2);
+	window.localStorage.setItem("totalmoney",newtmoney);
 	window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
-	
 	var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+	//alert(cartnum+'+'+(num-odNum)+'='+(cartnum+(num-odNum)));
 	$("#totalnum").text(cartnum+(num-odNum));
 	window.localStorage.setItem("cartnum",cartnum+(num-odNum));
 }

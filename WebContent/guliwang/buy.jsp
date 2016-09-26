@@ -165,7 +165,7 @@ function sortingData(){
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
-			if(respText.code!=202){
+			if(respText.msg != '您购买的：'){
 				alert('操作失败！');
 				return;
 			}
