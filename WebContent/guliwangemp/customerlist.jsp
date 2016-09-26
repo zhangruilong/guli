@@ -79,7 +79,7 @@ function entersearch(obj){
     var event = window.event || arguments.callee.caller.arguments[0];
     if (event.keyCode == 13)
     {
-    	getJson(basePath+"GLCustomerAction.do",{method:"selAll",query:$(obj).val()},initData,null);
+    	getJson(basePath+"GLCcustomerviewAction.do",{method:"selAll",query:$(obj).val(),wheresql:"ccustomercompany='"+emp.empcompany+"'"},initData,null);
     }
 }
 function successCB(r, cb) {

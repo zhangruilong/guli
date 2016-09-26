@@ -39,9 +39,8 @@
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var givegoodscode = '${param.givegoodscode}';
-var emp = JSON.parse(window.localStorage.getItem("emp"));
 $(function(){
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
@@ -84,7 +83,7 @@ function gotogoodsDetail(jsonitem,dailySur){
 }
 //初始化页面
 function initMiaoshaPage(resp){
-	var data = JSON.parse(resp);														//将返回的字符串转换为json
+	var data = eval('('+resp+')');														//将返回的字符串转换为json
 	$(".home-hot-commodity").html("");													//清空商品列表
 	$.ajax({
 		url:"GLOrderdAction.do?method=selCusXGOrderd",
@@ -94,6 +93,9 @@ function initMiaoshaPage(resp){
 			var cusOrder = JSON.parse(data2);
 			if(cusOrder.msg == '操作失败'){
 				alert("未知错误,请联系管理员.");
+			}
+			if(typeof(data.root) == 'undefined' ||　!data.root){
+				return;
 			}
 			$.each(data.root,function(i,item1){
 				var dailySur = parseInt(item1.givegoodsnum);

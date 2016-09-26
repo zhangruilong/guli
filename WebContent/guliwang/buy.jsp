@@ -165,6 +165,10 @@ function sortingData(){
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
+			if(respText.code!=202){
+				alert('操作失败！');
+				return;
+			}
 			if(respText.msg == '您购买的：'){
 				var jsds = respText.root;										//sdishes的json
 				window.localStorage.setItem("sdishes",JSON.stringify(jsds));

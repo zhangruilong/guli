@@ -91,7 +91,7 @@ $(function(){
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	//通过ajax查询大类
-	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
+	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
@@ -110,7 +110,7 @@ function initGoodsclass(data){																								//初始化商品大小类
 	 $.each(data.root, function(i, item) {				//遍历 data 中的 root 
 		if(item.goodsclassid==window.localStorage.getItem("goodsclassparent")){
 			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
-			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
+			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 		}else{
 			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 		}
@@ -119,7 +119,7 @@ function initGoodsclass(data){																								//初始化商品大小类
 		$(this).click(function(){
 			$(this).addClass('active').siblings().removeClass('active');	//当前元素被点击时添加 class 'active' 同时把其他同级元素 去除  class 'active'
 			//ajax查询小类并初始化
-			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",wheresql:"goodsclassparent = '"+$(this).attr('name')+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
+			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+$(this).attr('name')+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 			window.localStorage.setItem("goodsclassparent",$(this).attr('name'));
 		})
 	});
@@ -142,7 +142,7 @@ function initDishes(data){
  		var jsonitem = JSON.stringify(item);
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span class="fl"><img src="../'+item.goodsimage+
- 	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
+ 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
  	         	'<h1>'+item.goodsname+'<span>('+item.goodsunits+')</span></h1>'+
  	           '  <div class="block"> '+
  	               '  <span>'+

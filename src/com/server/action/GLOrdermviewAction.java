@@ -35,7 +35,7 @@ public class GLOrdermviewAction extends OrdermviewAction {
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Ordermview.class);
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-		queryinfo.setOrder(OrdermviewPoco.ORDER);
+		queryinfo.setOrder("ordermtime desc");
 		String openid = request.getParameter("openid");
 		String begindate = request.getParameter("begindate");
 		String enddate = request.getParameter("enddate");

@@ -195,7 +195,7 @@ function initDishes(data){
 		    		if(mcompany.ordermcompany==item.goodscompany)
 		            $(".cart-wrapper").append('<li name="'+item.goodsid+'">'+
 		                      	'<em><img src="../'+item.goodsimage+
-		         	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></em> '+
+		         	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></em> '+
 		                      	'<h2>'+item.goodsname+' <span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
 		          				'<span onclick="subnum(this,'+item.pricesprice+')" class="jian min"></span>'+
 		                          '<input class="text_box shuliang" readonly="readonly" name="'+item.goodsdetail+'" type="text" value="'+

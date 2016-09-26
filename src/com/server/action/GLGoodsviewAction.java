@@ -92,7 +92,7 @@ public class GLGoodsviewAction extends GoodsviewAction {
 			queryinfo.setType(Goodsview.class);
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 			queryinfo.setWheresql(wheresql);
-			queryinfo.setOrder(GoodsviewPoco.ORDER);
+			queryinfo.setOrder(" goodsorder desc,goodsname,goodsclass,goodsunits ");
 			cuss = (ArrayList<Goodsview>) selAll(queryinfo);
 			
 			Queryinfo collectqueryinfo = getQueryinfo(Collect.class, null, null, null);

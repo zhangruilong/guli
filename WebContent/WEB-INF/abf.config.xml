@@ -20,4 +20,5 @@
 	<bean id="GLOrdermviewAction" class="com.server.action.GLOrdermviewAction" />
 	<bean id="GLTimegoodsviewAction" class="com.server.action.GLTimegoodsviewAction" />
 	<bean id="GLSystem_attachAction" class="com.server.action.GLSystem_attachAction" />
+	<bean id="GLCcustomerviewAction" class="com.server.action.GLCcustomerviewAction" />
 </beans>
