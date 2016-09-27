@@ -84,7 +84,7 @@ $(function(){
 	             getcurrennumdanpin(data.goodsid)+'"> '+
 	            ' <span class="jia add" onclick="addnum(this,'+data.pricesprice
 				   +',\''+data.goodsname+'\',\''+data.pricesunit+'\',\''+data.goodsunits
-				   +'\',\''+data.goodscode+'\',\''+data.goodsclass
+				   +'\',\''+data.goodscode+'\',\''+data.goodsclassname
 				   +'\',\''+data.goodscompany+'\',\''+data.companyshop+'\',\''+data.companydetail
 				   +'\')"></span>'+
 				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+

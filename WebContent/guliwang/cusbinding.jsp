@@ -79,7 +79,7 @@ function companyload(query){
 					item.username+' '+
 					item.companyphone+'</span></span><span class="cdpa-delsp">'+bdstr+'<span></li>');
 			});
-			$(".bincompage ul li").click(bindcom);
+			$(".bincompage ul li").click(bindcom);			//启用按钮
 			
 		},
 		error : function(resp){
@@ -114,9 +114,9 @@ var bindcom = function(){
 		alert("已经绑定过了,不能重复绑定!");
 		return;
 	}
+	$(".bincompage ul li").unbind('click');				//禁用按钮
 	$.ajax({
-		
-		url:"GLCcustomerAction.do?method=insAll",
+		url:"GLCcustomerAction.do?method=addCcus",
 		type:"post",
 		data:{
 			json:'[{"ccustomercompany":"'+$(this).attr("name")+'","ccustomercustomer":"'+customer.customerid+'","ccustomerdetail":"3","creator":"0"}]',
@@ -126,11 +126,15 @@ var bindcom = function(){
 			if(data.code == '202'){
 				alert("已成功绑定经销商!");
 				window.location.href="index.jsp";
+			} else {
+				alert('绑定失败,请重新绑定。');
+				location.reload();			//启用按钮
 			}
 		},
 		error : function(resp){
 			var respText = eval('('+resp+')');
 			alert(respText.msg);
+			location.reload();			//启用按钮
 		}
 	});
 }
