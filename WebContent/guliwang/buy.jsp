@@ -83,14 +83,6 @@ jQuery(document).ready(function($){
 	//open popup 
 	$('.cd-popup-trigger').on('click', function(event){
 		event.preventDefault();
-		/* $('#companylist li').each(function(i,item){
-			if($(item).children('input').val() && ){
-				
-			}
-		});
-		if($(this).){
-			
-		} */
 		$('.cd-popup').addClass('is-visible');			//弹窗
 	});
 	
@@ -134,7 +126,6 @@ $(function(){
 			}
 		});
 	}
-	//$(".shouhuo-wrap a").attr("href","doAddressMana.action?customerId="+customer.customerid+"&message=foBuy");
 	if(!window.localStorage.getItem("totalmoney")){
 		window.localStorage.setItem("totalmoney",0);
 		$("#totalmoney").text(0);
