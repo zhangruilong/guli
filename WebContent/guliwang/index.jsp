@@ -59,14 +59,14 @@
 <div class="addWrap">
   <div class="swipe" id="mySwipe">
     <div class="swipe-wrap">
-      <div><a href="javascript:;"><img class="img-responsive" src="../images/banner1.jpg"/></a></div>
+      <!-- <div><a href="javascript:;"><img class="img-responsive" src="../images/banner1.jpg"/></a></div>
       <div><a href="javascript:;"><img class="img-responsive" src="../images/banner2.jpg"/></a></div>
-      <div><a href="../images/youhuida.jpg"><img class="img-responsive" src="../images/youhui.jpg"/></a></div>
+      <div><a href="../images/youhuida.jpg"><img class="img-responsive" src="../images/youhui.jpg"/></a></div> -->
     </div>
   </div>
   <ul id="position">
     <li class="cur"></li>
-    <li class=""></li>
+    <!-- <li class=""></li> -->
   </ul>
 </div>
 			<div class="home-hot">
@@ -173,6 +173,33 @@
 	function initCustomer(data){			//将customer(客户信息放入缓存)
 		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){
 			$(".cd-popup").addClass("is-visible");
+		} else {
+			//首页图片
+			$.ajax({
+				url:"GLSystem_attachAction.do?method=shouyeImg",
+				type:"post",
+				data:{
+					customerid:data.root[0].customerid
+				},
+				success:function(resp){
+					var data = eval('('+resp+')');
+					var href = "javascript:;";
+					$.each(data.root,function(i,item){
+						if(typeof(item.detail)!= 'undefined'){
+							href = item.detail;
+						}
+						if(i<data.root.length-1){
+							$('#position').append('<li class=""></li>');
+						}
+						$('.swipe-wrap').append('<div><a href="../'+href+'"><img class="img-responsive" src="../'+item.name+'"/></a></div>');
+					});
+					lunbotu();
+				},
+				error:function(resp){
+					var data = eval('('+resp+')');
+					alert(data.msg);
+				}
+			});
 		}
 		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
 		$(".fr").text('所在城市：'+data.root[0].customercity);
@@ -235,22 +262,23 @@
 				alert(ex);
 			}
 		}
+		//轮播图
+		function lunbotu(){
+			var bullets = document.getElementById('position').getElementsByTagName('li');
+			var banner = Swipe(document.getElementById('mySwipe'), {
+				auto: 2000,
+				continuous: true,
+				disableScroll:false,
+				callback: function(pos) {
+					var i = bullets.length;
+					while (i--) {
+					  bullets[i].className = ' ';
+					}
+					bullets[pos].className = 'cur';
+				}
+			});
+		}
 	</script>
 <script src="../js/swipe.js"></script> 
-<script type="text/javascript">
-var bullets = document.getElementById('position').getElementsByTagName('li');
-var banner = Swipe(document.getElementById('mySwipe'), {
-	auto: 2000,
-	continuous: true,
-	disableScroll:false,
-	callback: function(pos) {
-		var i = bullets.length;
-		while (i--) {
-		  bullets[i].className = ' ';
-		}
-		bullets[pos].className = 'cur';
-	}
-});
-</script>
 </body>
 </html>
