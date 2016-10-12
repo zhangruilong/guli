@@ -186,12 +186,12 @@
 					var href = "javascript:;";
 					$.each(data.root,function(i,item){
 						if(typeof(item.detail)!= 'undefined'){
-							href = item.detail;
+							href = '../'+item.detail;
 						}
 						if(i<data.root.length-1){
 							$('#position').append('<li class=""></li>');
 						}
-						$('.swipe-wrap').append('<div><a href="../'+href+'"><img class="img-responsive" src="../'+item.name+'"/></a></div>');
+						$('.swipe-wrap').append('<div><a href="'+href+'"><img class="img-responsive" src="../'+item.name+'"/></a></div>');
 					});
 					lunbotu();
 				},
