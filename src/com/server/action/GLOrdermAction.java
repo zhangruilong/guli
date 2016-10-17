@@ -50,7 +50,13 @@ public class GLOrdermAction extends OrdermAction {
 		
 		String mOrdermid = CommonUtil.getNewId();
 		temp.setOrdermid(mOrdermid);
-		temp.setOrdermcode(mOrdermid);
+		
+		String odCode = DateUtils.getDateTime().replace("-", "");
+		odCode = odCode.replace(" ", "");
+		odCode = odCode.replace(":", "");
+		String todayOd = getTotal("orderm", "ordermtime like '"+DateUtils.getDate()+"%' and ordermcompany='"+temp.getOrdermcompany()+"'")+"";
+		odCode += "00000".substring(0, 5-todayOd.length())+todayOd ;
+		temp.setOrdermcode(odCode);
 		temp.setOrdermrightmoney(temp.getOrdermmoney());
 //		temp.setOrdermcustomer(getCurrentUserid(request));
 		temp.setOrdermstatue("已下单");
