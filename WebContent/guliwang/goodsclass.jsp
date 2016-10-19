@@ -313,6 +313,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		mdishes.orderdetnum = num + 1;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));

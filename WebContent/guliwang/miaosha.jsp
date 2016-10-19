@@ -103,14 +103,15 @@ function initMiaoshaPage(resp){
 				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.timegoodsnum);
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+item2.timegoodsimage+
-	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
+	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
 				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && item3.orderdunits == item2.timegoodsunits ){
+						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && 
+								item3.orderdunits == item2.timegoodsunits ){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
@@ -218,6 +219,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.orderdtype = '秒杀';
 				mdishes.surplusnum = surplusnum;
 				mdishes.timegoodsnum = item.timegoodsnum;
+				mdishes.goodsweight = item.timegoodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));

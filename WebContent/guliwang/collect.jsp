@@ -152,6 +152,7 @@ $(function(){
 					mdishes.timegoodsnum = item.goodsnum;
 					mdishes.goodsunits = item.goodsunits;
 					mdishes.orderdetnum = 1;
+					mdishes.goodsweight = item.goodsweight;
 					sdishes.push(mdishes); 											//往json对象中添加一个新的元素(订单)
 					window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 					
@@ -188,6 +189,7 @@ $(function(){
 							mdishes.timegoodsnum = item.goodsnum;
 							mdishes.goodsunits = item.goodsunits;
 							mdishes.orderdetnum = 1;
+							mdishes.goodsweight = item.goodsweight;
 							sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
 							window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 							window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一

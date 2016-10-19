@@ -161,7 +161,7 @@ function initDishes(data){
  	 $.each(data.root, function(i, item) {
  		var jsonitem = JSON.stringify(item);
  		//var goods = jsonitem.replace(/\"/g,'\\"');
- 		//alert(goods);
+ 		//alert(item.goodsweight);
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+item.goodsimage+
  	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
@@ -270,6 +270,7 @@ function setGoodsNum(obj,num){
 		mdishes.orderdetnum = num;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -311,6 +312,7 @@ function setGoodsNum(obj,num){
 				mdishes.orderdetnum = num;
 				mdishes.goodsimage = item.goodsimage;
 				mdishes.orderdtype = '商品';
+				mdishes.goodsweight = item.goodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -442,6 +444,7 @@ function addnum(obj){
 		mdishes.orderdetnum = num + 1;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));

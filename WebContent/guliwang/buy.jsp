@@ -247,6 +247,7 @@ function buy(){
 						+ '","orderdunit":"' + item.pricesunit
 						+ '","orderdclass":"' + item.goodsclassname
 						+ '","orderdnum":"' + item.orderdetnum
+						+ '","orderdweight":"' + item.goodsweight
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});

@@ -81,6 +81,19 @@ public class SdishesVO {
 	 * 限购数量
 	 */
 	private Integer timegoodsnum;
+	
+	/**
+	 * 商品重量
+	 */
+	private String goodsweight;
+	
+	public String getGoodsweight() {
+		return goodsweight;
+	}
+
+	public void setGoodsweight(String goodsweight) {
+		this.goodsweight = goodsweight;
+	}
 
 	public String getGoodsid() {
 		return goodsid;

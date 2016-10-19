@@ -91,6 +91,7 @@ function regoumai(){
 						mdishes.orderdtype = '商品';
 						mdishes.goodsunits = item.goodsview.goodsunits;
 						mdishes.orderdetnum = item.nowGoodsNum;
+						mdishes.goodsweight = item.goodsview.goodsweight;
 						money = (parseFloat(item.goodsview.pricesprice) * now_GNum).toFixed(2);
 					} else if(item.type == '秒杀' && item.statue != '下架'){
 						var mdishes = new Object();
@@ -110,6 +111,7 @@ function regoumai(){
 						mdishes.orderdetnum = item.nowGoodsNum;
 						mdishes.surplusnum = item.tgview.surplusnum;
 						mdishes.timegoodsnum = item.tgview.timegoodsnum;
+						mdishes.goodsweight = item.tgview.timegoodsweight;
 						money = (parseFloat(item.tgview.timegoodsorgprice) * now_GNum).toFixed(2);
 					} else if(item.type == '买赠' && item.statue != '下架'){
 						var mdishes = new Object();
@@ -128,6 +130,7 @@ function regoumai(){
 						mdishes.goodsunits = item.ggview.givegoodsunits;
 						mdishes.orderdetnum = item.nowGoodsNum;
 						mdishes.timegoodsnum = item.ggview.givegoodsnum;
+						mdishes.goodsweight = item.ggview.givegoodsweight;
 						money = (parseFloat(item.ggview.givegoodsprice) * now_GNum).toFixed(2);
 					} else if(item.type == '预定' && item.statue != '下架'){
 						var mdishes = new Object();
@@ -190,6 +193,7 @@ function regoumai(){
 								mdishes.orderdtype = '商品';
 								mdishes.goodsunits = item.goodsview.goodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;
+								mdishes.goodsweight = item.goodsview.goodsweight;
 								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
 								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
@@ -231,6 +235,7 @@ function regoumai(){
 								mdishes.surplusnum = item.tgview.surplusnum;
 								mdishes.timegoodsnum = item.tgview.timegoodsnum;
 								mdishes.surplusnum = item.tgview.timegoodsnum;
+								mdishes.goodsweight = item.tgview.timegoodsweight;
 								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
 								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
@@ -270,6 +275,7 @@ function regoumai(){
 								mdishes.goodsunits = item.ggview.givegoodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;
 								mdishes.timegoodsnum = item.ggview.givegoodsnum;
+								mdishes.goodsweight = item.ggview.givegoodsweight;
 								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
 								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
 								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一

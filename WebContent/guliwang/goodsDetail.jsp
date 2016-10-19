@@ -361,6 +361,7 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				mdishes.goodsimage = item.timegoodsimage;
 				mdishes.orderdtype = '秒杀';
 				mdishes.timegoodsnum = item.timegoodsnum;
+				mdishes.goodsweight = item.timegoodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -434,6 +435,7 @@ function addgivegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				mdishes.goodsimage = item.givegoodsimage;
 				mdishes.orderdtype = '买赠';
 				mdishes.timegoodsnum = item.givegoodsnum;
+				mdishes.goodsweight = item.givegoodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -490,6 +492,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		mdishes.orderdetnum = num + 1;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));

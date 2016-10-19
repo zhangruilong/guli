@@ -198,7 +198,7 @@ public class GLOrderdAction extends OrderdAction {
 			if(CommonUtil.isNotEmpty(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<SdishesVO>>() {}.getType());
 			infoMap.put("svoList", svoList);
 			infoMap = checkXJ(infoMap, customertype, customerlevel);				//检查商品是否下架
-			infoMap = checkSurplus(customerid,infoMap);							//检查剩余限量是否足够 并修改
+			infoMap = checkSurplus(customerid,infoMap);								//检查剩余限量是否足够 并修改
 			@SuppressWarnings("unchecked")
 			Pageinfo pageinfo = new Pageinfo((List<SdishesVO>)infoMap.get("svoList"));
 			pageinfo.setMsg("您购买的："+TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+
