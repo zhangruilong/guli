@@ -228,13 +228,19 @@ function buy(){
 		var orderdetjson = '[';
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
-			//alert(JSON.stringify(item));
-			if(item.orderdtype == '秒杀' && item.orderdetnum > item.surplusnum){
-				$(".meg").text("您购买的秒杀商品卖完了.......");
-				$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
-				$('.cd-popup').addClass('is-visible');			//弹窗
-				flag++;
-				return false;
+			var orderdnote = '';
+			if(item.orderdtype == '秒杀'){
+				if(item.orderdetnum > item.surplusnum){
+					$(".meg").text("您购买的秒杀商品卖完了.......");
+					$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
+					$('.cd-popup').addClass('is-visible');			//弹窗
+					flag++;
+					return false;
+				} else {
+					orderdnote = item.orderdtype;
+				}
+			} else if(item.orderdtype == '买赠'){
+				orderdnote = item.goodsdetail;
 			}
 			if(mcompany.ordermcompany == item.goodscompany)
 				orderdetjson += '{"orderdid":"' + item.goodsid
@@ -248,6 +254,7 @@ function buy(){
 						+ '","orderdclass":"' + item.goodsclassname
 						+ '","orderdnum":"' + item.orderdetnum
 						+ '","orderdweight":"' + item.goodsweight
+						+ '","orderdnote":"' + orderdnote
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});
