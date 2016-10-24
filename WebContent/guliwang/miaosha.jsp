@@ -201,6 +201,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 			if(num == 0){					
 				//如果数量是0
 				$("#totalnum").show();
+				/* alert(goodsunits.length);
+				alert(goodsunits=='（5kg米 1.8L玉米油）*4组/箱'); */
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');

@@ -1,6 +1,7 @@
 package com.server.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,11 +52,9 @@ public class GLOrdermAction extends OrdermAction {
 		String mOrdermid = CommonUtil.getNewId();
 		temp.setOrdermid(mOrdermid);
 		
-		String odCode = DateUtils.getDateTime().replace("-", "");
-		odCode = odCode.replace(" ", "");
-		odCode = odCode.replace(":", "");
+		String odCode = DateUtils.formatDate(new Date(), "yyyyMMddhhmmss");
 		String todayOd = getTotal("orderm", "ordermtime like '"+DateUtils.getDate()+"%' and ordermcompany='"+temp.getOrdermcompany()+"'")+"";
-		odCode += "00000".substring(0, 5-todayOd.length())+todayOd ;
+		odCode = "G"+odCode+"0000".substring(0, 4-todayOd.length())+todayOd ;
 		temp.setOrdermcode(odCode);
 		temp.setOrdermrightmoney(temp.getOrdermmoney());
 //		temp.setOrdermcustomer(getCurrentUserid(request));
@@ -92,7 +91,7 @@ public class GLOrdermAction extends OrdermAction {
 			result = doAll(sqls);
 		}
 		if(result.equals(CommonConst.FAILURE)){
-			result = "{success:false,msg:'服务器异常,操作失败'}";
+			result = "{success:false,msg:'操作失败'}";
 		}/* else {
 			result = updSingle(cuss.get(0),TimegoodsPoco.KEYCOLUMN);
 			//updSingle(TimegoodsPoco.TABLE, "statue=0", "id!=1 and");			//这是修改

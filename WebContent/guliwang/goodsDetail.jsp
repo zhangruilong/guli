@@ -67,12 +67,15 @@
 	</div>
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/base.js"></script>
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	var type = '${param.type}';
-	var data = JSON.parse('${param.goods}');
+	var dataStr = getQueryString('goods');
+	//alert(dataStr);
+	var data = JSON.parse(dataStr);
 	if(type == '商品'){
 		comImage(data.goodscompany);									//广告图
 		$("#goods_det_img1").attr("src",'../'+data.goodsimage);
@@ -344,6 +347,8 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 			if(num == 0){					
 				//如果数量是0
 				$("#totalnum").show();
+				/* alert(goodsunits.length);
+				alert(goodsunits=='（5kg米 1.8L玉米油）*4组/箱'); */
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
