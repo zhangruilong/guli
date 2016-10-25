@@ -9,10 +9,13 @@
 <meta charset="utf-8">
 <meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style"
-	content="black-translucent">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- 禁止微信内置浏览器缓存 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
@@ -33,7 +36,7 @@
 <body>
 	<div class="gl-box">
 		<div class="home-search-wrapper">
-			<span class="citydrop">海盐县<!-- <em><img src="../images/dropbg.png"></em> --></span>
+			<span class="citydrop"><!-- 海盐县<em><img src="../images/dropbg.png"></em> --></span>
 			<!-- <div class="menu">
 				<div class="host-city">
 					<p class="quyu">
@@ -56,14 +59,14 @@
 <div class="addWrap">
   <div class="swipe" id="mySwipe">
     <div class="swipe-wrap">
-      <div><a href="javascript:;"><img class="img-responsive" src="../images/banner1.jpg"/></a></div>
+      <!-- <div><a href="javascript:;"><img class="img-responsive" src="../images/banner1.jpg"/></a></div>
       <div><a href="javascript:;"><img class="img-responsive" src="../images/banner2.jpg"/></a></div>
-      <div><a href="../images/youhuida.jpg"><img class="img-responsive" src="../images/youhui.jpg"/></a></div>
+      <div><a href="../images/youhuida.jpg"><img class="img-responsive" src="../images/youhui.jpg"/></a></div> -->
     </div>
   </div>
   <ul id="position">
     <li class="cur"></li>
-    <li class=""></li>
+    <!-- <li class=""></li> -->
   </ul>
 </div>
 			<div class="home-hot">
@@ -97,95 +100,135 @@
         </ul>
     </div>
 	</div>
-	<script src="../js/jquery-1.8.3.min.js"></script>
-	<script type="text/javascript">
-	var basePath = '<%=basePath%>';
-	//var xian = '';
-	//var city = '';
-	var customer = JSON.parse(window.localStorage.getItem("customeremp"));
-	$(function(){
-		if(!window.localStorage.getItem("totalnum")){
-			window.localStorage.setItem("totalnum",0);
-		}
-		//购物车图标上的数量
-		if(!window.localStorage.getItem("cartnum")){
-			window.localStorage.setItem("cartnum",0);
-		}else if(window.localStorage.getItem("cartnum")==0){
-			$("#totalnum").hide();
-			$("#totalnum").text(0);
-		}else{
-			$("#totalnum").text(window.localStorage.getItem("cartnum"));
-		}
-		$(".citydrop").text(customer.customerxian);
-	})
-	//跳转
-	function dohrefJump(url){
-		window.location.href = url;
-	}
-	//到品牌专区
-	function dopinpaizhuanqu(){
-		window.localStorage.setItem("goodsclassparent",'G14630381061319233');
-		dohrefJump('goodsclass.jsp');
-	}
-		
-		//提交搜索条件
-		function submitSearch(obj) {
-			var event = window.event || arguments.callee.caller.arguments[0];
-			if (event.keyCode == 13) { //如果按下的是回车键
-				var seachVal = $("#searchdishes").val();	//获取搜索条件
-				window.location.href = 'goods.jsp?searchdishes=' + seachVal;
-
-			}
-		}
-		
-		//到购物车页面
-		function docart(obj){
-			if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
-				$(obj).attr("href","cartnothing.html");
-			}
-		}
-		function successCB(r, cb) {
-			cb && cb(r);
-		}
-
-		function getJson(url, param, sCallback, fCallBack) {
-			try
-			{
-				$.ajax({
-					url: url,
-					data: param,
-					dataType:"json",
-					success: function(r) {
-						successCB(r, sCallback);
-						successCB(r, fCallBack);
-					},
-					error:function(r) {
-						var resp = eval(r); 
-						alert(resp.msg);
-					}
-				});
-			}
-			catch (ex)
-			{
-				alert(ex);
-			}
-		}
-	</script>
-<script src="../js/swipe.js"></script> 
+	<!--弹框-->
+<div class="cd-popup" role="alert">
+	<div class="cd-popup-container">
+		<div class="cd-buttons">
+        	<h1>谷粒网提示</h1>
+			<p class="popup_msg">尚无账号，立即注册？</p>
+            <a class="cd-popup-close">取消</a><a class="popup_queding" href="reg.jsp">确定</a>
+		</div>
+	</div>
+</div>
+<script src="../js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
-var bullets = document.getElementById('position').getElementsByTagName('li');
-var banner = Swipe(document.getElementById('mySwipe'), {
-	auto: 2000,
-	continuous: true,
-	disableScroll:false,
-	callback: function(pos) {
-		var i = bullets.length;
-		while (i--) {
-		  bullets[i].className = ' ';
+var basePath = '<%=basePath%>';
+//var xian = '';
+//var city = '';
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+$(function(){
+	//首页图片
+	$.ajax({
+		url:"GLSystem_attachAction.do?method=shouyeImg",
+		type:"post",
+		data:{
+			customerid:customer.customerid
+		},
+		success : function(resp){
+			var data = eval('('+resp+')');
+			var href = "javascript:;";
+			$.each(data.root,function(i,item){
+				if(typeof(item.detail)!= 'undefined'){
+					href = '../'+item.detail;
+				}
+				if(i<data.root.length-1){
+					$('#position').append('<li class=""></li>');
+				}
+				$('.swipe-wrap').append('<div><a href="'+href+'"><img class="img-responsive" src="../'+item.name+'"/></a></div>');
+			});
+			lunbotu();
+		},
+		error : function(resp){
+			var data = eval('('+resp+')');
+			alert(data.msg);
 		}
-		bullets[pos].className = 'cur';
+	});
+	//$(".fr").text('所在城市：'+customer.customercity);
+	$(".citydrop").text(customer.customerxian);
+		
+	if(!window.localStorage.getItem("totalnum")){
+		window.localStorage.setItem("totalnum",0);
 	}
+	//购物车图标上的数量
+	if(!window.localStorage.getItem("cartnum")){
+		window.localStorage.setItem("cartnum",0);
+	}else if(window.localStorage.getItem("cartnum")==0){
+		$("#totalnum").hide();
+		$("#totalnum").text(0);
+	}else{
+		$("#totalnum").text(window.localStorage.getItem("cartnum"));
+	}
+	$(".citydrop").text(customer.customerxian);
 });
+//跳转
+function dohrefJump(url){
+	window.location.href = url;
+}
+//到品牌专区
+function dopinpaizhuanqu(){
+	window.localStorage.setItem("goodsclassparent",'G14630381061319233');
+	dohrefJump('goodsclass.jsp');
+}
+	
+//提交搜索条件
+function submitSearch(obj) {
+	var event = window.event || arguments.callee.caller.arguments[0];
+	if (event.keyCode == 13) { 												//如果按下的是回车键
+		var seachVal = $("#searchdishes").val();							//获取搜索条件
+		window.location.href = 'goods.jsp?searchdishes=' + seachVal;
+
+	}
+}
+
+//到购物车页面
+function docart(obj){
+	if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
+		$(obj).attr("href","cartnothing.html");
+	}
+}
+function successCB(r, cb) {
+	cb && cb(r);
+}
+
+function getJson(url, param, sCallback, fCallBack) {
+	try
+	{
+		$.ajax({
+			url: url,
+			data: param,
+			dataType:"json",
+			success: function(r) {
+				successCB(r, sCallback);
+				successCB(r, fCallBack);
+			},
+			error:function(r) {
+				var resp = eval(r); 
+				alert(resp.msg);
+			}
+		});
+	}
+	catch (ex)
+	{
+		alert(ex);
+	}
+}
+//轮播图
+function lunbotu(){
+	var bullets = document.getElementById('position').getElementsByTagName('li');
+	var banner = Swipe(document.getElementById('mySwipe'), {
+		auto: 2000,
+		continuous: true,
+		disableScroll:false,
+		callback: function(pos) {
+			var i = bullets.length;
+			while (i--) {
+			  bullets[i].className = ' ';
+			}
+			bullets[pos].className = 'cur';
+		}
+	});
+}
 </script>
+<script src="../js/swipe.js"></script> 
 </body>
 </html>

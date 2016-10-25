@@ -9,6 +9,11 @@
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+var username = window.localStorage.getItem("username",username);
+var password = window.localStorage.getItem("password",password);
+</script>
 </head>
 
 <body>
@@ -22,15 +27,19 @@
         </ul>
     </div>
 </div>
-<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+
 <script type="text/javascript">
+$(function(){
+	$("#username").val(username);
+	$("#password").val(password);
+});
 function nextpage(){
-	var username = $("#username").val();
+	username = $("#username").val();
 	if(username==''||username==null){
 		$.dialog.alert("操作提示","用户名不能为空");
 		return;
 	}
-	var password = $("#password").val();
+	password = $("#password").val();
 	if(password==''||password==null){
 		$.dialog.alert("操作提示","密码不能为空");
 		return;
@@ -47,6 +56,8 @@ function nextpage(){
 				alert(respText.msg);
 			else {
 				window.localStorage.setItem("emp",JSON.stringify(respText.root[0]));
+				window.localStorage.setItem("username",username);
+				window.localStorage.setItem("password",password);
 				window.location.href = "customerlist.jsp";
 			}
 		},

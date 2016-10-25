@@ -12,6 +12,7 @@
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 </head>
 
 <body>
@@ -30,8 +31,20 @@
         	<h1>结算信息</h1>
         	<ul id="companylist">
             	<li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font></li>
-                <li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font></li>
+                <!-- <li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font></li> -->
             </ul>
+        </div>
+        <div class="jiesuan-info">
+        	<h1>留言信息</h1>
+        	<!-- <ul id="companylist">
+            	<li>供应商: <font class="font-grey">天然粮油有限公司</font> <br>订单金额: <font class="font-oringe">600元</font>
+            	<br>买家留言:<input> </li>
+            </ul> -->
+            <ul>
+            	<li><textarea placeholder="关于订单商品、配送时间等，可给供货商留言..." class="liuy-info-ta" onpropertychange= "this.style.posHeight=this.scrollHeight" ></textarea>
+    			</li>
+            </ul>
+            
         </div>
         <div class="jiesuan-info">
         	<h1>支付方式</h1>
@@ -62,7 +75,7 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+
 <script type="text/javascript" src="../js/buy3.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
@@ -107,13 +120,12 @@ $(function(){
 				$("#addressphone").text(item.addressphone);
 				$("#addressaddress").text(item.addressaddress);
 			},
-			error : function(resp2){
-				var respText2 = eval('('+resp2+')');
-				alert(respText2.msg);
+			error : function(resp){
+				var respText = eval('('+resp+')');
+				alert(respText.msg);
 			}
 		});
 	}
-	//$(".shouhuo-wrap a").attr("href","doAddressMana.action?customerId="+customer.customerid+"&message=foBuy");
 	if(!window.localStorage.getItem("totalmoney")){
 		window.localStorage.setItem("totalmoney",0);
 		$("#totalmoney").text(0);
@@ -144,6 +156,10 @@ function sortingData(){
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
+			if(respText.msg != '您购买的：'){
+				alert('操作失败！');
+				return;
+			}
 			if(respText.msg == '您购买的：'){
 				var jsds = respText.root;										//sdishes的json
 				window.localStorage.setItem("sdishes",JSON.stringify(jsds));
@@ -202,23 +218,29 @@ function buy(){
 		//alert(JSON.stringify(mcompany));
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
-				+ '","ordermemp":"补单'
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
+				+ '","ordermdetail":"' + $(".liuy-info-ta").val()
 				+ '","ordermway":"货到付款"}]';
 		var orderdetjson = '[';
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
-			//alert(JSON.stringify(item));
-			if(item.orderdtype == '秒杀' && item.orderdetnum > item.surplusnum){
-				$(".meg").text("您购买的秒杀商品卖完了.......");
-				$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
-				$('.cd-popup').addClass('is-visible');			//弹窗
-				flag++;
-				return false;
+			var orderdnote = '';
+			if(item.orderdtype == '秒杀'){
+				if(item.orderdetnum > item.surplusnum){
+					$(".meg").text("您购买的秒杀商品卖完了.......");
+					$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
+					$('.cd-popup').addClass('is-visible');			//弹窗
+					flag++;
+					return false;
+				} else {
+					orderdnote = item.orderdtype;
+				}
+			} else if(item.orderdtype == '买赠'){
+				orderdnote = item.goodsdetail;
 			}
 			if(mcompany.ordermcompany == item.goodscompany)
 				orderdetjson += '{"orderdid":"' + item.goodsid
@@ -231,6 +253,8 @@ function buy(){
 						+ '","orderdunit":"' + item.pricesunit
 						+ '","orderdclass":"' + item.goodsclassname
 						+ '","orderdnum":"' + item.orderdetnum
+						+ '","orderdweight":"' + item.goodsweight
+						+ '","orderdnote":"' + orderdnote
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});
@@ -264,7 +288,7 @@ function saveOrder(ordermjson,orderdetjson){
 			}
 		},
 		error : function(resp) {
-			$("#buyall").attr('onclick','sortingData();');			//启用按钮
+			$("#buyall").attr('onclick','sortingData();');//启用按钮
 			alert('网络出现问题，请稍后再试');
 		}
 	});

@@ -159,7 +159,7 @@ function initDishes(data){
  	 $.each(data.root, function(i, item) {
  		var jsonitem = JSON.stringify(item);
  		//var goods = jsonitem.replace(/\"/g,'\\"');
- 		//alert(goods);
+ 		//alert(item.goodsweight);
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+item.goodsimage+
  	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
@@ -179,11 +179,7 @@ function initDishes(data){
 					   +')"></span>'+
  	                 '<input class="text_box shuliang" name="danpin" type="number" value="'+
  	                 getcurrennumdanpin(item.goodsid)+'"> '+
- 	                ' <span class="jia add" onclick="addnum(this,'+item.pricesprice
-					   +',\''+item.goodsname+'\',\''+item.pricesunit+'\',\''+item.goodsunits
-					   +'\',\''+item.goodscode+'\',\''+item.goodsclassname
-					   +'\',\''+item.goodscompany+'\',\''+item.companyshop+'\',\''+item.companydetail
-					   +'\')"></span>'+
+ 	                ' <span class="jia add" onclick="addnum(this)"></span>'+
 				   '<span hidden="ture">'+jsonitem+'</span>'+
  	               '  <span hidden="ture" class="jian min" onclick="subnum(this,'+item.pricesprice2
 				   +')"></span>'+
@@ -215,30 +211,46 @@ function initDishes(data){
 	});
  	$('.shuliang').blur(function(){
  		var goodsnumObj = this;
- 		var reg = /^[0-9]*$/;
- 		if(reg.test(goodsnumObj.value)){
- 			if(goodsnumObj.value==''){
- 				goodsnumObj.value='0';
+ 		var goodsNum = goodsnumObj.value;
+		if(!goodsNum || $.trim(goodsNum)=='' || parseInt(goodsNum)==0){
+			goodsNum='0';
+			goodsnumObj.value='0';
+		}
+ 		var reg = /^\d*$/;
+ 		if(reg.test(goodsNum)){
+ 			if(parseInt(goodsNum) > 999){
+ 				alert('输入的数字过大，最多只能输入999。');
+ 				//goodsNum='0';
+ 				//goodsnumObj.value='0';
+ 				return;
  			}
- 			setGoodsNum($(goodsnumObj).next().get(0));
+ 			//订单
+ 			if(window.localStorage.getItem("sdishes")==null){
+ 				window.localStorage.setItem("sdishes","[]");
+ 			}
+ 			var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
+ 			if(sdishes.length==0 && parseInt(goodsNum)==0){					//如果购物车
+ 				return;
+ 			}
+ 			setGoodsNum($(goodsnumObj).next().get(0),parseInt(goodsNum));
  		} else {
+ 			//goodsNum='0';
+			//goodsnumObj.value='0';
  			alert('请输入正确的数字。');
  		}
  	});
 }
 //输入了正确数字后
-function setGoodsNum(obj){
+function setGoodsNum(obj,num){
 	var item = JSON.parse($(obj).next().text());
 	var odNum = 0;														//之前的商品数量
 	//订单
-	if(window.localStorage.getItem("sdishes")==null){
-		window.localStorage.setItem("sdishes","[]");
-	}
 	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 	//数量
-	var numt = $(obj).prev(); 
-	var num = parseInt(numt.val());
-	if(sdishes.length==0){
+	//var numt = $(obj).prev(); 
+	//alert(numt.val());
+	//var num = parseInt(numt.val());
+	if(sdishes.length==0 && num != 0){
 		$("#totalnum").show();
 		//新增订单
 		var mdishes = new Object();
@@ -256,6 +268,7 @@ function setGoodsNum(obj){
 		mdishes.orderdetnum = num;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -265,6 +278,7 @@ function setGoodsNum(obj){
 			if(item2.goodsid==$(obj).parent().attr('name')
 					&&item2.goodsdetail==$(obj).prev().attr('name')){
 				odNum = item2.orderdetnum;
+				//alert(num);
 				//修改订单
 				if(num==0){
 					//删除订单
@@ -296,6 +310,7 @@ function setGoodsNum(obj){
 				mdishes.orderdetnum = num;
 				mdishes.goodsimage = item.goodsimage;
 				mdishes.orderdtype = '商品';
+				mdishes.goodsweight = item.goodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -366,7 +381,7 @@ function getcurrennumdanpin(dishesid){
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==dishesid
-					&&item.goodsdetail=="danpin"){
+					&&item.goodsdetail=='danpin'){
 				orderdetnum = item.orderdetnum;
 				return false;
 			}
@@ -400,7 +415,9 @@ function addnum(obj){
 	window.localStorage.setItem("totalmoney",newtmoney);
 	//数量
 	var numt = $(obj).prev(); 
-	var num = parseInt(numt.val());
+	//var num = parseInt(numt.val());
+	var num = parseInt(getcurrennumdanpin($(obj).parent().attr('name')));
+	//alert(num);
 	numt.val(num+1);
 	//订单
 	if(window.localStorage.getItem("sdishes")==null){
@@ -425,6 +442,7 @@ function addnum(obj){
 		mdishes.orderdetnum = num + 1;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -434,7 +452,7 @@ function addnum(obj){
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==$(obj).parent().attr('name')
 					&&item.goodsdetail==$(obj).prev().attr('name')){
-				item.orderdetnum = $(obj).prev().val();									//订单数量等于输入的数量
+				item.orderdetnum = num+1;									//订单数量等于输入的数量
 				return false;
 			}
 		});
@@ -448,7 +466,8 @@ function addnum(obj){
 //减号
 function subnum(obj,pricesprice){
 	var numt = $(obj).next(); 
-	var num = parseInt(numt.val());
+	var currentID = $(obj).parent().attr('name');
+	var num = getcurrennumdanpin(currentID);
 	if(num > 0){
 		//总价
 		var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));
@@ -461,10 +480,11 @@ function subnum(obj,pricesprice){
 		if(num == 1){
 			//删除订单
 			$.each(sdishes,function(i,item){
-				if(item.goodsid==$(obj).parent().attr('name')){
+				if(item.goodsid==currentID
+						&&item.goodsdetail==$(obj).next().attr('name')){
 					sdishes.splice(i,1);
 					return false;
-				};
+				}
 			});
 			//种类数
 			var tnum = parseInt(window.localStorage.getItem("totalnum"));

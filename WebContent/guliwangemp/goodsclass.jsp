@@ -27,7 +27,7 @@
 <div class="gl-box">
 	<div class="home-search-wrapper">
         <span class="citydrop on"><span id="curgoodsclass">大米</span> <em><img src="../images/dropbg.png"></em></span> 
-        <div class="menu" style="display: block; height: 92%;">
+        <div class="menu" style="display: block; height: 95%;">
             <div class="menu-tags home-city-drop">
                 <div class="fenlei-tit">商品分类</div>
                 <div class="wrapper">
@@ -54,7 +54,7 @@
         	<em class="icon-shouye1"></em>首页</a></li>
             <li class="active"><a href="goodsclass.jsp"><em class="icon-fenlei2"></em>商城</a></li>
             <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
-            <li><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
+            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
         </ul>
     </div>
 <!--弹框-->
@@ -73,9 +73,12 @@
 var basePath = '<%=basePath%>';
 var searchdishesvalue = '<%=searchdishesvalue%>';
 var searchclassesvalue = '<%=searchclassesvalue%>';
-var emp = JSON.parse(window.localStorage.getItem("emp"));
+var openid = window.localStorage.getItem("openid");
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+var emp = JSON.parse(window.localStorage.getItem("emp"));
 $(function(){ 
+	getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
+		wheresql : "openid='"+openid+"'"},initCustomer,null);		//得到openid
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
 	}
@@ -90,18 +93,26 @@ $(function(){
 	}else{
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
+	if(window.localStorage.getItem("goodsclassname")){
+		$("#curgoodsclass").text(window.localStorage.getItem("goodsclassname"));
+	}
+	
 	//通过ajax查询大类
 	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
 })
+function initCustomer(data){			//将customer(客户信息放入缓存)
+	window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
+	customer = data.root[0];
+}
 function entersearch(){
     var event = window.event || arguments.callee.caller.arguments[0];
     if (event.keyCode == 13)
     {
     	searchdishesvalue = $("#searchdishes").val();
-		window.location.href = 'goods.jsp?searchdishes=' + searchdishesvalue;
+    	window.location.href = 'goods.jsp?searchdishes=' + searchdishesvalue;
     }
 }
 //商品大小类
@@ -142,7 +153,7 @@ function initDishes(data){
  		var jsonitem = JSON.stringify(item);
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span class="fl"><img src="../'+item.goodsimage+
- 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
+ 	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
  	         	'<h1>'+item.goodsname+'<span>('+item.goodsunits+')</span></h1>'+
  	           '  <div class="block"> '+
  	               '  <span>'+
@@ -292,6 +303,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		mdishes.orderdetnum = num + 1;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));

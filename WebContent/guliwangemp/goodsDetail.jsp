@@ -67,15 +67,17 @@
 	</div>
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/base.js"></script>
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	var type = '${param.type}';
-	var data = JSON.parse('${param.goods}');
+	var dataStr = getQueryString('goods');
+	var data = JSON.parse(dataStr);
 	if(type == '商品'){
+		comImage(data.goodscompany);									//广告图
 		$("#goods_det_img1").attr("src",'../'+data.goodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
 	    $("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.goodsname+'（'+data.goodsunits+'）</span>');
 		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.pricesprice+'/'+data.pricesunit+'</span>');
 		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.goodsid+'">'+
@@ -84,7 +86,7 @@ $(function(){
 	             getcurrennumdanpin(data.goodsid)+'"> '+
 	            ' <span class="jia add" onclick="addnum(this,'+data.pricesprice
 				   +',\''+data.goodsname+'\',\''+data.pricesunit+'\',\''+data.goodsunits
-				   +'\',\''+data.goodscode+'\',\''+data.goodsclass
+				   +'\',\''+data.goodscode+'\',\''+data.goodsclassname
 				   +'\',\''+data.goodscompany+'\',\''+data.companyshop+'\',\''+data.companydetail
 				   +'\')"></span>'+
 				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
@@ -115,7 +117,7 @@ $(function(){
 				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.timegoodsorgprice+'/'+data.timegoodsunit+'</span>');
 				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.timegoodsid+'">'+
 			            '<span class="jian min"  onclick="subnum(this,'+data.timegoodsorgprice+')"></span>'+
-			            '<input readonly="readonly" class="text_box shuliang" name="danpin" type="text" value="'+
+			            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 			             getcurrennumdanpin(data.timegoodsid)+'"> '+
 			            ' <span name="'+dailySur+'" class="jia add" onclick="addtimegoodsnum(this,'+data.timegoodsorgprice
 						   +',\''+data.timegoodsname+'\',\''+data.timegoodsunit+'\',\''+data.timegoodsunits
@@ -130,8 +132,8 @@ $(function(){
 				alert(respText2.msg);
 			}
 		});
+		comImage(data.timegoodscompany);									//广告图
 		$("#goods_det_img1").attr("src",'../'+data.timegoodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
 		$(".gd-lower-liebiao span:eq(0)").text(data.timegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.timegoodsclass);
 	} else if(type == '买赠'){
@@ -171,9 +173,27 @@ $(function(){
 			}
 		});
 		$("#goods_det_img1").attr("src",'../'+data.givegoodsimage);
-		$("#goods_det_img2").attr("src",basePath+'images/youhuida.jpg');
+		comImage(data.givegoodscompany);									//广告图
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
+	} else if(type == '预定'){
+		$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.bkgoodsname+'（'+data.bkgoodsunits+'）<br><span style="color: #666;">'+data.bkgoodsdetail+'</span></span>');
+		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsorgprice+'/'+data.bkgoodsunit+'</span>');
+		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.bkgoodsid+'">'+
+	            '<span class="jian min"  onclick="subnum(this,'+data.bkgoodsorgprice+')"></span>'+
+	            '<input readonly="readonly" class="text_box shuliang" name="'+data.bkgoodsdetail+'" type="text" value="'+
+	             getcurrennumdanpin(data.bkgoodsid)+'"> '+
+	            ' <span class="jia add" onclick="addbkgoodsnum(this,'+data.bkgoodsorgprice
+				   +',\''+data.bkgoodsname+'\',\''+data.bkgoodsunit+'\',\''+data.bkgoodsunits
+				   +'\',\''+data.bkgoodscode+'\',\''+data.bkgoodsclass
+				   +'\',\''+data.bkgoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
+				   +'\')"></span>'+
+				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
+	        	'</div>');
+		comImage(data.bkgoodscompany);									//广告图
+		$("#goods_det_img1").attr("src",'../'+data.bkgoodsimage);
+		$(".gd-lower-liebiao span:eq(0)").text(data.bkgoodsunits);
+		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodsclass);
 	}
 	//弹窗
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
@@ -186,12 +206,32 @@ $(function(){
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
 		$("#totalnum").text(0);
-	}else{
+	} else {
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	if(window.localStorage.getItem("totalnum")==0)
 		$("#totalnum").hide();
 });
+//经销商图片
+function comImage(comid){
+	$.ajax({
+		url:"GLSystem_attachAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"code='detail' and classify='经销商' and fid like '%"+comid+"%'"
+		},
+		success:function(resp){
+			var data = eval('('+resp+')');
+			if(data.root && data.root.length>0){
+				$("#goods_det_img2").attr("src",basePath+data.root[0].name);
+			}
+		},
+		error:function(resp){
+			var data = eval('('+resp+')');
+			alert(data.msg);
+		}
+	});
+}
 //到购物车
 function docart(){
 	if (window.localStorage.getItem("sdishes") == null || window.localStorage.getItem("sdishes") == "[]") {				//判断有没有购物车
@@ -199,6 +239,78 @@ function docart(){
 	} else {
 		window.location.href = "cart.jsp";
 	}
+}
+//加号(预定商品)
+function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
+	if(!customer.customerid || customer.customerid == '' || typeof(customer.customerid) == 'undefined'){
+		$(".cd-popup").addClass("is-visible");
+		return;
+	}
+	var item = JSON.parse($(obj).next().text());				//得到商品信息
+		//数量
+		var numt = $(obj).prev(); 
+		var num = parseInt(numt.val());
+		//var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
+		/* if((parseInt(cusMSOrderNum) - num) <= 0){
+			alert('您购买的商品超过了限购数量。');
+			return;
+		} else { */
+			if(!window.localStorage.getItem("totalmoney")){
+				window.localStorage.setItem("totalmoney","0")
+			}
+			//总价
+			var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));		//总价
+			var newtmoney = (tmoney+pricesprice).toFixed(2);						//总价加上商品价格得到新价格
+			window.localStorage.setItem("totalmoney",newtmoney);					//设置总价格到缓存
+			//数量
+			var numt = $(obj).prev();
+			var num = parseInt(numt.val());						//得到input的值,商品数
+			numt.val(num+1);									//input的值加一
+			//订单
+			if(window.localStorage.getItem("sdishes")==null || !window.localStorage.getItem("sdishes")){
+				window.localStorage.setItem("sdishes","[]");
+			}
+			sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//得到现有订单
+			if(num == 0){					
+				//如果数量是0
+				$("#totalnum").show();
+				//新增订单
+				var mdishes = new Object();
+				mdishes.goodsid = item.bkgoodsid;
+				mdishes.goodsdetail = item.bkgoodsdetail;
+				mdishes.goodscompany = goodscompany;
+				mdishes.companyshop = companyshop;
+				mdishes.companydetail = companydetail;
+				mdishes.goodsclassname = goodsclassname;
+				mdishes.goodscode = goodscode;
+				mdishes.pricesprice = pricesprice;
+				mdishes.pricesunit = pricesunit;
+				mdishes.goodsname = goodsname;
+				mdishes.goodsunits = goodsunits;
+				mdishes.orderdetnum = num + 1;
+				mdishes.goodsimage = item.bkgoodsimage;
+				mdishes.orderdtype = '预定';
+				sdishes.push(mdishes);
+				//种类数
+				var tnum = parseInt(window.localStorage.getItem("totalnum"));
+				window.localStorage.setItem("totalnum",tnum+1);
+			}else{							
+				//如果数量不是0
+				//修改订单
+				$.each(sdishes, function(i, item3) {
+					if(item3.goodsid==item.bkgoodsid
+							&&item3.goodsclassname==item.bkgoodsclass){
+						item3.orderdetnum = item3.orderdetnum + 1;
+						return false;
+					}
+				});
+			}
+			window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
+			
+			var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+			$("#totalnum").text(cartnum+1);
+			window.localStorage.setItem("cartnum",cartnum+1);
+		//}
 }
 //加号(秒杀商品)
 function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
@@ -234,6 +346,8 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 			if(num == 0){					
 				//如果数量是0
 				$("#totalnum").show();
+				/* alert(goodsunits.length);
+				alert(goodsunits=='（5kg米 1.8L玉米油）*4组/箱'); */
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
@@ -251,6 +365,7 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				mdishes.goodsimage = item.timegoodsimage;
 				mdishes.orderdtype = '秒杀';
 				mdishes.timegoodsnum = item.timegoodsnum;
+				mdishes.goodsweight = item.timegoodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -324,6 +439,7 @@ function addgivegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				mdishes.goodsimage = item.givegoodsimage;
 				mdishes.orderdtype = '买赠';
 				mdishes.timegoodsnum = item.givegoodsnum;
+				mdishes.goodsweight = item.givegoodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -380,6 +496,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		mdishes.orderdetnum = num + 1;
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
+		mdishes.goodsweight = item.goodsweight;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));

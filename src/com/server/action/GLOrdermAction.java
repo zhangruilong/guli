@@ -53,7 +53,7 @@ public class GLOrdermAction extends OrdermAction {
 		temp.setOrdermid(mOrdermid);
 		
 		String odCode = DateUtils.formatDate(new Date(), "yyyyMMddhhmmss");
-		String todayOd = getTotal("orderm", "ordermtime like '"+DateUtils.getDate()+"%' and ordermcompany='"+temp.getOrdermcompany()+"'")+"";
+		String todayOd = (getTotal("orderm", "ordermtime like '"+DateUtils.getDate()+"%' and ordermcompany='"+temp.getOrdermcompany()+"'")+1)+"";
 		odCode = "G"+odCode+"0000".substring(0, 4-todayOd.length())+todayOd ;
 		temp.setOrdermcode(odCode);
 		temp.setOrdermrightmoney(temp.getOrdermmoney());

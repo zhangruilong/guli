@@ -74,7 +74,6 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	var type = '${param.type}';
 	var dataStr = getQueryString('goods');
-	//alert(dataStr);
 	var data = JSON.parse(dataStr);
 	if(type == '商品'){
 		comImage(data.goodscompany);									//广告图

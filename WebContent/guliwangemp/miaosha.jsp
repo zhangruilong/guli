@@ -88,7 +88,7 @@ function gotogoodsDetail(jsonitem){
 }
 //初始化页面
 function initMiaoshaPage(resp){
-	var data = JSON.parse(resp);
+	var data = eval('('+resp+')');
 	$.ajax({
 		url:"GLOrderdAction.do?method=selCusXGOrderd",
 		type:"post",
@@ -97,18 +97,22 @@ function initMiaoshaPage(resp){
 		success : function(data2){
 			var cusOrder = JSON.parse(data2);
 			$(".home-hot-commodity").html("");
+			if(typeof(data.root) == 'undefined' ||　!data.root){
+				return;
+			}
 			$.each(data.root,function(j,item2){
 				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.timegoodsnum);
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+item2.timegoodsimage+
-	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
+	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
 				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && item3.orderdunits == item2.timegoodsunits ){
+						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && 
+								item3.orderdunits == item2.timegoodsunits ){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
@@ -130,7 +134,7 @@ function initMiaoshaPage(resp){
 				' <em>￥'+item2.timegoodsprice+'</em></div>'+
 					'<div class="stock-num" name="'+item2.timegoodsid+'">'+
 		            '<span class="jian min"  onclick="subnum(this,'+item2.timegoodsorgprice+')"></span>'+
-		            '<input readonly="readonly" class="text_box shuliang" name="danpin" type="text" value="'+
+		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 		             getcurrennumdanpin(item2.timegoodsid)+'"> '+
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item2.timegoodsorgprice
 					   +',\''+item2.timegoodsname+'\',\''+item2.timegoodsunit+'\',\''+item2.timegoodsunits
@@ -198,6 +202,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 			if(num == 0){					
 				//如果数量是0
 				$("#totalnum").show();
+				/* alert(goodsunits.length);
+				alert(goodsunits=='（5kg米 1.8L玉米油）*4组/箱'); */
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
@@ -216,6 +222,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.orderdtype = '秒杀';
 				mdishes.surplusnum = surplusnum;
 				mdishes.timegoodsnum = item.timegoodsnum;
+				mdishes.goodsweight = item.timegoodsweight;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));

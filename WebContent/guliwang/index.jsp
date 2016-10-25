@@ -170,7 +170,7 @@
 	  }
 	}
 	//得到客户信息
-	function initCustomer(data){			//将customer(客户信息放入缓存)
+	function initCustomer(data){
 		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){
 			$(".cd-popup").addClass("is-visible");
 		} else {
@@ -201,14 +201,10 @@
 				}
 			});
 		}
-		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
-		$(".fr").text('所在城市：'+data.root[0].customercity);
+		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));			//将customer(客户信息放入缓存)
+		//$(".fr").text('所在城市：'+data.root[0].customercity);
 		$(".citydrop").text(data.root[0].customerxian);
 		//initIndexPage();
-	}
-	//初始化页面
-	function initIndexPage(){
-		
 	}
 	//跳转
 	function dohrefJump(url){
