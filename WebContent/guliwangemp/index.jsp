@@ -59,13 +59,13 @@
 <div class="addWrap">
   <div class="swipe" id="mySwipe">
     <div class="swipe-wrap">
-      <!-- <div><a href="javascript:;"><img class="img-responsive" src="../images/banner1.jpg"/></a></div>
-      <div><a href="javascript:;"><img class="img-responsive" src="../images/banner2.jpg"/></a></div>
+      <a style="visibility:visible;" href="javascript:;"><img class="img-responsive" src="../images/banner1.jpg"/></a>
+      <!-- <div><a href="javascript:;"><img class="img-responsive" src="../images/banner2.jpg"/></a></div>
       <div><a href="../images/youhuida.jpg"><img class="img-responsive" src="../images/youhui.jpg"/></a></div> -->
     </div>
   </div>
   <ul id="position">
-    <li class="cur"></li>
+    <!-- <li class="cur"></li> -->
     <!-- <li class=""></li> -->
   </ul>
 </div>
@@ -118,7 +118,7 @@ var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	//首页图片
-	$.ajax({
+	/* $.ajax({
 		url:"GLSystem_attachAction.do?method=shouyeImg",
 		type:"post",
 		data:{
@@ -142,7 +142,7 @@ $(function(){
 			var data = eval('('+resp+')');
 			alert(data.msg);
 		}
-	});
+	}); */
 	//$(".fr").text('所在城市：'+customer.customercity);
 	$(".citydrop").text(customer.customerxian);
 		
@@ -213,7 +213,7 @@ function getJson(url, param, sCallback, fCallBack) {
 	}
 }
 //轮播图
-function lunbotu(){
+/* function lunbotu(){
 	var bullets = document.getElementById('position').getElementsByTagName('li');
 	var banner = Swipe(document.getElementById('mySwipe'), {
 		auto: 2000,
@@ -227,7 +227,7 @@ function lunbotu(){
 			bullets[pos].className = 'cur';
 		}
 	});
-}
+} */
 </script>
 <script src="../js/swipe.js"></script> 
 </body>
