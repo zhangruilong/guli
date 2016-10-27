@@ -31,8 +31,8 @@
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script> 
 var basePath = '<%=basePath%>';
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
-	var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 	var openid = customer.openid;
 	getJson(basePath+"GLOrdermviewAction.do",{method:"mselQuery",
 		openid : openid,

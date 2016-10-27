@@ -77,8 +77,6 @@ var openid = window.localStorage.getItem("openid");
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var emp = JSON.parse(window.localStorage.getItem("emp"));
 $(function(){ 
-	getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
-		wheresql : "openid='"+openid+"'"},initCustomer,null);		//得到openid
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
 	}
@@ -96,17 +94,12 @@ $(function(){
 	if(window.localStorage.getItem("goodsclassname")){
 		$("#curgoodsclass").text(window.localStorage.getItem("goodsclassname"));
 	}
-	
 	//通过ajax查询大类
 	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
 })
-function initCustomer(data){			//将customer(客户信息放入缓存)
-	window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
-	customer = data.root[0];
-}
 function entersearch(){
     var event = window.event || arguments.callee.caller.arguments[0];
     if (event.keyCode == 13)
