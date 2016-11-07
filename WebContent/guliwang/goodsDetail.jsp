@@ -218,7 +218,7 @@ function comImage(comid){
 		url:"GLSystem_attachAction.do?method=selAll",
 		type:"post",
 		data:{
-			wheresql:"code='detail' and classify='经销商-detail' and fid like '%"+comid+"%'"
+			wheresql:"code='detail' and classify='经销商' and fid like '%"+comid+"%'"
 		},
 		success:function(resp){
 			var data = eval('('+resp+')');

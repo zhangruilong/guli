@@ -30,7 +30,7 @@ public class GLSystem_attachAction extends System_attachAction {
 	@SuppressWarnings("unchecked")
 	public void shouyeImg(HttpServletRequest request, HttpServletResponse response){
 		String cusid = request.getParameter("customerid");
-		String sql = "select * from system_attach sa where classify='经销商' and (";
+		String sql = "select * from system_attach sa where classify='经销商' and code like 'shouye_' and (";
 		ArrayList<Ccustomer> ccusLi = (ArrayList<Ccustomer>) selAll(Ccustomer.class,"select * from ccustomer c where c.ccustomercustomer='"+cusid+"'");
 		if(ccusLi.size()>0){
 			for (Ccustomer cc : ccusLi) {

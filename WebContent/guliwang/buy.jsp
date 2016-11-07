@@ -231,7 +231,7 @@ function buy(){
 			var orderdnote = '';
 			if(item.orderdtype == '秒杀'){
 				if(item.orderdetnum > item.surplusnum){
-					$(".meg").text("您购买的秒杀商品卖完了.......");
+					$(".meg").text("您购买的秒杀商品剩余数量不足.......");
 					$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
 					$('.cd-popup').addClass('is-visible');			//弹窗
 					flag++;
