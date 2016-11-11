@@ -255,6 +255,7 @@ function buy(){
 						+ '","orderdnum":"' + item.orderdetnum
 						+ '","orderdweight":"' + item.goodsweight
 						+ '","orderdnote":"' + orderdnote
+						+ '","orderdgoods":"' + item.goodsid
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});
