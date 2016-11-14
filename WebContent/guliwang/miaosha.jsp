@@ -40,6 +40,7 @@
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
+<script src="../js/base.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 var timegoodscode = '${param.timegoodscode}';
@@ -106,7 +107,8 @@ function initMiaoshaPage(resp){
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
+				'</h1><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
+				+changeStr(item2.timegoodsdetail)+'</span><br> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
@@ -115,7 +117,7 @@ function initMiaoshaPage(resp){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
-					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;									//每日限购剩余数量
 					liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'</font>';
 					if(item2.allnum != '-1'){
 						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
@@ -170,13 +172,6 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));
-		/* if(data){
-			$.each(data.miaoshaList,function(i,item2){
-				if(item2.orderdcode == item.timegoodscode){
-					restNum -= parseInt(item2.orderdnum);
-				}
-			});
-		} */
 		
 		if((parseInt(cusMSOrderNum) - num) <= 0){
 			alert('您购买的商品超过了限购数量。');

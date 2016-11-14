@@ -111,9 +111,10 @@ $(function(){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
-					dailySur = parseInt(data.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+					dailySur = parseInt(data.timegoodsnum) - itemGoodsCount;							//每日限购剩余数量
 				}
-				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.timegoodsname+'（'+data.timegoodsunits+'）</span>');
+				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.timegoodsname+'（'+data.timegoodsunits+
+						'）<br><span style="color: #666;">'+changeStr(data.timegoodsdetail)+'</span></span>');
 				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.timegoodsorgprice+'/'+data.timegoodsunit+'</span>');
 				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.timegoodsid+'">'+
 			            '<span class="jian min"  onclick="subnum(this,'+data.timegoodsorgprice+')"></span>'+
