@@ -107,7 +107,8 @@ function initMiaoshaPage(resp){
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
+				'</h1><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
+				+changeStr(item2.timegoodsdetail)+'</span><br> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
@@ -116,7 +117,7 @@ function initMiaoshaPage(resp){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
-					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;									//每日限购剩余数量
 					liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'</font>';
 					if(item2.allnum != '-1'){
 						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';

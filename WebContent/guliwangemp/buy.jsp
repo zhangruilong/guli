@@ -238,7 +238,11 @@ function buy(){
 					flag++;
 					return false;
 				} else {
-					orderdnote = item.orderdtype;
+					if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
+						orderdnote = item.goodsdetail;
+					} else {
+						orderdnote = item.orderdtype;
+					}
 				}
 			} else if(item.orderdtype == '买赠'){
 				orderdnote = item.goodsdetail;

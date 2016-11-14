@@ -85,8 +85,8 @@ public class GLGoodsviewAction extends GoodsviewAction {
 			if(CommonUtil.isNotEmpty(goodsclassname)){
 				wheresql += " and (goodsclassname='"+goodsclassname+
 						"' or goodsbrand='"+goodsclassname+
-						"' or goodstype like '"+goodsclassname+
-						"')";
+						"' or goodstype like '%"+goodsclassname+
+						"%')";
 			}
 			Queryinfo queryinfo = getQueryinfo(request);
 			queryinfo.setType(Goodsview.class);

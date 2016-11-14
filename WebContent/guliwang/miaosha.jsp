@@ -107,7 +107,7 @@ function initMiaoshaPage(resp){
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
+				'</h1><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
 				+changeStr(item2.timegoodsdetail)+'</span><br> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
