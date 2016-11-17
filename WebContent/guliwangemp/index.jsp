@@ -87,7 +87,7 @@
 			
 	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
 	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <a onclick="" href="#"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
+	        <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
 	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
@@ -163,6 +163,12 @@ $(function(){
 //跳转
 function dohrefJump(url){
 	window.location.href = url;
+}
+//到裸价商品
+function doLuoJaGoods(){
+	window.localStorage.setItem("goodsclassname","裸价商品");
+	window.localStorage.setItem("goodsclassparent","G14630381061319232");
+	window.location.href = "goodsclass.jsp";
 }
 //到品牌专区
 function dopinpaizhuanqu(){
