@@ -107,8 +107,7 @@ function initMiaoshaPage(resp){
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
-				+changeStr(item2.timegoodsdetail)+'</span><br> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
+				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
@@ -128,12 +127,13 @@ function initMiaoshaPage(resp){
 						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
 					}
 				}
-				liObj+='</span><br>';
+				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
+				+changeStr(item2.timegoodsdetail)+'</span>';
 				/* alert(item2.companydetail);
 				return; */
-				liObj += '<div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
+				liObj += '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
 				' <em>￥'+item2.timegoodsprice+'</em></div>'+
-					'<div class="stock-num" name="'+item2.timegoodsid+'">'+
+					'<div class="miaosha_stock-num" name="'+item2.timegoodsid+'">'+
 		            '<span class="jian min"  onclick="subnum(this,'+item2.timegoodsorgprice+')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 		             getcurrennumdanpin(item2.timegoodsid)+'"> '+
@@ -143,7 +143,7 @@ function initMiaoshaPage(resp){
 					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
 					   +'\',\''+item2.surplusnum+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
-		        	'</div>';
+		        	'</div></div>';
 		        liObj += '</li>';
 				$(".home-hot-commodity").append(liObj);
 			});
@@ -201,7 +201,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
-				mdishes.goodsdetail = $(obj).prev().attr('name');
+				mdishes.goodsdetail = item.timegoodsdetail;
 				mdishes.goodscompany = goodscompany;
 				mdishes.companyshop = companyshop;
 				mdishes.companydetail = companydetail;

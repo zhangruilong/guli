@@ -238,13 +238,13 @@ function buy(){
 					return false;
 				} else {
 					if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
-						orderdnote = item.goodsdetail;
+						orderdnote = '秒杀:'+item.goodsdetail;
 					} else {
 						orderdnote = item.orderdtype;
 					}
 				}
 			} else if(item.orderdtype == '买赠'){
-				orderdnote = item.goodsdetail;
+				orderdnote = '买赠:'+item.goodsdetail;
 			}
 			if(mcompany.ordermcompany == item.goodscompany)
 				orderdetjson += '{"orderdid":"' + item.goodsid
@@ -282,6 +282,7 @@ function saveOrder(ordermjson,orderdetjson){
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 
 			if(respText.success == false) {
+				$("#buyall").attr('onclick','sortingData();');//启用按钮
 				alert(respText.msg);
 			} else {
 				window.localStorage.setItem("sdishes", "[]");

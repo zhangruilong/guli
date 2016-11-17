@@ -232,20 +232,20 @@ function buy(){
 			var orderdnote = '';
 			if(item.orderdtype == '秒杀'){
 				if(item.orderdetnum > item.surplusnum){
-					$(".meg").text("您购买的秒杀商品卖完了.......");
+					$(".meg").text("您购买的秒杀商品剩余数量不足.......");
 					$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
 					$('.cd-popup').addClass('is-visible');			//弹窗
 					flag++;
 					return false;
 				} else {
 					if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
-						orderdnote = item.goodsdetail;
+						orderdnote = '秒杀:'+item.goodsdetail;
 					} else {
 						orderdnote = item.orderdtype;
 					}
 				}
 			} else if(item.orderdtype == '买赠'){
-				orderdnote = item.goodsdetail;
+				orderdnote = '买赠:'+item.goodsdetail;
 			}
 			if(mcompany.ordermcompany == item.goodscompany)
 				orderdetjson += '{"orderdid":"' + item.goodsid
@@ -260,6 +260,7 @@ function buy(){
 						+ '","orderdnum":"' + item.orderdetnum
 						+ '","orderdweight":"' + item.goodsweight
 						+ '","orderdnote":"' + orderdnote
+						+ '","orderdgoods":"' + item.goodsid
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});

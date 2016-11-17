@@ -59,7 +59,9 @@ color:#fff !important;
 .goods-detail-wrapper .gdw_t_li_stock_num .jia,.goods-detail-wrapper .gdw_t_li_stock_num .jian,.goods-detail-wrapper .gdw_t_li_stock_num .shuliang{width: 32%;}
 .gdw_t_li3_cc{position:relative;bottom:-25px;float:right; margin-right: 7%;width: 44px;text-align: center;}
 /*秒杀商品*/
-.miaosha_li_price_div{float: left;margin: 10% 0% 0% 0%;}
+.ms-bottom .miaosha_li_price_div{float: left;margin: 8% 0% 0% 0%;}
+.ms-bottom .miaosha_stock-num { position: relative; width: 45%;margin: 7% 0% 0% 0%; float: right; }
+.ms-bottom{width: 71%;float: right;}
 .miaosha_li_price_div strong{color: #f64320}
 .miaosha_li_price_div em{ color: #666;font-style: normal; text-decoration: line-through; font-size: .6em }
 /*买赠商品*/
@@ -125,7 +127,7 @@ color:#fff !important;
 .home-hot-wrap .home-hot-commodity li a h1, .goods-wrapper .home-hot-commodity li h1 { font-size: 1em; font-weight: normal; margin: 4% 0 }
 .home-hot-wrap .home-hot-commodity li a .fl img, .goods-wrapper .home-hot-commodity li .fl img { width: 90px; }
 .home-hot-wrap .home-hot-commodity li a span, .goods-wrapper .home-hot-commodity li span { color: #666; font-size: .6em }
-.goods-wrapper .home-hot-commodity li .miaosha-detail { color: #666; font-size: 12px;width: 68%;display: inline-block;margin: 8px 0px 8px 0px; }
+.goods-wrapper .home-hot-commodity li .miaosha-detail { color: #666; font-size: 16px;width: 68%;display: inline-block;margin: 8px 0px 8px 0px; }
 .home-hot-wrap .home-hot-commodity li a span.fl, .goods-wrapper .home-hot-commodity li span.fl { margin-right: 2%; margin-top: 4% }
 .home-hot-wrap .home-hot-commodity li a span.fl { margin-top: 0 }
 .home-hot-wrap .home-hot-commodity li a span strong, .goods-wrapper .home-hot-commodity li span strong { font-size: 1.6em; color: #f64320 }

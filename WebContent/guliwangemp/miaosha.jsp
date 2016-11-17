@@ -107,8 +107,7 @@ function initMiaoshaPage(resp){
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
-				+changeStr(item2.timegoodsdetail)+'</span><br> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
+				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
@@ -128,7 +127,8 @@ function initMiaoshaPage(resp){
 						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
 					}
 				}
-				liObj+='</span><br>';
+				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
+				+changeStr(item2.timegoodsdetail)+'</span><br>';
 				/* alert(item2.companydetail);
 				return; */
 				liObj += '<div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
@@ -208,7 +208,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
-				mdishes.goodsdetail = $(obj).prev().attr('name');
+				mdishes.goodsdetail = item.timegoodsdetail;
 				mdishes.goodscompany = goodscompany;
 				mdishes.companyshop = companyshop;
 				mdishes.companydetail = companydetail;

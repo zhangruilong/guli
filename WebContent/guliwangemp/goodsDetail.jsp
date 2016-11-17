@@ -351,7 +351,7 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
-				mdishes.goodsdetail = $(obj).prev().attr('name');
+				mdishes.goodsdetail = item.timegoodsdetail;
 				mdishes.goodscompany = goodscompany;
 				mdishes.companyshop = companyshop;
 				mdishes.companydetail = companydetail;
