@@ -4,6 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- 禁止微信内置浏览器缓存 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">

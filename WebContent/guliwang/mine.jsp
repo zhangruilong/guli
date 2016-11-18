@@ -8,6 +8,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- 禁止微信内置浏览器缓存 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
@@ -49,7 +53,7 @@ input:focus{ outline:none}
     </div>
     <div class="personal-center">
     	<a onclick="clearlocalstore();">清除缓存 <span class="sign"></span></a>
-    	<a href="#">谷粒客服 <span class="sign">400-110-2502</span></a>
+    	<a href="tel:400-110-2502">谷粒客服 <span style="height: 14px;float: right;margin-right: 8%;display: inline-block;position: relative;">400-110-2502</span></a>
         <a onclick="acpage('objection.jsp')" >意见反馈 <span class="sign"></span></a>
     </div>
 </div>
