@@ -75,9 +75,9 @@
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customer"));
+var type = '${param.type}';
+var dataStr = getQueryString('goods');
 $(function(){
-	var type = '${param.type}';
-	var dataStr = getQueryString('goods');
 	var data = JSON.parse(dataStr);
 	if(type == '商品'){
 		comImage(data.goodscompany);									//广告图
@@ -111,14 +111,13 @@ $(function(){
 				if(cusOrder){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '秒杀' && item3.orderdcode == data.timegoodscode){
+						if(item3.orderdtype == '秒杀' && item3.orderdcode == data.timegoodscode && item3.orderdunits == data.timegoodsunits){
 							itemGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
-					dailySur = parseInt(data.timegoodsnum) - itemGoodsCount;							//每日限购剩余数量
+					dailySur = parseInt(data.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
 				}
-				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.timegoodsname+'（'+data.timegoodsunits+
-						'）<br><span style="color: #666;">'+changeStr(data.timegoodsdetail)+'</span></span>');
+				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.timegoodsname+'（'+data.timegoodsunits+'）</span>');
 				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.timegoodsorgprice+'/'+data.timegoodsunit+'</span>');
 				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.timegoodsid+'">'+
 			            '<span class="jian min"  onclick="subnum(this,'+data.timegoodsorgprice+')"></span>'+
@@ -152,7 +151,7 @@ $(function(){
 				if(cusOrder){
 					var giveGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '买赠' && item3.orderdcode == data.givegoodscode){
+						if(item3.orderdtype == '买赠' && item3.orderdcode == data.givegoodscode && item3.orderdunits == data.givegoodsunits){
 							giveGoodsCount += parseInt(item3.orderdclass);
 						}
 					});
@@ -381,7 +380,7 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				//修改订单
 				$.each(sdishes, function(i, item3) {
 					if(item3.goodsid==$(obj).parent().attr('name')
-							&&item3.goodsdetail==$(obj).prev().attr('name')){
+							&&item3.goodsclassname==goodsclassname){
 						item3.orderdetnum = item3.orderdetnum + 1;
 						return false;
 					}
@@ -456,7 +455,7 @@ function addgivegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				//修改订单
 				$.each(sdishes, function(i, item3) {
 					if(item3.goodsid==$(obj).parent().attr('name')
-							&&item3.goodsdetail==$(obj).prev().attr('name')){
+							&&item3.goodsclassname==goodsclassname){
 						item3.orderdetnum = item3.orderdetnum + 1;
 						return false;
 					}
@@ -513,7 +512,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		//修改订单
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==$(obj).parent().attr('name')
-					&&item.goodsdetail==$(obj).prev().attr('name')){
+					&&item.goodsclassname==goodsclassname){
 				item.orderdetnum = item.orderdetnum + 1;
 				return false;
 			}
@@ -541,7 +540,7 @@ function subnum(obj,pricesprice){
 		if(num == 1){
 			//删除订单
 			$.each(sdishes,function(i,item){
-				if(item.goodsid==$(obj).parent().attr('name')){
+				if(item.goodsid==$(obj).parent().attr('name') && item.orderdtype==type){
 					sdishes.splice(i,1);
 					return false;
 				};
@@ -555,7 +554,7 @@ function subnum(obj,pricesprice){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsdetail==$(obj).next().attr('name')){
+						&& item.orderdtype==type){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}
@@ -578,7 +577,7 @@ function getcurrennumdanpin(dishesid){
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==dishesid
-					&&item.orderdtype=='${param.type}'){
+					&&item.orderdtype==type){
 				orderdetnum = item.orderdetnum;
 				return false;
 			}

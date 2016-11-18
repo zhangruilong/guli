@@ -44,6 +44,7 @@
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
+<script src="../js/base.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var timegoodscode = '${param.timegoodscode}';
@@ -132,12 +133,12 @@ function initMiaoshaPage(resp){
 					}
 				}
 				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
-				+changeStr(item2.timegoodsdetail)+'</span><br>';
+				+changeStr(item2.timegoodsdetail)+'</span>';
 				/* alert(item2.companydetail);
 				return; */
-				liObj += '<div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
+				liObj += '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
 				' <em>￥'+item2.timegoodsprice+'</em></div>'+
-					'<div class="stock-num" name="'+item2.timegoodsid+'">'+
+					'<div class="miaosha_stock-num" name="'+item2.timegoodsid+'">'+
 		            '<span class="jian min"  onclick="subnum(this,'+item2.timegoodsorgprice+')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 		             getcurrennumdanpin(item2.timegoodsid)+'"> '+
@@ -147,7 +148,7 @@ function initMiaoshaPage(resp){
 					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
 					   +'\',\''+item2.surplusnum+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
-		        	'</div>';
+		        	'</div></div>';
 		        liObj += '</li>';
 				$(".home-hot-commodity").append(liObj);
 			});
@@ -231,7 +232,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				//修改订单
 				$.each(sdishes, function(i, item3) {
 					if(item3.goodsid==$(obj).parent().attr('name')
-							&&item3.goodsdetail==$(obj).prev().attr('name')){
+							&&item3.goodsclassname==goodsclassname){
 						item3.orderdetnum = item3.orderdetnum + 1;
 						return false;
 					}
@@ -260,7 +261,8 @@ function subnum(obj,pricesprice){
 		if(num == 1){
 			//删除订单
 			$.each(sdishes,function(i,item){
-				if(item.goodsid==$(obj).parent().attr('name')){
+				if(item.goodsid==$(obj).parent().attr('name')
+						&&item.goodsclassname==goodsclassname){
 					sdishes.splice(i,1);
 					return false;
 				};
@@ -274,7 +276,7 @@ function subnum(obj,pricesprice){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsdetail==$(obj).next().attr('name')){
+						&&item3.goodsclassname==goodsclassname){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}

@@ -231,7 +231,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				//修改订单
 				$.each(sdishes, function(i, item3) {
 					if(item3.goodsid==$(obj).parent().attr('name')
-							&&item3.goodsdetail==$(obj).prev().attr('name')){
+							&&item3.goodsclassname==goodsclassname){
 						item3.orderdetnum = item3.orderdetnum + 1;
 						return false;
 					}
@@ -260,7 +260,8 @@ function subnum(obj,pricesprice){
 		if(num == 1){
 			//删除订单
 			$.each(sdishes,function(i,item){
-				if(item.goodsid==$(obj).parent().attr('name')){
+				if(item.goodsid==$(obj).parent().attr('name')
+						&&item.goodsclassname==goodsclassname){
 					sdishes.splice(i,1);
 					return false;
 				};
@@ -274,7 +275,7 @@ function subnum(obj,pricesprice){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsdetail==$(obj).next().attr('name')){
+						&&item3.goodsclassname==goodsclassname){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}

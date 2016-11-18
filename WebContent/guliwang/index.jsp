@@ -87,7 +87,7 @@
 			
 	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
 	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
+	        <!-- <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a> -->
 	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
