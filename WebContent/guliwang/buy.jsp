@@ -77,6 +77,7 @@
 </div>
 
 <script type="text/javascript" src="../js/buy3.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 jQuery(document).ready(function($){
@@ -215,7 +216,6 @@ function buy(){
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
 	var flag = 0;
 	$.each(scompany, function(y, mcompany) {
-		//alert(JSON.stringify(mcompany));
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
@@ -260,6 +260,7 @@ function buy(){
 						+ '","orderdweight":"' + item.goodsweight
 						+ '","orderdnote":"' + orderdnote
 						+ '","orderdgoods":"' + item.goodsid
+						+ '","orderdbrand":"' + changeStr(item.goodsbrand)
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});

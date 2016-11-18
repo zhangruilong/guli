@@ -57,7 +57,6 @@ public class GLOrdermAction extends OrdermAction {
 		odCode = "G"+odCode+"0000".substring(0, 4-todayOd.length())+todayOd ;
 		temp.setOrdermcode(odCode);
 		temp.setOrdermrightmoney(temp.getOrdermmoney());
-//		temp.setOrdermcustomer(getCurrentUserid(request));
 		temp.setOrdermstatue("已下单");
 		temp.setOrdermtime(DateUtils.getDateTime());
 		ArrayList<String> sqls = new ArrayList<String> ();
@@ -79,8 +78,6 @@ public class GLOrdermAction extends OrdermAction {
 						editNumTG.setSurplusnum(editNumTG.getSurplusnum() - mOrderd.getOrderdnum());
 						result = updSingle(editNumTG,TimegoodsPoco.KEYCOLUMN);
 					}
-					/*String timegoodssql = "update ";
-					sqls.add(timegoodssql);*/
 				}
 				mOrderd.setOrderdid(CommonUtil.getNewId());
 				mOrderd.setOrderdorderm(mOrdermid);
@@ -92,11 +89,7 @@ public class GLOrdermAction extends OrdermAction {
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'操作失败'}";
-		}/* else {
-			result = updSingle(cuss.get(0),TimegoodsPoco.KEYCOLUMN);
-			//updSingle(TimegoodsPoco.TABLE, "statue=0", "id!=1 and");			//这是修改
-			//doSingle("update a =1");											//这是执行一条sql语句
-		}*/
+		}
 		responsePW(response, result);
 	}
 }

@@ -217,6 +217,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.surplusnum = surplusnum;
 				mdishes.timegoodsnum = item.timegoodsnum;
 				mdishes.goodsweight = item.timegoodsweight;
+				mdishes.goodsbrand = item.timegoodsbrand;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));

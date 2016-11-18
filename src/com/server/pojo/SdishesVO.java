@@ -86,6 +86,10 @@ public class SdishesVO {
 	 * 商品重量
 	 */
 	private String goodsweight;
+	/**
+	 * 品牌
+	 */
+	private String goodsbrand;
 	
 	public String getGoodsweight() {
 		return goodsweight;
@@ -93,6 +97,14 @@ public class SdishesVO {
 
 	public void setGoodsweight(String goodsweight) {
 		this.goodsweight = goodsweight;
+	}
+
+	public String getGoodsbrand() {
+		return goodsbrand;
+	}
+
+	public void setGoodsbrand(String goodsbrand) {
+		this.goodsbrand = goodsbrand;
 	}
 
 	public String getGoodsid() {

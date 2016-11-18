@@ -271,6 +271,7 @@ function setGoodsNum(obj,num){
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
+		mdishes.goodsbrand = item.goodsbrand;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -313,6 +314,7 @@ function setGoodsNum(obj,num){
 				mdishes.goodsimage = item.goodsimage;
 				mdishes.orderdtype = '商品';
 				mdishes.goodsweight = item.goodsweight;
+				mdishes.goodsbrand = item.goodsbrand;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -445,6 +447,7 @@ function addnum(obj){
 		mdishes.goodsimage = item.goodsimage;
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
+		mdishes.goodsbrand = item.goodsbrand;
 		sdishes.push(mdishes);
 		//种类数
 		var tnum = parseInt(window.localStorage.getItem("totalnum"));
