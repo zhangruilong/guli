@@ -77,6 +77,7 @@
 </div>
 
 <script type="text/javascript" src="../js/buy3.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 jQuery(document).ready(function($){
@@ -215,12 +216,10 @@ function buy(){
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
 	var flag = 0;
 	$.each(scompany, function(y, mcompany) {
-		//alert(JSON.stringify(mcompany));
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney
-				+ '","ordermemp":"补单'
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
@@ -261,6 +260,7 @@ function buy(){
 						+ '","orderdweight":"' + item.goodsweight
 						+ '","orderdnote":"' + orderdnote
 						+ '","orderdgoods":"' + item.goodsid
+						+ '","orderdbrand":"' + changeStr(item.goodsbrand)
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 		});
@@ -283,6 +283,7 @@ function saveOrder(ordermjson,orderdetjson){
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 
 			if(respText.success == false) {
+				$("#buyall").attr('onclick','sortingData();');//启用按钮
 				alert(respText.msg);
 			} else {
 				window.localStorage.setItem("sdishes", "[]");

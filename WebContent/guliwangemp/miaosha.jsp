@@ -172,13 +172,6 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));
-		/* if(data){
-			$.each(data.miaoshaList,function(i,item2){
-				if(item2.orderdcode == item.timegoodscode){
-					restNum -= parseInt(item2.orderdnum);
-				}
-			});
-		} */
 		
 		if((parseInt(cusMSOrderNum) - num) <= 0){
 			alert('您购买的商品超过了限购数量。');
@@ -224,6 +217,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.surplusnum = surplusnum;
 				mdishes.timegoodsnum = item.timegoodsnum;
 				mdishes.goodsweight = item.timegoodsweight;
+				mdishes.goodsbrand = item.timegoodsbrand;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
