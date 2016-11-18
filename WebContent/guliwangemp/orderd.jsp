@@ -101,7 +101,7 @@ function regoumai(){
 					} else if(item.type == '秒杀' && item.statue != '下架'){
 						var mdishes = new Object();
 						mdishes.goodsid = item.tgview.timegoodsid;
-						mdishes.goodsdetail = 'miaosha';
+						mdishes.goodsdetail = item.tgview.timegoodsdetail;
 						mdishes.goodscompany = item.tgview.timegoodscompany;
 						mdishes.companyshop = item.tgview.companyshop;
 						mdishes.companydetail = item.tgview.companydetail;
@@ -227,7 +227,7 @@ function regoumai(){
 								//新增订单
 								var mdishes = new Object();
 								mdishes.goodsid = item.tgview.timegoodsid;
-								mdishes.goodsdetail = 'miaosha';
+								mdishes.goodsdetail = item.tgview.timegoodsdetail;
 								mdishes.goodscompany = item.tgview.timegoodscompany;
 								mdishes.companyshop = item.tgview.companyshop;
 								mdishes.companydetail = item.tgview.companydetail;
