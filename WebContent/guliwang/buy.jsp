@@ -8,10 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- 禁止微信内置浏览器缓存 -->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
+
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
@@ -163,6 +160,7 @@ function sortingData(){
 			var respText = eval('('+resp+')');
 			if(respText.msg != '您购买的：'){
 				alert('操作失败！');
+				$("#buyall").attr('onclick','sortingData();');
 				return;
 			}
 			if(respText.msg == '您购买的：'){
@@ -216,16 +214,15 @@ function sortingData(){
 }
 //将购物车写入订单表
 function buy(){
-	$("#buyall").attr('onclick','');											//禁用按钮
+	//alert("拼接数据");
+	//$("#buyall").attr('onclick','');											//禁用按钮
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
-	var flag = 0;
+	
 	$.each(scompany, function(y, mcompany) {
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney
-				+ '","ordermcuslevel":"' + customer.customerlevel
-				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
@@ -233,26 +230,26 @@ function buy(){
 				+ '","ordermway":"货到付款"}]';
 		var orderdetjson = '[';
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
+		
 		$.each(sdishes, function(i, item) {
+			
 			var orderdnote = '';
 			if(item.orderdtype == '秒杀'){
-				if(item.orderdetnum > item.surplusnum){
-					$(".meg").text("您购买的秒杀商品剩余数量不足.......");
-					$(".cd-popup-ok").attr("onclick","javascript:window.location.href = 'cart.jsp'");
-					$('.cd-popup').addClass('is-visible');			//弹窗
-					flag++;
-					return false;
+				
+				if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
+					orderdnote = '秒杀 '+item.goodsdetail;
 				} else {
-					if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
-						orderdnote = '秒杀:'+item.goodsdetail;
-					} else {
-						orderdnote = item.orderdtype;
-					}
+					orderdnote = item.orderdtype;
 				}
+				
+//alert("秒杀结束");
 			} else if(item.orderdtype == '买赠'){
-				orderdnote = '买赠:'+item.goodsdetail;
+				orderdnote = '买赠 '+item.goodsdetail;
+				//alert("买增结束");
 			}
-			if(mcompany.ordermcompany == item.goodscompany)
+			//alert(JSON.stringify(item));
+			if(mcompany.ordermcompany == item.goodscompany){
+				//alert("正常开始");
 				orderdetjson += '{"orderdid":"' + item.goodsid
 						+ '","orderdcode":"' + item.goodscode
 						+ '","orderdtype":"' + item.orderdtype
@@ -269,11 +266,13 @@ function buy(){
 						+ '","orderdbrand":"' + changeStr(item.goodsbrand)
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
+				//alert("正常结束");
+				}
 		});
-		if(flag > 0){
-			return false;
-		}
+		//alert("结束循环");
+		
 		orderdetjson = orderdetjson.substr(0, orderdetjson.length - 1) + ']';
+		//alert("拼接数据结束");
 		saveOrder(ordermjson,orderdetjson);
      });
 }

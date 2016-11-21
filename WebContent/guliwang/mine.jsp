@@ -137,6 +137,8 @@ function clearlocalstore(){
 	localStorage.removeItem("totalnum");
 	localStorage.removeItem("totalmoney");
 	localStorage.removeItem("cartnum");
+	localStorage.removeItem("customeremp");
+	localStorage.removeItem("scompany");
 	alert("清除缓存成功！");
 	window.location.href = "index.jsp";
 }
