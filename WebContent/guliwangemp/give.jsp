@@ -114,7 +114,7 @@ function initMiaoshaPage(resp){
 				if(cusOrder){
 					var giveGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '买赠' && item3.orderdcode == item1.givegoodscode && ){
+						if(item3.orderdtype == '买赠' && item3.orderdcode == item1.givegoodscode && item3.orderdunits == item1.givegoodsunits){
 							giveGoodsCount += item3.orderdclass;
 						}
 					});

@@ -224,6 +224,8 @@ function buy(){
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney
+				+ '","ordermcuslevel":"' + customer.customerlevel
+				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
