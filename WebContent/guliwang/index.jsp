@@ -193,6 +193,7 @@
 			});
 		}
 		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));			//将customer(客户信息放入缓存)
+		customer = JSON.parse(window.localStorage.getItem("customer"));
 		$(".citydrop").text(data.root[0].customerxian);
 	}
 	//跳转
