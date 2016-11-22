@@ -33,7 +33,7 @@
 <body>
 	<div class="gl-box">
 		<div class="home-search-wrapper">
-			<span class="citydrop">海盐县<!-- <em><img src="../images/dropbg.png"></em> --></span>
+			<span class="citydrop"><!-- <em><img src="../images/dropbg.png"></em> --></span>
 			<!-- <div class="menu">
 				<div class="host-city">
 					<p class="quyu">
@@ -84,7 +84,7 @@
 			
 	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
 	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <!-- <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a> -->
+	        <a onclick="doLuoJaGoods()"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
 	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
@@ -110,8 +110,6 @@
 	<script src="../js/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript">
 	var basePath = '<%=basePath%>';
-	//var xian = '';
-	//var city = '';
 	var customer = JSON.parse(window.localStorage.getItem("customer"));
 	$(function(){
 		//openid
@@ -125,11 +123,7 @@
 		if(!window.localStorage.getItem("openid")||"null"==window.localStorage.getItem("openid")){
 			getOpenid();
 			window.localStorage.setItem("openid",getParamValue("openid"));		//得到openid
-		}
-		/* else if(xian != '' && xian != null && city != '' && city != null){
-			
-			initIndexPage();
-		} */ else {
+		} else {
 			//得到页面数据
 			getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
 				wheresql : "openid='"+window.localStorage.getItem("openid")+"'"},initCustomer,null);		//得到openid
@@ -199,9 +193,7 @@
 			});
 		}
 		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));			//将customer(客户信息放入缓存)
-		//$(".fr").text('所在城市：'+data.root[0].customercity);
 		$(".citydrop").text(data.root[0].customerxian);
-		//initIndexPage();
 	}
 	//跳转
 	function dohrefJump(url){
@@ -210,13 +202,39 @@
 	//到裸价商品
 	function doLuoJaGoods(){
 		window.localStorage.setItem("goodsclassname","裸价商品");
-		window.localStorage.setItem("goodsclassparent","G14630381061319232");
-		window.location.href = "goodsclass.jsp";
+		$.ajax({
+			url:"GLGoodsclassAction.do?method=mselAll",
+			type:"post",
+			data:{
+				wheresql:"goodsclassname='裸价专区'",
+				cusid:customer.customerid
+			},
+			success : function(data){
+				window.localStorage.setItem("goodsclassparent",data.root[0].goodsclassid);
+				window.location.href = "goodsclass.jsp";
+			},
+			error : function(resp){
+				
+			}
+		});
 	}
 	//到品牌专区
 	function dopinpaizhuanqu(){
-		window.localStorage.setItem("goodsclassparent",'G14630381061319233');
-		dohrefJump('goodsclass.jsp');
+		$.ajax({
+			url:"GLGoodsclassAction.do?method=mselAll",
+			type:"post",
+			data:{
+				wheresql:"goodsclassname='品牌专区'",
+				cusid:customer.customerid
+			},
+			success : function(data){
+				window.localStorage.setItem("goodsclassparent",data.root[0].goodsclassid);
+				window.location.href = "goodsclass.jsp";
+			},
+			error : function(resp){
+				window.location.href = "goodsclass.jsp";
+			}
+		});
 	}
 		
 		//提交搜索条件

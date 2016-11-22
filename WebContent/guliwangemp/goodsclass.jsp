@@ -112,8 +112,9 @@ function entersearch(){
 //商品大小类
 function initGoodsclass(data){																								//初始化商品大小类
 	 $("#fenlei-left").html("");
+	 var defGCP = window.localStorage.getItem("goodsclassparent");
 	 $.each(data.root, function(i, item) {				//遍历 data 中的 root 
-		if(item.goodsclassid==window.localStorage.getItem("goodsclassparent")){
+		if(item.goodsclassid==defGCP){
 			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
 		}else{

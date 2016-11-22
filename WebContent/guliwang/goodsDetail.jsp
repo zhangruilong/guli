@@ -16,6 +16,7 @@
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="../css/swipe.css" type="text/css" />
 <style type="text/css">
 .gdw_t_li3_pri{color: #F86B4F;font-size: 24px;float: left;margin-top: 26px;}
 #gdw_t_li3{height: 51px;overflow: visible;}
@@ -37,7 +38,17 @@
 <body>
 <div class="goods-detail-wrapper">
 	<ul>
-    	<li class="gd-gimg-li"><span><img id="goods_det_img1" alt="" src=""></span></li>
+    	<li class="gd-gimg-li">
+    	<div class="addWrap">
+		  <div class="swipe" id="mySwipe">
+		    <div class="swipe-wrap" id="gd-lunbo-box">
+		    </div>
+		  </div>
+		  <ul id="position">
+		  </ul>
+		</div>
+    	
+    	</li>
         <li id="gdw_t_li2">
         	<!-- <span id="goods_ti"></span>
         	<span class="gdw_tli2span_collect"></span> -->
@@ -69,16 +80,40 @@
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/base.js"></script>
+<script src="../js/swipe.js"></script> 
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 var type = '${param.type}';
 var dataStr = getQueryString('goods');
+function lunbotu(){
+	var bullets = document.getElementById('position').getElementsByTagName('li');
+	var banner = Swipe(document.getElementById('mySwipe'), {
+		auto: 2000,
+		continuous: true,
+		disableScroll:false,
+		callback: function(pos) {
+			var i = bullets.length;
+			while (i--) {
+			  bullets[i].className = ' ';
+			}
+			bullets[pos].className = 'cur';
+		}
+	});
+}
 $(function(){
 	var data = JSON.parse(dataStr);
 	if(type == '商品'){
 		comImage(data.goodscompany);									//广告图
-		$("#goods_det_img1").attr("src",'../'+data.goodsimage);
+		var imgArr = data.goodsimage.split(',');
+		$.each(imgArr,function(i,item){
+			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
+			if(i==0){
+				$('#position').append('<li class="cur"></li>');
+			} else {
+				$('#position').append('<li class=""></li>');
+			}
+		});
 	    $("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.goodsname+'（'+data.goodsunits+'）</span>');
 		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.pricesprice+'/'+data.pricesunit+'</span>');
 		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.goodsid+'">'+
@@ -212,6 +247,7 @@ $(function(){
 	}
 	if(window.localStorage.getItem("totalnum")==0)
 		$("#totalnum").hide();
+	lunbotu();									//轮播图
 });
 //经销商图片
 function comImage(comid){
@@ -625,6 +661,7 @@ function checkedgoods(goodsid){
 		}
 	});
 }
+
 </script>
 </body>
 </html>

@@ -83,7 +83,7 @@
 			
 	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
 	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <!-- <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a> -->
+	        <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
 	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
@@ -113,33 +113,6 @@ var basePath = '<%=basePath%>';
 //var city = '';
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
-	//首页图片
-	/* $.ajax({
-		url:"GLSystem_attachAction.do?method=shouyeImg",
-		type:"post",
-		data:{
-			customerid:customer.customerid
-		},
-		success : function(resp){
-			var data = eval('('+resp+')');
-			var href = "javascript:;";
-			$.each(data.root,function(i,item){
-				if(typeof(item.detail)!= 'undefined'){
-					href = '../'+item.detail;
-				}
-				if(i<data.root.length-1){
-					$('#position').append('<li class=""></li>');
-				}
-				$('.swipe-wrap').append('<div><a href="'+href+'"><img class="img-responsive" src="../'+item.name+'"/></a></div>');
-			});
-			lunbotu();
-		},
-		error : function(resp){
-			var data = eval('('+resp+')');
-			alert(data.msg);
-		}
-	}); */
-	//$(".fr").text('所在城市：'+customer.customercity);
 	$(".citydrop").text(customer.customerxian);
 		
 	if(!window.localStorage.getItem("totalnum")){
@@ -163,13 +136,39 @@ function dohrefJump(url){
 //到裸价商品
 function doLuoJaGoods(){
 	window.localStorage.setItem("goodsclassname","裸价商品");
-	window.localStorage.setItem("goodsclassparent","G14630381061319232");
-	window.location.href = "goodsclass.jsp";
+	$.ajax({
+		url:"GLGoodsclassAction.do?method=mselAll",
+		type:"post",
+		data:{
+			wheresql:"goodsclassname='裸价专区'",
+			cusid:customer.customerid
+		},
+		success : function(data){
+			window.localStorage.setItem("goodsclassparent",data.root[0].goodsclassid);
+			window.location.href = "goodsclass.jsp";
+		},
+		error : function(resp){
+			
+		}
+	});
 }
 //到品牌专区
 function dopinpaizhuanqu(){
-	window.localStorage.setItem("goodsclassparent",'G14630381061319233');
-	dohrefJump('goodsclass.jsp');
+	$.ajax({
+		url:"GLGoodsclassAction.do?method=mselAll",
+		type:"post",
+		data:{
+			wheresql:"goodsclassname='品牌专区'",
+			cusid:customer.customerid
+		},
+		success : function(data){
+			window.localStorage.setItem("goodsclassparent",data.root[0].goodsclassid);
+			window.location.href = "goodsclass.jsp";
+		},
+		error : function(resp){
+			window.location.href = "goodsclass.jsp";
+		}
+	});
 }
 	
 //提交搜索条件
@@ -214,22 +213,6 @@ function getJson(url, param, sCallback, fCallBack) {
 		alert(ex);
 	}
 }
-//轮播图
-/* function lunbotu(){
-	var bullets = document.getElementById('position').getElementsByTagName('li');
-	var banner = Swipe(document.getElementById('mySwipe'), {
-		auto: 2000,
-		continuous: true,
-		disableScroll:false,
-		callback: function(pos) {
-			var i = bullets.length;
-			while (i--) {
-			  bullets[i].className = ' ';
-			}
-			bullets[pos].className = 'cur';
-		}
-	});
-} */
 </script>
 <script src="../js/swipe.js"></script> 
 </body>
