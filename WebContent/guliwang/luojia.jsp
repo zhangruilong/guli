@@ -34,10 +34,6 @@
         </ul>
     </div>
 </div>
-    <div class="goods-wrapper">
-        <ul class="home-hot-commodity">
-        </ul>
-    </div>
 </div>
 <div class="personal-center-nav">
     	<ul>

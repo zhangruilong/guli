@@ -44,7 +44,7 @@ function Swipe(container, options) {
 
     // 确定每个幻灯片的宽度
     width = container.getBoundingClientRect().width || container.offsetWidth;
-
+    
     element.style.width = (slides.length * width) + 'px';
 
     // 栈元素

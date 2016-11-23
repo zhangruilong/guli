@@ -106,7 +106,7 @@ $(function(){
 	if(type == '商品'){
 		comImage(data.goodscompany);									//广告图
 		var imgArr = data.goodsimage.split(',');
-		$.each(imgArr,function(i,item){
+		$.each(imgArr,function(i,item){									//商品图
 			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
 			if(i==0){
 				$('#position').append('<li class="cur"></li>');
@@ -133,6 +133,15 @@ $(function(){
 		$("#gdw_t_li2").append(' <span class="gdw_t_li3_cc"><input type="checkbox" id="'+data.goodsid+'checkbox" class="chk_1" '+data.goodsdetail+'>'+
 	     		'<label for="'+data.goodsid+'checkbox" onclick="checkedgoods(\''+data.goodsid+'\');"></label></span>');
 	} else if (type == '秒杀'){
+		var imgArr = data.timegoodsimage.split(',');
+		$.each(imgArr,function(i,item){									//商品图
+			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
+			if(i==0){
+				$('#position').append('<li class="cur"></li>');
+			} else {
+				$('#position').append('<li class=""></li>');
+			}
+		});
 		$.ajax({
 			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
@@ -162,6 +171,7 @@ $(function(){
 						   +'\')"></span>'+
 						   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
 			        	'</div>');
+				
 			},
 			error : function(resp2){
 				var respText2 = eval('('+resp2+')');
@@ -169,15 +179,26 @@ $(function(){
 			}
 		});
 		comImage(data.timegoodscompany);									//广告图
-		$("#goods_det_img1").attr("src",'../'+data.timegoodsimage);
 		$(".gd-lower-liebiao span:eq(0)").text(data.timegoodsunits);
+		$(".gd-lower-liebiao span:eq(1)").text(changeStr(data.timegoodsbrand));
 		$(".gd-lower-liebiao span:eq(2)").text(data.timegoodsclass);
+		
 	} else if(type == '买赠'){
+		var imgArr = data.givegoodsimage.split(',');
+		$.each(imgArr,function(i,item){									//商品图
+			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
+			if(i==0){
+				$('#position').append('<li class="cur"></li>');
+			} else {
+				$('#position').append('<li class=""></li>');
+			}
+		});
 		$.ajax({
 			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
 			data:{customerid:customer.customerid},
 			success : function(data2){
+				
 				var cusOrder = JSON.parse(data2);
 				var dailySur = parseInt(data.givegoodsnum);
 				if(cusOrder){
@@ -208,11 +229,20 @@ $(function(){
 				alert(respText2.msg);
 			}
 		});
-		$("#goods_det_img1").attr("src",'../'+data.givegoodsimage);
 		comImage(data.givegoodscompany);									//广告图
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
+		$(".gd-lower-liebiao span:eq(1)").text(changeStr(data.givegoodsbrand));
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
 	} else if(type == '预定'){
+		var imgArr = data.bkgoodsimage.split(',');
+		$.each(imgArr,function(i,item){									//商品图
+			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
+			if(i==0){
+				$('#position').append('<li class="cur"></li>');
+			} else {
+				$('#position').append('<li class=""></li>');
+			}
+		});
 		$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.bkgoodsname+'（'+data.bkgoodsunits+'）<br><span style="color: #666;">'+data.bkgoodsdetail+'</span></span>');
 		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsorgprice+'/'+data.bkgoodsunit+'</span>');
 		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.bkgoodsid+'">'+
@@ -227,7 +257,6 @@ $(function(){
 				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
 	        	'</div>');
 		comImage(data.bkgoodscompany);									//广告图
-		$("#goods_det_img1").attr("src",'../'+data.bkgoodsimage);
 		$(".gd-lower-liebiao span:eq(0)").text(data.bkgoodsunits);
 		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodsclass);
 	}
@@ -293,7 +322,7 @@ function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode
 			return;
 		} else { */
 			if(!window.localStorage.getItem("totalmoney")){
-				window.localStorage.setItem("totalmoney","0")
+				window.localStorage.setItem("totalmoney","0");
 			}
 			//总价
 			var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));		//总价
