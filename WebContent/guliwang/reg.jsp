@@ -190,7 +190,7 @@ $("#xianList").css("top",xianListTop + "px");
 				'"customercity":"'+$("#customercity").val()+'",'+
 				'"customerphone":"'+$("#customerphone").val()+'",'+
 				'"customerxian":"'+$("#customerxian").val()+'",'+
-				'"customershop":"'+$("#customershop").val()+'",'+
+				'"customershop":"'+$.trim($("#customershop").val())+'",'+
 				'"customername":"'+$("#customername").val()+'",'+
 				'"customeraddress":"'+$("#customeraddress").val()+'"'+
 				'}]'

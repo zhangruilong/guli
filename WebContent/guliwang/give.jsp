@@ -101,8 +101,9 @@ function initMiaoshaPage(resp){
 			$.each(data.root,function(i,item1){
 				var dailySur = parseInt(item1.givegoodsnum);
 				var jsonitem = JSON.stringify(item1);
+				var givegoodsimages = item1.givegoodsimage.split(',');
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="fl"> <img src="../'
-					+item1.givegoodsimage+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
+					+givegoodsimages[0]+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
 					'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');">'+item1.givegoodsname+
 						'<span>（'+item1.givegoodsunits+'）</span>'+
 					'</h1><div class="block"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
@@ -195,7 +196,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				mdishes.goodsimage = item.givegoodsimage;
+				var givegoodsimages = item.givegoodsimage.split(',');
+				mdishes.goodsimage = givegoodsimages[0];
 				mdishes.orderdtype = '买赠';
 				mdishes.timegoodsnum = item.givegoodsnum;
 				mdishes.goodsweight = item.givegoodsweight;

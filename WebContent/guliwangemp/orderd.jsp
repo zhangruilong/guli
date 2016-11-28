@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
@@ -87,7 +88,8 @@ function regoumai(){
 						mdishes.pricesprice = item.goodsview.pricesprice;
 						mdishes.pricesunit = item.goodsview.pricesunit;
 						mdishes.goodsname = item.goodsview.goodsname;
-						mdishes.goodsimage = item.goodsview.goodsimage;
+						var goodsimages = item.goodsview.goodsimage.split(',');
+						mdishes.goodsimage = goodsimages[0];
 						mdishes.orderdtype = '商品';
 						mdishes.goodsunits = item.goodsview.goodsunits;
 						mdishes.orderdetnum = item.nowGoodsNum;
@@ -106,7 +108,8 @@ function regoumai(){
 						mdishes.pricesprice = item.tgview.timegoodsorgprice;
 						mdishes.pricesunit = item.tgview.timegoodsunit;
 						mdishes.goodsname = item.tgview.timegoodsname;
-						mdishes.goodsimage = item.tgview.timegoodsimage;
+						var timegoodsimages = item.tgview.timegoodsimage.split(',');
+						mdishes.goodsimage = timegoodsimages[0];
 						mdishes.orderdtype = item.type;
 						mdishes.goodsunits = item.tgview.timegoodsunits;
 						mdishes.orderdetnum = item.nowGoodsNum;
@@ -127,7 +130,8 @@ function regoumai(){
 						mdishes.pricesprice = item.ggview.givegoodsprice;
 						mdishes.pricesunit = item.ggview.givegoodsunit;
 						mdishes.goodsname = item.ggview.givegoodsname;
-						mdishes.goodsimage = item.ggview.givegoodsimage;
+						var givegoodsimages = item.ggview.givegoodsimage.split(',');
+						mdishes.goodsimage = givegoodsimages[0];
 						mdishes.orderdtype = item.type;
 						mdishes.goodsunits = item.ggview.givegoodsunits;
 						mdishes.orderdetnum = item.nowGoodsNum;
@@ -192,7 +196,8 @@ function regoumai(){
 								mdishes.pricesprice = item.goodsview.pricesprice;
 								mdishes.pricesunit = item.goodsview.pricesunit;
 								mdishes.goodsname = item.goodsview.goodsname;
-								mdishes.goodsimage = item.goodsview.goodsimage;
+								var goodsimages = item.goodsview.goodsimage.split(',');
+								mdishes.goodsimage = goodsimages[0];
 								mdishes.orderdtype = '商品';
 								mdishes.goodsunits = item.goodsview.goodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;
@@ -232,7 +237,8 @@ function regoumai(){
 								mdishes.pricesprice = item.tgview.timegoodsorgprice;
 								mdishes.pricesunit = item.tgview.timegoodsunit;
 								mdishes.goodsname = item.tgview.timegoodsname;
-								mdishes.goodsimage = item.tgview.timegoodsimage;
+								var timegoodsimages = item.tgview.timegoodsimage.split(',');
+								mdishes.goodsimage = timegoodsimages[0];
 								mdishes.orderdtype = item.type;
 								mdishes.goodsunits = item.tgview.timegoodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;
@@ -275,7 +281,8 @@ function regoumai(){
 								mdishes.pricesprice = item.ggview.givegoodsprice;
 								mdishes.pricesunit = item.ggview.givegoodsunit;
 								mdishes.goodsname = item.ggview.givegoodsname;
-								mdishes.goodsimage = item.ggview.givegoodsimage;
+								var givegoodsimages = item.ggview.givegoodsimage.split(',');
+								mdishes.goodsimage = givegoodsimages[0];
 								mdishes.orderdtype = item.type;
 								mdishes.goodsunits = item.ggview.givegoodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;

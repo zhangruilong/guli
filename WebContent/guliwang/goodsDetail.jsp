@@ -428,7 +428,8 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				mdishes.goodsimage = item.timegoodsimage;
+				var timegoodsimages = item.timegoodsimage.split(',');
+				mdishes.goodsimage = timegoodsimages[0];
 				mdishes.orderdtype = '秒杀';
 				mdishes.timegoodsnum = item.timegoodsnum;
 				mdishes.goodsweight = item.timegoodsweight;
@@ -503,7 +504,8 @@ function addgivegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				mdishes.goodsimage = item.givegoodsimage;
+				var givegoodsimages = item.givegoodsimage.split(',');
+				mdishes.goodsimage = givegoodsimages[0];
 				mdishes.orderdtype = '买赠';
 				mdishes.timegoodsnum = item.givegoodsnum;
 				mdishes.goodsweight = item.givegoodsweight;
@@ -562,7 +564,8 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		mdishes.goodsname = goodsname;
 		mdishes.goodsunits = goodsunits;
 		mdishes.orderdetnum = num + 1;
-		mdishes.goodsimage = item.goodsimage;
+		var goodsimages = item.goodsimage.split(',');
+		mdishes.goodsimage = goodsimages[0];
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
 		mdishes.goodsbrand = item.goodsbrand;

@@ -75,10 +75,11 @@ $(function(){
 			if(typeof(data) != 'undefined' && data.length > 0){
 				$.each(data,function(i,item){
 					var jsonitem = JSON.stringify(item);
+					var goodsimages = item.goodsimage.split(',');
 					$(".shoucang-wrap ul").append(
 						'<li name="'+item.goodsid+'"><span hidden="true">'+jsonitem+'</span>'+
 						'<a name="'+item.goodsid+'" ><span class="fl">'+
-						'<img src="../'+item.goodsimage+'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
+						'<img src="../'+goodsimages[0]+'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 							'<h1>'+item.goodsname+'<span>（'+item.goodsunits+'）</span>'+
 								'</h1>'+
 								'<p class="clct-GP-img">'+
@@ -143,7 +144,8 @@ $(function(){
 					mdishes.pricesprice = item.pricesprice;
 					mdishes.pricesunit = item.pricesunit;
 					mdishes.goodsname = item.goodsname;
-					mdishes.goodsimage = item.goodsimage;
+					var goodsimages = item.goodsimage.split(',');
+					mdishes.goodsimage = goodsimages[0];
 					mdishes.orderdtype = '商品';
 					mdishes.timegoodsnum = item.goodsnum;
 					mdishes.goodsunits = item.goodsunits;
@@ -181,7 +183,8 @@ $(function(){
 							mdishes.pricesprice = item.pricesprice;
 							mdishes.pricesunit = item.pricesunit;
 							mdishes.goodsname = item.goodsname;
-							mdishes.goodsimage = item.goodsimage;
+							var goodsimages = item.goodsimage.split(',');
+							mdishes.goodsimage = goodsimages[0];
 							mdishes.orderdtype = '商品';
 							mdishes.timegoodsnum = item.goodsnum;
 							mdishes.goodsunits = item.goodsunits;

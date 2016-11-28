@@ -161,10 +161,10 @@ function initDishes(data){
      $(".home-hot-commodity").html("");
  	 $.each(data.root, function(i, item) {
  		var jsonitem = JSON.stringify(item);
- 		//var goods = jsonitem.replace(/\"/g,'\\"');
- 		//alert(item.goodsweight);
+ 		var goodsimages = item.goodsimage.split(',');
+ 		
  		$(".home-hot-commodity").append('<li>'+
- 	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+item.goodsimage+
+ 	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+goodsimages[0]+
  	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
  	         	'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');">'+item.goodsname+'<span>('+item.goodsunits+')</span></h1>'+
  	           '  <div class="block"> '+
@@ -269,7 +269,8 @@ function setGoodsNum(obj,num){
 		mdishes.goodsname = item.goodsname;
 		mdishes.goodsunits = item.goodsunits;
 		mdishes.orderdetnum = num;
-		mdishes.goodsimage = item.goodsimage;
+		var goodsimage = item.goodsimage.split(',');
+		mdishes.goodsimage = goodsimage[0];
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
 		mdishes.goodsbrand = item.goodsbrand;
@@ -312,7 +313,8 @@ function setGoodsNum(obj,num){
 				mdishes.goodsname = item.goodsname;
 				mdishes.goodsunits = item.goodsunits;
 				mdishes.orderdetnum = num;
-				mdishes.goodsimage = item.goodsimage;
+				var goodsimage = item.goodsimage.split(',');
+				mdishes.goodsimage = goodsimage[0];
 				mdishes.orderdtype = '商品';
 				mdishes.goodsweight = item.goodsweight;
 				mdishes.goodsbrand = item.goodsbrand;
@@ -445,7 +447,8 @@ function addnum(obj){
 		mdishes.goodsname = item.goodsname;
 		mdishes.goodsunits = item.goodsunits;
 		mdishes.orderdetnum = num + 1;
-		mdishes.goodsimage = item.goodsimage;
+		var goodsimage = item.goodsimage.split(',');
+		mdishes.goodsimage = goodsimage[0];
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
 		mdishes.goodsbrand = item.goodsbrand;
