@@ -223,6 +223,8 @@ function buy(){
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
 				+ '","ordermmoney":"' + mcompany.ordermmoney
+				+ '","ordermcustype":"' + customer.customertype
+				+ '","ordermcuslevel":"' + customer.customerlevel
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
