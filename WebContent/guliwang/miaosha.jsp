@@ -45,7 +45,6 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 var timegoodscode = '${param.timegoodscode}';
-var goodsimage = [];
 $(function(){ 
 	//购物车图标上的数量
 	if(!window.localStorage.getItem("cartnum")){
@@ -143,7 +142,7 @@ function initMiaoshaPage(resp){
 				liObj += '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
 				' <em>￥'+item2.timegoodsprice+'</em></div>'+
 					'<div class="miaosha_stock-num" name="'+item2.timegoodsid+'">'+
-		            '<span class="jian min"  onclick="subnum(this,'+item2.timegoodsorgprice+')"></span>'+
+		            '<span class="jian min"  onclick="subnum(this,\''+item2.timegoodsorgprice+'\',\''+item2.timegoodsclass+'\')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 		             getcurrennumdanpin(item2.timegoodsid)+'"> '+
 		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item2.timegoodsorgprice
@@ -256,7 +255,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		}
 }
 //减号
-function subnum(obj,pricesprice){
+function subnum(obj,pricesprice,goodsclassname){
 	var numt = $(obj).next(); 
 	var num = parseInt(numt.val());
 	if(num > 0){
@@ -286,7 +285,7 @@ function subnum(obj,pricesprice){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item3.goodsclassname==goodsclassname){
+						&&item.goodsclassname==goodsclassname){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}

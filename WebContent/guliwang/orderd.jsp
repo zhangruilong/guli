@@ -396,7 +396,7 @@ function initOrderm(data){
      $(".pdl-b8").html("");
  	 $.each(data.root, function(i, item) {
  		$(".order-detail-info").append('<p name="'+item.companyphone+'">'+item.companyshop+'</p>'+
- 				'<p>联系电话：'+item.companyphone+'</p>'+
+ 				'<p>联系电话：<a href="tel:'+item.companyphone+'">'+item.companyphone+'</a></p>'+
  				'<p>'+item.companydetail+'</p>');
  		var odmmsg = '<p>收货人：'+item.ordermconnect+item.ordermphone+'</p>'+
 			'<p>收货地址：'+item.ordermaddress+'</p>'+
