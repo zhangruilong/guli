@@ -88,7 +88,12 @@ function regoumai(){
 						mdishes.pricesprice = item.goodsview.pricesprice;
 						mdishes.pricesunit = item.goodsview.pricesunit;
 						mdishes.goodsname = item.goodsview.goodsname;
-						var goodsimages = item.goodsview.goodsimage.split(',');
+						var goodsimages = [];
+				 		if(typeof(item.goodsview.goodsimage)!='undefined'){
+				 			goodsimages = item.goodsview.goodsimage.split(',');
+				 		} else {
+				 			goodsimages[0] = 'images/default.jpg';
+				 		}
 						mdishes.goodsimage = goodsimages[0];
 						mdishes.orderdtype = '商品';
 						mdishes.goodsunits = item.goodsview.goodsunits;
@@ -108,7 +113,12 @@ function regoumai(){
 						mdishes.pricesprice = item.tgview.timegoodsorgprice;
 						mdishes.pricesunit = item.tgview.timegoodsunit;
 						mdishes.goodsname = item.tgview.timegoodsname;
-						var timegoodsimages = item.tgview.timegoodsimage.split(',');
+						var timegoodsimages = [];
+				 		if(typeof(item.tgview.timegoodsimage)!='undefined'){
+				 			timegoodsimages = item.tgview.timegoodsimage.split(',');
+				 		} else {
+				 			timegoodsimages[0] = 'images/default.jpg';
+				 		}
 						mdishes.goodsimage = timegoodsimages[0];
 						mdishes.orderdtype = item.type;
 						mdishes.goodsunits = item.tgview.timegoodsunits;
@@ -130,7 +140,12 @@ function regoumai(){
 						mdishes.pricesprice = item.ggview.givegoodsprice;
 						mdishes.pricesunit = item.ggview.givegoodsunit;
 						mdishes.goodsname = item.ggview.givegoodsname;
-						var givegoodsimages = item.ggview.givegoodsimage.split(',');
+						var givegoodsimages = [];
+						if(typeof(item.ggview.givegoodsimage)!='undefined'){
+							givegoodsimages = item.ggview.givegoodsimage.split(',');
+				 		} else {
+				 			givegoodsimages[0] = 'images/default.jpg';
+				 		}
 						mdishes.goodsimage = givegoodsimages[0];
 						mdishes.orderdtype = item.type;
 						mdishes.goodsunits = item.ggview.givegoodsunits;
@@ -196,7 +211,12 @@ function regoumai(){
 								mdishes.pricesprice = item.goodsview.pricesprice;
 								mdishes.pricesunit = item.goodsview.pricesunit;
 								mdishes.goodsname = item.goodsview.goodsname;
-								var goodsimages = item.goodsview.goodsimage.split(',');
+								var goodsimages = [];
+						 		if(typeof(item.goodsview.goodsimage)!='undefined'){
+						 			goodsimages = item.goodsview.goodsimage.split(',');
+						 		} else {
+						 			goodsimages[0] = 'images/default.jpg';
+						 		}
 								mdishes.goodsimage = goodsimages[0];
 								mdishes.orderdtype = '商品';
 								mdishes.goodsunits = item.goodsview.goodsunits;
@@ -237,7 +257,12 @@ function regoumai(){
 								mdishes.pricesprice = item.tgview.timegoodsorgprice;
 								mdishes.pricesunit = item.tgview.timegoodsunit;
 								mdishes.goodsname = item.tgview.timegoodsname;
-								var timegoodsimages = item.tgview.timegoodsimage.split(',');
+								var timegoodsimages = [];
+								if(typeof(item.tgview.timegoodsimage)!='undefined'){
+						 			timegoodsimages = item.tgview.timegoodsimage.split(',');
+						 		} else {
+						 			timegoodsimages[0] = 'images/default.jpg';
+						 		}
 								mdishes.goodsimage = timegoodsimages[0];
 								mdishes.orderdtype = item.type;
 								mdishes.goodsunits = item.tgview.timegoodsunits;
@@ -281,7 +306,12 @@ function regoumai(){
 								mdishes.pricesprice = item.ggview.givegoodsprice;
 								mdishes.pricesunit = item.ggview.givegoodsunit;
 								mdishes.goodsname = item.ggview.givegoodsname;
-								var givegoodsimages = item.ggview.givegoodsimage.split(',');
+								var givegoodsimages = [];
+								if(typeof(item.ggview.givegoodsimage)!='undefined'){
+									givegoodsimages = item.ggview.givegoodsimage.split(',');
+						 		} else {
+						 			givegoodsimages[0] = 'images/default.jpg';
+						 		}
 								mdishes.goodsimage = givegoodsimages[0];
 								mdishes.orderdtype = item.type;
 								mdishes.goodsunits = item.ggview.givegoodsunits;

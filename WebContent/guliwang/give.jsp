@@ -101,7 +101,12 @@ function initMiaoshaPage(resp){
 			$.each(data.root,function(i,item1){
 				var dailySur = parseInt(item1.givegoodsnum);
 				var jsonitem = JSON.stringify(item1);
-				var givegoodsimages = item1.givegoodsimage.split(',');
+				var givegoodsimages = [];
+				if(typeof(item1.givegoodsimage)!='undefined'){
+					givegoodsimages = item1.givegoodsimage.split(',');
+		 		} else {
+		 			givegoodsimages[0] = 'images/default.jpg';
+		 		}
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="fl"> <img src="../'
 					+givegoodsimages[0]+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
 					'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');">'+item1.givegoodsname+
@@ -196,7 +201,13 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				var givegoodsimages = item.givegoodsimage.split(',');
+				
+				var givegoodsimages = [];
+				if(typeof(item.givegoodsimage)!='undefined'){
+					givegoodsimages = item.givegoodsimage.split(',');
+		 		} else {
+		 			givegoodsimages[0] = 'images/default.jpg';
+		 		}
 				mdishes.goodsimage = givegoodsimages[0];
 				mdishes.orderdtype = '买赠';
 				mdishes.timegoodsnum = item.givegoodsnum;

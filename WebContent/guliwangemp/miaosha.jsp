@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
@@ -96,6 +97,7 @@ function initMiaoshaPage(resp){
 		data:{customerid:customer.customerid,
 			wheresql: "surplusnum>'0'"},
 		success : function(data2){
+			
 			var cusOrder = JSON.parse(data2);
 			$(".home-hot-commodity").html("");
 			if(typeof(data.root) == 'undefined' ||　!data.root){
@@ -104,7 +106,12 @@ function initMiaoshaPage(resp){
 			$.each(data.root,function(j,item2){
 				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.timegoodsnum);
-				var timegoodsimages = item2.timegoodsimage.split(',');
+				var timegoodsimages = [];
+				if(typeof(item2.timegoodsimage)!='undefined'){
+					timegoodsimages = item2.timegoodsimage.split(',');
+		 		} else {
+		 			timegoodsimages[0] = 'images/default.jpg';
+		 		}
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+timegoodsimages[0]+
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
@@ -214,7 +221,12 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				var timegoodsimages = item.timegoodsimage.split(',');
+				var timegoodsimages = [];
+				if(typeof(item.timegoodsimage)!='undefined'){
+					timegoodsimages = item.timegoodsimage.split(',');
+		 		} else {
+		 			timegoodsimages[0] = 'images/default.jpg';
+		 		}
 				mdishes.goodsimage = timegoodsimages[0];
 				mdishes.orderdtype = '秒杀';
 				mdishes.surplusnum = surplusnum;

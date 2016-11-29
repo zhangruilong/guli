@@ -161,7 +161,12 @@ function initDishes(data){
      $(".home-hot-commodity").html("");
  	 $.each(data.root, function(i, item) {
  		var jsonitem = JSON.stringify(item);
- 		var goodsimages = item.goodsimage.split(',');
+ 		var goodsimages = [];
+ 		if(typeof(item.goodsimage)!='undefined'){
+ 			goodsimages = item.goodsimage.split(',');
+ 		} else {
+ 			goodsimages[0] = 'images/default.jpg';
+ 		}
  		
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+goodsimages[0]+
@@ -269,8 +274,13 @@ function setGoodsNum(obj,num){
 		mdishes.goodsname = item.goodsname;
 		mdishes.goodsunits = item.goodsunits;
 		mdishes.orderdetnum = num;
-		var goodsimage = item.goodsimage.split(',');
-		mdishes.goodsimage = goodsimage[0];
+		var goodsimages = [];
+		if(typeof(item.goodsimage)!='undefined'){
+ 			goodsimages = item.goodsimage.split(',');
+ 		} else {
+ 			goodsimages[0] = 'images/default.jpg';
+ 		}
+		mdishes.goodsimage = goodsimages[0];
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
 		mdishes.goodsbrand = item.goodsbrand;
@@ -313,8 +323,14 @@ function setGoodsNum(obj,num){
 				mdishes.goodsname = item.goodsname;
 				mdishes.goodsunits = item.goodsunits;
 				mdishes.orderdetnum = num;
-				var goodsimage = item.goodsimage.split(',');
-				mdishes.goodsimage = goodsimage[0];
+				
+				var goodsimages = [];
+				if(typeof(item.goodsimage)!='undefined'){
+		 			goodsimages = item.goodsimage.split(',');
+		 		} else {
+		 			goodsimages[0] = 'images/default.jpg';
+		 		}
+				mdishes.goodsimage = goodsimages[0];
 				mdishes.orderdtype = '商品';
 				mdishes.goodsweight = item.goodsweight;
 				mdishes.goodsbrand = item.goodsbrand;
@@ -447,8 +463,13 @@ function addnum(obj){
 		mdishes.goodsname = item.goodsname;
 		mdishes.goodsunits = item.goodsunits;
 		mdishes.orderdetnum = num + 1;
-		var goodsimage = item.goodsimage.split(',');
-		mdishes.goodsimage = goodsimage[0];
+		var goodsimages = [];
+		if(typeof(item.goodsimage)!='undefined'){
+ 			goodsimages = item.goodsimage.split(',');
+ 		} else {
+ 			goodsimages[0] = 'images/default.jpg';
+ 		}
+		mdishes.goodsimage = goodsimages[0];
 		mdishes.orderdtype = '商品';
 		mdishes.goodsweight = item.goodsweight;
 		mdishes.goodsbrand = item.goodsbrand;

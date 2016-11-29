@@ -75,7 +75,12 @@ $(function(){
 			if(typeof(data) != 'undefined' && data.length > 0){
 				$.each(data,function(i,item){
 					var jsonitem = JSON.stringify(item);
-					var goodsimages = item.goodsimage.split(',');
+					var goodsimages = [];
+			 		if(typeof(item.goodsimage)!='undefined'){
+			 			goodsimages = item.goodsimage.split(',');
+			 		} else {
+			 			goodsimages[0] = 'images/default.jpg';
+			 		}
 					$(".shoucang-wrap ul").append(
 						'<li name="'+item.goodsid+'"><span hidden="true">'+jsonitem+'</span>'+
 						'<a name="'+item.goodsid+'" ><span class="fl">'+
@@ -144,7 +149,12 @@ $(function(){
 					mdishes.pricesprice = item.pricesprice;
 					mdishes.pricesunit = item.pricesunit;
 					mdishes.goodsname = item.goodsname;
-					var goodsimages = item.goodsimage.split(',');
+					var goodsimages = [];
+			 		if(typeof(item.goodsimage)!='undefined'){
+			 			goodsimages = item.goodsimage.split(',');
+			 		} else {
+			 			goodsimages[0] = 'images/default.jpg';
+			 		}
 					mdishes.goodsimage = goodsimages[0];
 					mdishes.orderdtype = '商品';
 					mdishes.timegoodsnum = item.goodsnum;
@@ -183,7 +193,12 @@ $(function(){
 							mdishes.pricesprice = item.pricesprice;
 							mdishes.pricesunit = item.pricesunit;
 							mdishes.goodsname = item.goodsname;
-							var goodsimages = item.goodsimage.split(',');
+							var goodsimages = [];
+					 		if(typeof(item.goodsimage)!='undefined'){
+					 			goodsimages = item.goodsimage.split(',');
+					 		} else {
+					 			goodsimages[0] = 'images/default.jpg';
+					 		}
 							mdishes.goodsimage = goodsimages[0];
 							mdishes.orderdtype = '商品';
 							mdishes.timegoodsnum = item.goodsnum;

@@ -106,7 +106,12 @@ function initMiaoshaPage(resp){
 			$.each(data.root,function(j,item2){
 				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.timegoodsnum);
-				var timegoodsimages = item2.timegoodsimage.split(',');
+				var timegoodsimages = [];
+				if(typeof(item2.timegoodsimage)!='undefined'){
+					timegoodsimages = item2.timegoodsimage.split(',');
+		 		} else {
+		 			timegoodsimages[0] = 'images/default.jpg';
+		 		}
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+timegoodsimages[0]+
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
@@ -216,7 +221,12 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				var timegoodsimages = item.timegoodsimage.split(',');
+				var timegoodsimages = [];
+				if(typeof(item.timegoodsimage)!='undefined'){
+					timegoodsimages = item.timegoodsimage.split(',');
+		 		} else {
+		 			timegoodsimages[0] = 'images/default.jpg';
+		 		}
 				mdishes.goodsimage = timegoodsimages[0];
 				mdishes.orderdtype = '秒杀';
 				mdishes.surplusnum = surplusnum;
