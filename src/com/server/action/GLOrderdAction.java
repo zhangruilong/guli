@@ -66,14 +66,16 @@ public class GLOrderdAction extends OrderdAction {
 	public void queryREgoumaiGoods(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		String msg = "";
+		String customertype = request.getParameter("customertype");
+		String customerlevel = request.getParameter("customerlevel");
 		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
 		for (Orderd item : cuss) {
 			GoodsVo gvo = new GoodsVo();
 			if(item.getOrderdtype().equals("商品")){
 				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
 							   "' and gv.goodsunits = '"+item.getOrderdunits()+
-							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
-							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
+							   "' and gv.pricesclass = '"+customertype+
+							   "' and gv.priceslevel = "+customerlevel+
 							   " and gv.goodsstatue = '上架'");
 				if(gList.size() > 0){
 					gvo.setType(item.getOrderdtype());
@@ -86,7 +88,7 @@ public class GLOrderdAction extends OrderdAction {
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
-								"' and tv.timegoodsstatue = '启用'");
+								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '%"+customertype+"%'");
 				if(tgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setTgview(tgviewList.get(0));
@@ -98,7 +100,7 @@ public class GLOrderdAction extends OrderdAction {
 			} else if(item.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
 								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
-								"' and gv.givegoodsstatue = '启用'");
+								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '%"+customertype+"%'");
 				if(ggviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGgview(ggviewList.get(0));
@@ -293,7 +295,7 @@ public class GLOrderdAction extends OrderdAction {
 			SdishesVO svo = svoList.get(i);
 			Integer odNum = svo.getOrderdetnum();				//订单中购买的数量
 			//检查秒杀和买赠商品的每日限购
-			if(svo.getOrderdtype().equals("秒杀") || svo.getOrderdtype().equals("买赠")){
+			if((svo.getOrderdtype().equals("秒杀") || svo.getOrderdtype().equals("买赠")) && !svo.getTimegoodsnum().equals(-1)){
 				Integer daySur = svo.getTimegoodsnum() - odNum;
 				for (Orderd od : cuss) {
 					if(od.getOrderdtype().equals(svo.getOrderdtype()) && od.getOrderdcode().equals(svo.getGoodscode()) && od.getOrderdunits().equals(svo.getGoodsunits())){

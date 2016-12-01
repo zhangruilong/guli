@@ -149,7 +149,7 @@ $(function(){
 			success : function(data2){
 				var cusOrder = JSON.parse(data2);
 				var dailySur = parseInt(data.timegoodsnum);
-				if(cusOrder){
+				if(cusOrder && cusOrder.root && cusOrder.root.length >0){
 					var itemGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
 						if(item3.orderdtype == '秒杀' && item3.orderdcode == data.timegoodscode && item3.orderdunits == data.timegoodsunits){
@@ -201,7 +201,7 @@ $(function(){
 				
 				var cusOrder = JSON.parse(data2);
 				var dailySur = parseInt(data.givegoodsnum);
-				if(cusOrder){
+				if(cusOrder && cusOrder.root && cusOrder.root.length >0){
 					var giveGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
 						if(item3.orderdtype == '买赠' && item3.orderdcode == data.givegoodscode && item3.orderdunits == data.givegoodsunits){
@@ -389,7 +389,7 @@ function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));
-		if((parseInt(cusMSOrderNum) - num) <= 0){
+		if((parseInt(cusMSOrderNum) - num) <= 0 && item.timegoodsnum != -1){
 			alert('您购买的商品超过了限购数量。');
 			return;
 		} else {
@@ -467,7 +467,7 @@ function addgivegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodsco
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
-		if((parseInt(cusMSOrderNum) - num) <= 0){
+		if((parseInt(cusMSOrderNum) - num) <= 0 && item.givegoodsnum != -1){
 			alert('您购买的商品超过了限购数量。');
 			return;
 		} else {

@@ -65,7 +65,7 @@ $(function(){
 	});
 	var companyid = '';
 	if(typeof(emp) != 'undefined'){
-		companyid = emp.empcompany;
+		//companyid = emp.empcompany;
 	}
 	$.ajax({
 		url:"GLTimegoodsviewAction.do?method=cusTimeG",
@@ -91,21 +91,24 @@ function gotogoodsDetail(jsonitem){
 function initMiaoshaPage(resp){
 	var data = eval('('+resp+')');
 	$.ajax({
-		url:"GLOrderdAction.do?method=selCusXGOrderd",
+		url:"GLOrderdAction.do?method=selCusXGOrderd",				//查询客户今天购买的秒杀商品数量
 		type:"post",
 		data:{customerid:customer.customerid,
 			wheresql: "surplusnum>'0'"},
 		success : function(data2){
 			
-			var cusOrder = JSON.parse(data2);
+			var cusOrder = JSON.parse(data2);						//买过的限购商品订单
 			$(".home-hot-commodity").html("");
 			if(typeof(data.root) == 'undefined' ||　!data.root){
 				return;
 			}
 			$.each(data.root,function(j,item2){
-				var jsonitem = JSON.stringify(item2);
-				var dailySur = parseInt(item2.timegoodsnum);
-				var timegoodsimages = [];
+				if(item2.timegoodsid=='G14748807842181916'){
+					alert(item2.timegoodsname);
+				}
+				var jsonitem = JSON.stringify(item2);			
+				var dailySur = parseInt(item2.timegoodsnum);			//剩余的每日限购数量
+				var timegoodsimages = [];								//商品图片
 				if(typeof(item2.timegoodsimage)!='undefined'){
 					timegoodsimages = item2.timegoodsimage.split(',');
 		 		} else {
@@ -116,23 +119,27 @@ function initMiaoshaPage(resp){
 				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
 					'<span>（'+item2.timegoodsunits+'）</span>'+
 				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
-				if(cusOrder){
-					var itemGoodsCount = 0;
-					$.each(cusOrder.root,function(k,item3){
-						if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && 
-								item3.orderdunits == item2.timegoodsunits ){
-							itemGoodsCount += parseInt(item3.orderdclass);
-						}
-					});
-					dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;									//每日限购剩余数量
-					liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'</font>';
+				if(cusOrder && cusOrder.root && cusOrder.root.length >0){
+					if(item2.timegoodsnum != -1){					//如果有每日限购
+						var itemGoodsCount = 0;
+						$.each(cusOrder.root,function(k,item3){
+							if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && 
+									item3.orderdunits == item2.timegoodsunits ){
+								itemGoodsCount += parseInt(item3.orderdclass);
+							}
+						});
+						dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;									//每日限购剩余数量
+						liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'。</font>';
+					}
 					if(item2.allnum != '-1'){
-						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
+						liObj += ' <font>总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'。</font>';
 					}
 				} else {
-					liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'</font>';
+					if(item2.timegoodsnum != -1){					//如果有每日限购
+						liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'。</font>';
+					}
 					if(item2.allnum != '-1' ){
-						liObj += '<font>，总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'</font>';
+						liObj += '<font>总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'。</font>';
 					}
 				}
 				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
@@ -181,12 +188,12 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));
 		
-		if((parseInt(cusMSOrderNum) - num) <= 0){
+		if((parseInt(cusMSOrderNum) - num) <= 0 && item.timegoodsnum != -1){
 			alert('您购买的商品超过了限购数量。');
 			return;
 		} else {
 			if(!window.localStorage.getItem("totalmoney")){
-				window.localStorage.setItem("totalmoney","0")
+				window.localStorage.setItem("totalmoney","0");
 			}
 			//总价
 			var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));		//总价
@@ -274,7 +281,7 @@ function subnum(obj,pricesprice,goodsclassname){
 						&&item.goodsclassname==goodsclassname){
 					sdishes.splice(i,1);
 					return false;
-				};
+				}
 			});
 			//种类数
 			var tnum = parseInt(window.localStorage.getItem("totalnum"));

@@ -60,7 +60,7 @@ $(function(){
 	}
 	var companyid = '';
 	if(typeof(emp) != 'undefined'){
-		companyid = emp.empcompany;
+		//companyid = emp.empcompany;
 	}
 	$.ajax({
 		url:"GLGivegoodsviewAction.do?method=cusGiveG",
@@ -114,7 +114,7 @@ function initMiaoshaPage(resp){
 					'</h1><div class="block"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
 					+item1.givegoodsdetail+'</span><br> <span class="givegoods_li_priceANDunit"> <strong>￥'+item1.givegoodsprice+'/'+item1.givegoodsunit+
 					'</strong> ';
-				if(cusOrder){
+				if(cusOrder && cusOrder.root && cusOrder.root.length >0 && parseInt(item1.givegoodsnum) != -1){
 					var giveGoodsCount = 0;
 					$.each(cusOrder.root,function(k,item3){
 						if(item3.orderdtype == '买赠' && item3.orderdcode == item1.givegoodscode && item3.orderdunits == item1.givegoodsunits){
@@ -123,7 +123,7 @@ function initMiaoshaPage(resp){
 					});
 					dailySur = parseInt(item1.givegoodsnum) - giveGoodsCount;																//每日限购剩余数量
 					liObj += '<font>限购'+item1.givegoodsnum+item1.givegoodsunit+'</font><br/>';
-				} else {
+				} else if(parseInt(item1.givegoodsnum) != -1){
 					liObj += '<font>限购'+item1.givegoodsnum+item1.givegoodsunit+'</font><br/>';
 				}
 				liObj += '</span><span hidden="ture" style="display:none;">'+JSON.stringify(item1)+'</span>';
@@ -164,7 +164,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
-		if((parseInt(cusMSOrderNum) - num) <= 0){
+		if((parseInt(cusMSOrderNum) - num) <= 0 && item.givegoodsnum != -1){
 			alert('您购买的商品超过了限购数量。');
 			return;
 		} else {

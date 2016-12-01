@@ -169,7 +169,6 @@ function initDishes(data){
 		    		if(cusOrder.root && cusOrder.root.length > 0){
 		    			var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
-							//alert(item.orderdtype +" == "+ item3.orderdtype +" && "+ item3.orderdcode +" == "+ item.goodscode);
 							if(item.orderdtype == item3.orderdtype && item3.orderdcode == item.goodscode && item3.orderdunits == item.goodsunits){
 								itemGoodsCount += parseInt(item3.orderdclass);
 							}
@@ -181,10 +180,10 @@ function initDishes(data){
 		                      	'<em><img src="../'+item.goodsimage+
 		         	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></em> '+
 		                      	'<h2>'+item.goodsname+' <span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
-		          				'<span onclick="subnum(this,'+item.pricesprice+')" class="jian min"></span>'+
+		          				'<span onclick="subnum(this,\''+item.pricesprice+'\',\''+item.goodsclassname+'\')" class="jian min"></span>'+
 		                          '<input class="text_box shuliang" readonly="readonly" name="'+item.goodsdetail+'" type="text" value="'+
 		       	                getcurrennum(item.goodsid,item.goodsdetail)+'"> '+
-		                          '<span name="'+dailySur+'" onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.goodsclassname+'\')" class="jia add"></span>'+
+		                          '<span name="'+dailySur+'" onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.goodsclassname+'\',\''+item.timegoodsnum+'\')" class="jia add"></span>'+
 		                      '</li>');
 		       });
 		       $(".cart-wrapper").append('</ul><div class="songda">'+mcompany.companydetail+'</div>');		//添加供应商信息
@@ -215,12 +214,12 @@ function getcurrennum(dishesid,goodsdetail){
 	}
 }
 //加号
-function addnum(obj,dishesprice,goodscode,goodsclassname){
+function addnum(obj,dishesprice,goodscode,goodsclassname,timegoodsnum){
 	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 	var cusMSOrderNum = parseInt($(obj).attr("name"));
 	var numt = $(obj).prev(); 
 	var num = parseInt(numt.val());
-	if((parseInt(cusMSOrderNum) - num) <= 0){
+	if((parseInt(cusMSOrderNum) - num) <= 0 && parseInt(timegoodsnum) != -1){
 		alert('您购买的商品超过了限购数量。');
 	} else {
 		//总价
@@ -238,7 +237,7 @@ function addnum(obj,dishesprice,goodscode,goodsclassname){
 		//修改订单
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==$(obj).parent().attr('name')
-					&&item.goodsdetail==$(obj).prev().attr('name')){
+					&&item.goodsclassname == goodsclassname ){
 				item.orderdetnum = item.orderdetnum + 1;
 				return false;
 			}
@@ -249,7 +248,7 @@ function addnum(obj,dishesprice,goodscode,goodsclassname){
 	}
 }
 //减号
-function subnum(obj,dishesprice){
+function subnum(obj,dishesprice,goodsclassname){
 	var numt = $(obj).next(); 
 	var num = parseInt(numt.val());
 	if(num > 0){
@@ -281,7 +280,7 @@ function subnum(obj,dishesprice){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsdetail==$(obj).next().attr('name')){
+						&&item.goodsclassname == goodsclassname ){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}
