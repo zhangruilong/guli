@@ -228,6 +228,7 @@ function buy(){
 				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermcuslevel":"' + customer.customerlevel
+				+ '","ordermcusshop":"' + customer.customershop
 				+ '","ordermemp":"补单'
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
@@ -267,9 +268,9 @@ function buy(){
 						+ '","orderdclass":"' + item.goodsclassname
 						+ '","orderdnum":"' + item.orderdetnum
 						+ '","orderdweight":"' + item.goodsweight
-						+ '","orderdnote":"' + orderdnote
-						+ '","orderdgoods":"' + item.goodsid
-						+ '","orderdbrand":"' + changeStr(item.goodsbrand)
+						+ '","orderdnote":"' + orderdnote					//订单备注
+						+ '","orderdgoods":"' + item.goodsid				//商品id
+						+ '","orderdbrand":"' + changeStr(item.goodsbrand)		//商品品牌
 						+ '","orderdmoney":"' + (item.pricesprice * item.orderdetnum).toFixed(2)
 						+ '"},';
 				//alert("正常结束");

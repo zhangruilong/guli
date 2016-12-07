@@ -50,6 +50,7 @@ public class GLCustomerAction extends CustomerAction {
 	//查询所有
 	public void selCustomer(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
+		queryinfo.setWheresql(queryinfo.getWheresql());
 		queryinfo.setType(Customer.class);
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(CustomerPoco.ORDER);
@@ -61,10 +62,13 @@ public class GLCustomerAction extends CustomerAction {
 			mCustomer.setCustomershop("我的店铺");
 			mCustomer.setCustomerlevel(3);
 			mCustomer.setCustomertype("3");
+			mCustomer.setCustomerstatue("启用");
 			cuss.add(mCustomer);
 		}
-		Pageinfo pageinfo = new Pageinfo(0, cuss);
-		result = CommonConst.GSON.toJson(pageinfo);
+		if(null != cuss.get(0).getCustomerstatue() && cuss.get(0).getCustomerstatue().equals("启用")){
+			Pageinfo pageinfo = new Pageinfo(0, cuss);
+			result = CommonConst.GSON.toJson(pageinfo);
+		}
 		responsePW(response, result);
 	}
 	//注册

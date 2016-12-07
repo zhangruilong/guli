@@ -30,14 +30,14 @@ public class GLSystem_attachAction extends System_attachAction {
 	@SuppressWarnings("unchecked")
 	public void shouyeImg(HttpServletRequest request, HttpServletResponse response){
 		String cusid = request.getParameter("customerid");
-		String sql = "select * from system_attach sa where classify='经销商' and code like 'shouye_' and (";
+		String sql = "select * from system_attach where classify='经销商' and code like 'shouye_' and (";
 		ArrayList<Ccustomer> ccusLi = (ArrayList<Ccustomer>) selAll(Ccustomer.class,"select * from ccustomer c where c.ccustomercustomer='"+cusid+"'");
 		if(ccusLi.size()>0){
 			for (Ccustomer cc : ccusLi) {
 				sql+= "fid like '%"+cc.getCcustomercompany()+"%' or ";
 			}
 			sql = sql.substring(0, sql.length()-3)+")";
-			Pageinfo pageinfo = new Pageinfo(0, selAll(System_attach.class, sql));
+			Pageinfo pageinfo = new Pageinfo(0, selAll(System_attach.class, sql+" order by code"));
 			result = CommonConst.GSON.toJson(pageinfo);
 		}
 		responsePW(response, result);

@@ -125,8 +125,22 @@
 			window.localStorage.setItem("openid",getParamValue("openid"));		//得到openid
 		} else {
 			//得到页面数据
-			getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
-				wheresql : "openid='"+window.localStorage.getItem("openid")+"'"},initCustomer,null);		//得到openid
+			//getJson(basePath+"GLCustomerAction.do",{method:"selCustomer",
+			//	wheresql : "openid='"+window.localStorage.getItem("openid")+"'"},initCustomer,null);		//得到openid 
+			$.ajax({
+				url : basePath+"GLCustomerAction.do",
+				type : "post",
+				data : {
+					method:"selCustomer",
+					wheresql : "openid='"+window.localStorage.getItem("openid")+"'"
+				},
+				dataType : "json",
+				success : initCustomer,
+				error : function(data){
+					alert('获取客户信息失败。');
+					window.open("about:blank","_self").close();
+				}
+			});
 		}
 		
 		if(!window.localStorage.getItem("totalnum")){
@@ -162,6 +176,11 @@
 	}
 	//得到客户信息
 	function initCustomer(data){
+		if(typeof(data)=='undefined' || !data || !data.root ){
+			alert('抱歉,未查询到您的客户信息。');
+			 window.open("about:blank","_self").close();
+			 return;
+		}
 		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){
 			$(".cd-popup").addClass("is-visible");
 		} else {
