@@ -65,10 +65,8 @@ public class GLCustomerAction extends CustomerAction {
 			mCustomer.setCustomerstatue("启用");
 			cuss.add(mCustomer);
 		}
-		if(null != cuss.get(0).getCustomerstatue() && cuss.get(0).getCustomerstatue().equals("启用")){
-			Pageinfo pageinfo = new Pageinfo(0, cuss);
-			result = CommonConst.GSON.toJson(pageinfo);
-		}
+		Pageinfo pageinfo = new Pageinfo(0, cuss);
+		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
 	//注册

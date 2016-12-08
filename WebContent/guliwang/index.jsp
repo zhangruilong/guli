@@ -177,9 +177,12 @@
 	//得到客户信息
 	function initCustomer(data){
 		if(typeof(data)=='undefined' || !data || !data.root ){
-			alert('抱歉,未查询到您的客户信息。');
-			 window.open("about:blank","_self").close();
-			 return;
+			return;
+		}
+		if(data.root[0].customerstatue=='禁用'){
+			alert('您的账号已被禁用,请联系当地经销商。');
+			window.open("about:blank","_self").close();
+			return;
 		}
 		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){
 			$(".cd-popup").addClass("is-visible");
