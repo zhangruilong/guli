@@ -181,7 +181,7 @@
 		}
 		if(data.root[0].customerstatue=='禁用'){
 			alert('您的账号已被禁用,请联系当地经销商。');
-			window.open("about:blank","_self").close();
+			window.localStorage.removeItem("customer");			//将customer移除
 			return;
 		}
 		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){

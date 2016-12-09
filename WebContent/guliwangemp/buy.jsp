@@ -244,14 +244,14 @@ function buy(){
 			if(item.orderdtype == '秒杀'){
 				
 				if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
-					orderdnote = '秒杀 '+item.goodsdetail;
+					orderdnote = '【秒杀】 '+item.goodsdetail;
 				} else {
 					orderdnote = item.orderdtype;
 				}
 				
 //alert("秒杀结束");
 			} else if(item.orderdtype == '买赠'){
-				orderdnote = '买赠 '+item.goodsdetail;
+				orderdnote = '【买赠】 '+item.goodsdetail;
 				//alert("买增结束");
 			}
 			//alert(JSON.stringify(item));

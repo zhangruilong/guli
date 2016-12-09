@@ -110,8 +110,8 @@ $(function(){
 function initCustomer(data){			//将customer(客户信息放入缓存)
 	if(data.root[0].customerstatue=='禁用'){
 		alert('您的账号已被禁用,请联系当地经销商。');
-		window.open("about:blank","_self").close();
-
+		window.localStorage.removeItem("customer");			//移除客户信息
+		return;
 	}
 	window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
 	customer = data.root[0];
