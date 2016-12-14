@@ -58,6 +58,7 @@ public class GLOrdermAction extends OrdermAction {
 		temp.setOrdermcode(odCode);
 		temp.setOrdermrightmoney(temp.getOrdermmoney());
 		temp.setOrdermstatue("已下单");
+		temp.setOrdermprinttimes("0");
 		temp.setOrdermtime(DateUtils.getDateTime());
 		ArrayList<String> sqls = new ArrayList<String> ();
 		String sqlOrderm = getInsSingleSql(temp);

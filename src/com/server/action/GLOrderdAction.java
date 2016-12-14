@@ -218,8 +218,7 @@ public class GLOrderdAction extends OrderdAction {
 		for (int i = 0; i < svoList.size(); i++) {
 			SdishesVO svo = svoList.get(i);
 			if(svo.getOrderdtype().equals("商品")){
-				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+svo.getGoodscode()+
-						   "' and gv.goodsunits = '"+svo.getGoodsunits()+
+				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodsid = '"+svo.getGoodsid()+
 						   "' and gv.pricesclass = '"+customertype+
 						   "' and gv.priceslevel = "+customerlevel+
 						   " and gv.goodsstatue = '上架'");
