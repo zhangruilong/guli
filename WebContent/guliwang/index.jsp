@@ -79,23 +79,22 @@
 			<ul class="home-hot-commodity">
 			</ul>
 		</div>
-		
-		<div class="" style="padding-top: 10px;margin-bottom: 15%;">
-			
-	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
-	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
+		<!-- 首页专区 -->
+		<div id="index-area-box" style="padding-top: 10px;margin-bottom: 15%;">
+	        <!-- <a onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
+	        <a onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
 	        <a href="luojia.jsp"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
-	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
+	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a> -->
 	    </div>
 		<div class="personal-center-nav">
-    	<ul>
-        	<li class="active"><a href="index.jsp">
-        	<em class="icon-shouye2"></em>首页</a></li>
-            <li><a href="goodsclass.jsp"><em class="icon-fenlei1"></em>商城</a></li>
-            <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
-            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
-        </ul>
-    </div>
+	    	<ul>
+	        	<li class="active"><a href="index.jsp">
+	        	<em class="icon-shouye2"></em>首页</a></li>
+	            <li><a href="goodsclass.jsp"><em class="icon-fenlei1"></em>商城</a></li>
+	            <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
+	            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
+	        </ul>
+	    </div>
 	</div>
 	<!--弹框-->
 <div class="cd-popup" role="alert">
@@ -176,18 +175,14 @@
 	}
 	//得到客户信息
 	function initCustomer(data){
-		if(typeof(data)=='undefined' || !data || !data.root ){
-			return;
-		}
-		if(data.root[0].customerstatue=='禁用'){
+		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){
+			$(".cd-popup").addClass("is-visible");
+		} else if(data.root[0].customerstatue=='禁用'){
 			alert('您的账号已被禁用,请联系当地经销商。');
 			window.localStorage.removeItem("customer");			//将customer移除
 			return;
-		}
-		if(data.root[0].customerid == null || data.root[0].customerid == '' || typeof(data.root[0].customerid) == 'undefined'){
-			$(".cd-popup").addClass("is-visible");
 		} else {
-			//首页图片
+			//首页图片和首页专区
 			$.ajax({
 				url:"GLSystem_attachAction.do?method=shouyeImg",
 				type:"post",
@@ -195,28 +190,37 @@
 					customerid:data.root[0].customerid
 				},
 				success:function(resp){
-					var data = eval('('+resp+')');
-					var href = "javascript:;";
-					$.each(data.root,function(i,item){
-						if(typeof(item.detail)!= 'undefined'){
-							href = '../'+item.detail;
-						}
-						if(i<data.root.length-1){
-							$('#position').append('<li class=""></li>');
-						}
-						$('.swipe-wrap').append('<div><a href="'+href+'"><img class="img-responsive" src="../'+item.name+'"/></a></div>');
-					});
-					lunbotu();
+					var pageData = eval('('+resp+')');
+					if(pageData.msg=='操作成功'){
+						var href = "javascript:;";
+						var imageArray = pageData.images;		//图片
+						var areaArray = pageData.area;		//首页区
+						$.each(imageArray,function(i,item){
+							if(typeof(item.detail)!= 'undefined'){
+								href = '../'+item.detail;
+							}
+							if(i<imageArray.length-1){
+								$('#position').append('<li class=""></li>');
+							}
+							$('.swipe-wrap').append('<div><a href="'+ href +'"><img class="img-responsive" src="../'+ item.name +'"/></a></div>');
+						});
+						$.each(areaArray,function(i,item){
+							$('#index-area-box').append('<a onclick="" href="'+item.indexareaurl+'"><img alt="'+item.indexareaname+'" src="../'+item.indexareaimage+'"></a>');
+						});
+						lunbotu();
+					} else {
+						alert(pageData.msg);
+					}
 				},
 				error:function(resp){
-					var data = eval('('+resp+')');
-					alert(data.msg);
+					var pageData = eval('('+resp+')');
+					alert(pageData.msg);
 				}
 			});
+			window.localStorage.setItem("customer",JSON.stringify(data.root[0]));			//将customer(客户信息放入缓存)
+			customer = data.root[0];
+			$(".citydrop").text(data.root[0].customerxian);
 		}
-		window.localStorage.setItem("customer",JSON.stringify(data.root[0]));			//将customer(客户信息放入缓存)
-		customer = data.root[0];
-		$(".citydrop").text(data.root[0].customerxian);
 	}
 	//跳转
 	function dohrefJump(url){
@@ -247,7 +251,6 @@
 			if (event.keyCode == 13) { //如果按下的是回车键
 				var seachVal = $("#searchdishes").val();	//获取搜索条件
 				window.location.href = 'goods.jsp?searchdishes=' + seachVal;
-
 			}
 		}
 		

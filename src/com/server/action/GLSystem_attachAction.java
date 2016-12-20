@@ -2,13 +2,16 @@ package com.server.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.pojo.Ccustomer;
 import com.server.pojo.Customer;
+import com.server.pojo.Indexarea;
 import com.system.action.System_attachAction;
 import com.system.poco.System_attachPoco;
 import com.system.pojo.System_attach;
@@ -26,26 +29,33 @@ import com.system.tools.util.FileUtil;
  */
 public class GLSystem_attachAction extends System_attachAction {
 	
-	//首页图片
+	//首页图片和首页专区
 	@SuppressWarnings("unchecked")
 	public void shouyeImg(HttpServletRequest request, HttpServletResponse response){
 		String cusid = request.getParameter("customerid");
-		String sql = "select * from system_attach where classify='经销商' and code like 'shouye_' and (";
-		ArrayList<Ccustomer> ccusLi = (ArrayList<Ccustomer>) selAll(Ccustomer.class,"select * from ccustomer c where c.ccustomercustomer='"+cusid+"'");
+		String quImgSQL = "select * from system_attach where classify='经销商' and code like 'shouye_' and (";		//查询经销商图片
+		String quAreaSQL = "select * from indexarea ia where ia.indexareastatue='启用' and (";		//查询经销商首页区
+		ArrayList<Ccustomer> ccusLi = (ArrayList<Ccustomer>) selAll(Ccustomer.class,
+				"select * from ccustomer c where c.ccustomercustomer='"+cusid+"'");
 		if(ccusLi.size()>0){
 			for (Ccustomer cc : ccusLi) {
-				sql+= "fid like '%"+cc.getCcustomercompany()+"%' or ";
+				quImgSQL+= "fid like '%"+cc.getCcustomercompany()+"%' or ";
+				quAreaSQL+= "ia.indexareacompany='"+cc.getCcustomercompany()+"' or ";
 			}
-			sql = sql.substring(0, sql.length()-3)+")";
-			Pageinfo pageinfo = new Pageinfo(0, selAll(System_attach.class, sql+" order by code"));
-			result = CommonConst.GSON.toJson(pageinfo);
+			quImgSQL = quImgSQL.substring(0, quImgSQL.length()-3)+")";
+			quAreaSQL = quAreaSQL.substring(0, quAreaSQL.length()-3)+")";
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("msg", "操作成功");
+			resultMap.put("images",selAll(System_attach.class, quImgSQL+" order by code"));		//图片
+			resultMap.put("area",selAll(Indexarea.class, quAreaSQL+" order by ia.indexareaorder"));	//首页区
+			result = CommonConst.GSON.toJson(resultMap);
 		}
 		responsePW(response, result);
 	}
 	
 	//上传文件
 	public void uploadImg(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("===============upload==============================================================================================");
+		System.out.println("==============================================upload===============================================================");
 		//System_user user = getCurrentUser(request);
 		//if(CommonUtil.isNotEmpty(user)){
 			String json = request.getParameter("json");

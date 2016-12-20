@@ -35,12 +35,13 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
     	}
 		return querysql.substring(0, querysql.length() - 4);
 	};
-	//预定商品页
+	//年货商品和组合页
 	@SuppressWarnings("unchecked")
-	public void cusBookingsG(HttpServletRequest request, HttpServletResponse response){
+	public void carnivalGoods(HttpServletRequest request, HttpServletResponse response){
 		String cusid = request.getParameter("customerid");
 		String comid = request.getParameter("companyid");
 		String bkgoodscode = request.getParameter("bkgoodscode");
+		String bkgoodstype = request.getParameter("bkgoodstype");
 		String wheresql = null;
 		if(CommonUtil.isEmpty(comid)){
 			//非业务员补单
@@ -51,7 +52,8 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 				Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+cusid+"'");
 				ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
 				if(Ccustomercuss.size()!=0){
-					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and (";
+					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodstype='"+
+							bkgoodstype+"' and (";
 					for (Ccustomer ccustomer : Ccustomercuss) {
 						wheresql += "bkgoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
 					}

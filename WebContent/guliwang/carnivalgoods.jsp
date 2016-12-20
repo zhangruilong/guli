@@ -20,10 +20,8 @@
 </head>
 <body>
 <div class="gl-box">
-	<!-- <div class="home-search-wrapper"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	<span>秒杀商品</span><a href="cart.jsp" class="gwc"><img src="images/gwc.png" ><em id="totalnum">0</em></a></div> -->
     <div class="wapper-nav"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	秒杀商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
+	精品年货<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
     <div class="goods-wrapper">
         <ul class="home-hot-commodity">
         </ul>
@@ -68,7 +66,7 @@ $(function(){
 		//companyid = emp.empcompany;
 	}
 	$.ajax({
-		url:"GLTimegoodsviewAction.do?method=cusTimeG",
+		url:"GLBkgoodsviewAction.do?method=carnivalGoods",	//年货商品
 		type:"post",
 		data:{
 			companyid:companyid,
@@ -76,7 +74,7 @@ $(function(){
 			customertype:customer.customertype,
 			timegoodscode:timegoodscode
 		},
-		success : initMiaoshaPage,
+		success : initCarnivalPage,
 		error: function(resp){
 			var respText = eval('('+resp+')'); 
 			alert(respText.msg);
@@ -85,87 +83,48 @@ $(function(){
 });
 //到商品详情页
 function gotogoodsDetail(jsonitem){
-	window.location.href = 'goodsDetail.jsp?type=秒杀&goods='+jsonitem;
+	window.location.href = 'goodsDetail.jsp?type=年货&goods='+jsonitem;
 }
 //初始化页面
-function initMiaoshaPage(resp){
+function initCarnivalPage(resp){
 	var data = eval('('+resp+')');
-	$.ajax({
-		url:"GLOrderdAction.do?method=selCusXGOrderd",				//查询客户今天购买的秒杀商品数量
-		type:"post",
-		data:{customerid:customer.customerid,
-			wheresql: "surplusnum>'0'"},
-		success : function(data2){
-			
-			var cusOrder = JSON.parse(data2);						//买过的限购商品订单
-			$(".home-hot-commodity").html("");
-			if(typeof(data.root) == 'undefined' ||　!data.root){
-				return;
-			}
-			$.each(data.root,function(j,item2){
-				var jsonitem = JSON.stringify(item2);			
-				var dailySur = parseInt(item2.timegoodsnum);			//剩余的每日限购数量
-				var timegoodsimages = [];								//商品图片
-				if(typeof(item2.timegoodsimage)!='undefined'){
-					timegoodsimages = item2.timegoodsimage.split(',');
-		 		} else {
-		 			timegoodsimages[0] = 'images/default.jpg';
-		 		}
-				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+timegoodsimages[0]+
-	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
-				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.timegoodsname+
-					'<span>（'+item2.timegoodsunits+'）</span>'+
-				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
-				if(cusOrder && cusOrder.root && cusOrder.root.length >0){
-					if(item2.timegoodsnum != -1){					//如果有每日限购
-						var itemGoodsCount = 0;
-						$.each(cusOrder.root,function(k,item3){
-							if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.timegoodscode && 
-									item3.orderdunits == item2.timegoodsunits ){
-								itemGoodsCount += parseInt(item3.orderdclass);
-							}
-						});
-						dailySur = parseInt(item2.timegoodsnum) - itemGoodsCount;									//每日限购剩余数量
-						liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'。</font>';
-					}
-					if(item2.allnum != '-1'){
-						liObj += ' <font>总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'。</font>';
-					}
-				} else {
-					if(item2.timegoodsnum != -1){					//如果有每日限购
-						liObj += '<font>每日限购'+item2.timegoodsnum+item2.timegoodsunit+'。</font>';
-					}
-					if(item2.allnum != '-1' ){
-						liObj += '<font>总限量'+item2.allnum+item2.timegoodsunit+'，还剩'+item2.surplusnum+item2.timegoodsunit+'。</font>';
-					}
-				}
-				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
-				+changeStr(item2.timegoodsdetail)+'</span>';
-				/* alert(item2.companydetail);
-				return; */
-				liObj += '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.timegoodsorgprice+'/'+item2.timegoodsunit+'</strong>'+
-				' <em>￥'+item2.timegoodsprice+'</em></div>'+
-					'<div class="miaosha_stock-num" name="'+item2.timegoodsid+'">'+
-		            '<span class="jian min"  onclick="subnum(this,\''+item2.timegoodsorgprice+'\',\''+item2.timegoodsclass+'\')"></span>'+
-		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
-		             getcurrennumdanpin(item2.timegoodsid)+'"> '+
-		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item2.timegoodsorgprice
-					   +',\''+item2.timegoodsname+'\',\''+item2.timegoodsunit+'\',\''+item2.timegoodsunits
-					   +'\',\''+item2.timegoodscode+'\',\''+item2.timegoodsclass
-					   +'\',\''+item2.timegoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
-					   +'\',\''+item2.surplusnum+'\')"></span>'+
-					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
-		        	'</div></div>';
-		        liObj += '</li>';
-				$(".home-hot-commodity").append(liObj);
-			});
-		},
-		error : function(resp2){
-			var respText2 = eval('('+resp2+')');
-			alert(respText2.msg);
-		}
+	$(".home-hot-commodity").html("");
+	if(typeof(data.root) == 'undefined' ||　!data.root){
+		return;
+	}
+	$.each(data.root,function(j,item){
+		var jsonitem = JSON.stringify(item);			
+		var dailySur = parseInt(item.bkgoodsnum);			//剩余的每日限购数量
+		var bkgoodsimages = [];								//商品图片
+		if(typeof(item.bkgoodsimage)!='undefined'){
+			bkgoodsimages = item.bkgoodsimage.split(',');
+ 		} else {
+ 			bkgoodsimages[0] = 'images/default.jpg';
+ 		}
+		/* 开始 */
+		var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+bkgoodsimages[0]+
+        	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
+		'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item.bkgoodsname+
+			'<span>（'+item.bkgoodsunits+'）</span>'+
+		'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+
+		'</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');" class="miaosha-detail" >'+
+		changeStr(item.bkgoodsdetail)+'</span>'+
+		'<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item.bkgoodsorgprice+'/'+item.bkgoodsunit+'</strong>'+
+		' <em>￥'+item.bkgoodsprice+'</em></div>'+
+			'<div class="miaosha_stock-num" name="'+item.bkgoodsid+'">'+
+            '<span class="jian min"  onclick="subnum(this,\''+item.bkgoodsorgprice+'\',\''+item.bkgoodsclass+'\')"></span>'+
+            '<input readonly="readonly" class="text_box shuliang" type="text" value="'+
+             getcurrennumdanpin(item.bkgoodsid)+'"> '+
+            ' <span class="jia add" onclick="addnum(this,'+item.bkgoodsorgprice
+			   +',\''+item.bkgoodsname+'\',\''+item.bkgoodsunit+'\',\''+item.bkgoodsunits
+			   +'\',\''+item.bkgoodscode+'\',\''+item.bkgoodsclass
+			   +'\',\''+item.bkgoodscompany+'\',\''+item.companyshop+'\',\''+item.companydetail
+			   +'\')"></span>'+
+			   '<span hidden="ture">'+JSON.stringify(item)+'</span>'+
+        	'</div></div></li>';
+        	/* 结束 */
+		$(".home-hot-commodity").append(liObj);
 	});
-	
 }
 //到购物车页面
 function docart(obj){
@@ -174,7 +133,7 @@ function docart(obj){
 	}
 }
 //加号
-function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail,surplusnum){
+function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
 	if(!customer.customerid || customer.customerid == '' || typeof(customer.customerid) == 'undefined'){
 		$(".cd-popup").addClass("is-visible");
 		return;
@@ -213,7 +172,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = $(obj).parent().attr('name');
-				mdishes.goodsdetail = item.timegoodsdetail;
+				mdishes.goodsdetail = item.bkgoodsdetail;
 				mdishes.goodscompany = goodscompany;
 				mdishes.companyshop = companyshop;
 				mdishes.companydetail = companydetail;
@@ -225,17 +184,15 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
 				var timegoodsimages = [];
-				if(typeof(item.timegoodsimage)!='undefined'){
-					timegoodsimages = item.timegoodsimage.split(',');
+				if(typeof(item.bkgoodsimage)!='undefined'){
+					bkgoodsimages = item.bkgoodsimage.split(',');
 		 		} else {
-		 			timegoodsimages[0] = 'images/default.jpg';
+		 			bkgoodsimages[0] = 'images/default.jpg';
 		 		}
-				mdishes.goodsimage = timegoodsimages[0];
-				mdishes.orderdtype = '秒杀';
-				mdishes.surplusnum = surplusnum;
-				mdishes.timegoodsnum = item.timegoodsnum;
-				mdishes.goodsweight = item.timegoodsweight;
-				mdishes.goodsbrand = item.timegoodsbrand;
+				mdishes.goodsimage = bkgoodsimages[0];
+				mdishes.orderdtype = '年货';
+				mdishes.goodsweight = item.bkgoodsweight;
+				mdishes.goodsbrand = item.bkgoodsbrand;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -275,7 +232,7 @@ function subnum(obj,pricesprice,goodsclassname){
 			//删除订单
 			$.each(sdishes,function(i,item){
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsclassname==goodsclassname){
+						&&item.orderdtype=="年货"){
 					sdishes.splice(i,1);
 					return false;
 				}
@@ -289,7 +246,7 @@ function subnum(obj,pricesprice,goodsclassname){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsclassname==goodsclassname){
+						&&item.orderdtype=="年货"){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}
@@ -312,7 +269,7 @@ function getcurrennumdanpin(dishesid){
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==dishesid
-					&&item.goodsclassname=="秒杀商品"){
+					&&item.orderdtype=="年货"){
 				orderdetnum = item.orderdetnum;
 				return false;
 			}

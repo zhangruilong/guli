@@ -233,7 +233,7 @@ $(function(){
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(1)").text(changeStr(data.givegoodsbrand));
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
-	} else if(type == '预定'){
+	} else if(type == '年货'){
 		var imgArr = data.bkgoodsimage.split(',');
 		$.each(imgArr,function(i,item){									//商品图
 			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
