@@ -21,7 +21,7 @@
 <body>
 <div class="gl-box">
     <div class="wapper-nav"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	精品年货<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
+	年货<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
     <div class="goods-wrapper">
         <ul class="home-hot-commodity">
         </ul>
@@ -42,7 +42,7 @@
 <script src="../js/base.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
-var timegoodscode = '${param.timegoodscode}';
+var bkgoodscode = '${param.bkgoodscode}';
 $(function(){ 
 	//购物车图标上的数量
 	if(!window.localStorage.getItem("cartnum")){
@@ -72,7 +72,8 @@ $(function(){
 			companyid:companyid,
 			customerid:customer.customerid,
 			customertype:customer.customertype,
-			timegoodscode:timegoodscode
+			bkgoodstype:'年货',
+			bkgoodscode:bkgoodscode
 		},
 		success : initCarnivalPage,
 		error: function(resp){
@@ -139,81 +140,75 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		return;
 	}
 	var item = JSON.parse($(obj).next().text());				//得到商品信息
-		//数量
-		var numt = $(obj).prev(); 
-		var num = parseInt(numt.val());
-		var cusMSOrderNum = parseInt($(obj).attr("name"));
-		
-		if((parseInt(cusMSOrderNum) - num) <= 0 && item.timegoodsnum != -1){
-			alert('您购买的商品超过了限购数量。');
-			return;
-		} else {
-			if(!window.localStorage.getItem("totalmoney")){
-				window.localStorage.setItem("totalmoney","0");
+	//数量
+	var numt = $(obj).prev(); 
+	var num = parseInt(numt.val());
+	
+	if(!window.localStorage.getItem("totalmoney")){
+		window.localStorage.setItem("totalmoney","0");
+	}
+	//总价
+	var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));		//总价
+	var newtmoney = (tmoney+pricesprice).toFixed(2);						//总价加上商品价格得到新价格
+	window.localStorage.setItem("totalmoney",newtmoney);					//设置总价格到缓存
+	//数量
+	var numt = $(obj).prev();
+	var num = parseInt(numt.val());						//得到input的值,商品数
+	numt.val(num+1);									//input的值加一
+	//订单
+	if(window.localStorage.getItem("sdishes")==null || !window.localStorage.getItem("sdishes")){
+		window.localStorage.setItem("sdishes","[]");
+	}
+	sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//得到现有订单
+	if(num == 0){					
+		//如果数量是0
+		$("#totalnum").show();
+		/* alert(goodsunits.length);
+		alert(goodsunits=='（5kg米 1.8L玉米油）*4组/箱'); */
+		//新增订单
+		var mdishes = new Object();
+		mdishes.goodsid = $(obj).parent().attr('name');
+		mdishes.goodsdetail = changeStr(item.bkgoodsdetail);
+		mdishes.goodscompany = goodscompany;
+		mdishes.companyshop = companyshop;
+		mdishes.companydetail = companydetail;
+		mdishes.goodsclassname = changeStr(goodsclassname);
+		mdishes.goodscode = goodscode;
+		mdishes.pricesprice = pricesprice;
+		mdishes.pricesunit = pricesunit;
+		mdishes.goodsname = goodsname;
+		mdishes.goodsunits = goodsunits;
+		mdishes.orderdetnum = num + 1;
+		var bkgoodsimages = [];
+		if(typeof(item.bkgoodsimage)!='undefined'){
+			bkgoodsimages = item.bkgoodsimage.split(',');
+ 		} else {
+ 			bkgoodsimages[0] = 'images/default.jpg';
+ 		}
+		mdishes.goodsimage = bkgoodsimages[0];
+		mdishes.orderdtype = '年货';
+		mdishes.goodsweight = item.bkgoodsweight;
+		mdishes.goodsbrand = item.bkgoodsbrand;
+		sdishes.push(mdishes);
+		//种类数
+		var tnum = parseInt(window.localStorage.getItem("totalnum"));
+		window.localStorage.setItem("totalnum",tnum+1);
+	}else{							
+		//如果数量不是0
+		//修改订单
+		$.each(sdishes, function(i, item3) {
+			if(item3.goodsid==$(obj).parent().attr('name')
+					&&item3.orderdtype==item.bkgoodstype){
+				item3.orderdetnum = item3.orderdetnum + 1;
+				return false;
 			}
-			//总价
-			var tmoney = parseFloat(window.localStorage.getItem("totalmoney"));		//总价
-			var newtmoney = (tmoney+pricesprice).toFixed(2);						//总价加上商品价格得到新价格
-			window.localStorage.setItem("totalmoney",newtmoney);					//设置总价格到缓存
-			//数量
-			var numt = $(obj).prev();
-			var num = parseInt(numt.val());						//得到input的值,商品数
-			numt.val(num+1);									//input的值加一
-			//订单
-			if(window.localStorage.getItem("sdishes")==null || !window.localStorage.getItem("sdishes")){
-				window.localStorage.setItem("sdishes","[]");
-			}
-			sdishes = JSON.parse(window.localStorage.getItem("sdishes"));	//得到现有订单
-			if(num == 0){					
-				//如果数量是0
-				$("#totalnum").show();
-				/* alert(goodsunits.length);
-				alert(goodsunits=='（5kg米 1.8L玉米油）*4组/箱'); */
-				//新增订单
-				var mdishes = new Object();
-				mdishes.goodsid = $(obj).parent().attr('name');
-				mdishes.goodsdetail = item.bkgoodsdetail;
-				mdishes.goodscompany = goodscompany;
-				mdishes.companyshop = companyshop;
-				mdishes.companydetail = companydetail;
-				mdishes.goodsclassname = goodsclassname;
-				mdishes.goodscode = goodscode;
-				mdishes.pricesprice = pricesprice;
-				mdishes.pricesunit = pricesunit;
-				mdishes.goodsname = goodsname;
-				mdishes.goodsunits = goodsunits;
-				mdishes.orderdetnum = num + 1;
-				var timegoodsimages = [];
-				if(typeof(item.bkgoodsimage)!='undefined'){
-					bkgoodsimages = item.bkgoodsimage.split(',');
-		 		} else {
-		 			bkgoodsimages[0] = 'images/default.jpg';
-		 		}
-				mdishes.goodsimage = bkgoodsimages[0];
-				mdishes.orderdtype = '年货';
-				mdishes.goodsweight = item.bkgoodsweight;
-				mdishes.goodsbrand = item.bkgoodsbrand;
-				sdishes.push(mdishes);
-				//种类数
-				var tnum = parseInt(window.localStorage.getItem("totalnum"));
-				window.localStorage.setItem("totalnum",tnum+1);
-			}else{							
-				//如果数量不是0
-				//修改订单
-				$.each(sdishes, function(i, item3) {
-					if(item3.goodsid==$(obj).parent().attr('name')
-							&&item3.goodsclassname==goodsclassname){
-						item3.orderdetnum = item3.orderdetnum + 1;
-						return false;
-					}
-				});
-			}
-			window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
-			
-			var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-			$("#totalnum").text(cartnum+1);
-			window.localStorage.setItem("cartnum",cartnum+1);
-		}
+		});
+	}
+	window.localStorage.setItem("sdishes",JSON.stringify(sdishes));
+	
+	var cartnum = parseInt(window.localStorage.getItem("cartnum"));
+	$("#totalnum").text(cartnum+1);
+	window.localStorage.setItem("cartnum",cartnum+1);
 }
 //减号
 function subnum(obj,pricesprice,goodsclassname){

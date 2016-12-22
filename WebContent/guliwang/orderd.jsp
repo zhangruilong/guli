@@ -154,7 +154,7 @@ function regoumai(){
 						mdishes.goodsweight = item.ggview.givegoodsweight;
 						mdishes.goodsbrand = item.ggview.givegoodsbrand;
 						money = (parseFloat(item.ggview.givegoodsprice) * now_GNum).toFixed(2);
-					} else if(item.type == '预定' && item.statue != '下架'){
+					} else if((item.type=='年货' || item.type=='组合商品') && item.statue != '下架'){
 						var mdishes = new Object();
 						mdishes.goodsid = item.bgview.bkgoodsid;
 						mdishes.goodsdetail = item.bgview.bkgoodsdetail;
@@ -169,6 +169,11 @@ function regoumai(){
 						mdishes.goodsimage = item.bgview.bkgoodsimage;
 						mdishes.orderdtype = item.type;
 						mdishes.goodsunits = item.bgview.bkgoodsunits;
+						mdishes.goodsweight = item.bgview.bkgoodsweight;
+						if(item.type=='组合商品'){
+							mdishes.surplusnum = item.bgview.bkgoodssurplus;	//剩余数量
+							mdishes.timegoodsnum = item.bgview.bkgoodsnum;	//限购数量
+						}
 						mdishes.orderdetnum = item.nowGoodsNum;
 						money = (parseFloat(item.bgview.bkgoodsorgprice) * now_GNum).toFixed(2);
 					}
@@ -267,9 +272,8 @@ function regoumai(){
 								mdishes.orderdtype = item.type;
 								mdishes.goodsunits = item.tgview.timegoodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;
-								mdishes.surplusnum = item.tgview.surplusnum;
-								mdishes.timegoodsnum = item.tgview.timegoodsnum;
-								mdishes.surplusnum = item.tgview.timegoodsnum;
+								mdishes.surplusnum = item.tgview.surplusnum;	//剩余数量
+								mdishes.timegoodsnum = item.tgview.timegoodsnum;	//限购数量
 								mdishes.goodsweight = item.tgview.timegoodsweight;
 								mdishes.goodsbrand = item.tgview.timegoodsbrand;
 								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
@@ -316,7 +320,7 @@ function regoumai(){
 								mdishes.orderdtype = item.type;
 								mdishes.goodsunits = item.ggview.givegoodsunits;
 								mdishes.orderdetnum = item.nowGoodsNum;
-								mdishes.timegoodsnum = item.ggview.givegoodsnum;
+								mdishes.timegoodsnum = item.ggview.givegoodsnum;	//限购数量
 								mdishes.goodsweight = item.ggview.givegoodsweight;
 								mdishes.goodsbrand = item.ggview.givegoodsbrand;
 								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
@@ -328,8 +332,8 @@ function regoumai(){
 								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 								window.localStorage.setItem("cartnum",cartnum+now_GNum);
 							}
-						} else if(item.type == '预定' && item.statue != '下架'){
-							if( item1.goodsid == item.bgview.givegoodsid){
+						} else if((item.type=='年货' || item.type=='组合商品') && item.statue != '下架'){
+							if( item1.goodsid == item.bgview.bkgoodsid){
 								//如果商品id相同
 								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
 								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
@@ -355,7 +359,13 @@ function regoumai(){
 								mdishes.goodsname = item.bgview.bkgoodsname;
 								mdishes.goodsimage = item.bgview.bkgoodsimage;
 								mdishes.orderdtype = item.type;
+								if(item.type=='组合商品'){
+									mdishes.surplusnum = item.bgview.bkgoodssurplus;	//剩余数量
+									mdishes.timegoodsnum = item.bgview.bkgoodsnum;	//限购数量
+								}
 								mdishes.goodsunits = item.bgview.bkgoodsunits;
+								mdishes.goodsweight = item.bgview.bkgoodsweight;
+								mdishes.goodsbrand = item.bgview.bkgoodsbrand;
 								mdishes.orderdetnum = item.nowGoodsNum;
 								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
 								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));

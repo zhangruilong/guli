@@ -237,12 +237,12 @@ function buy(){
 		$.each(sdishes, function(i, item) {
 			
 			var orderdnote = '';
-			if(item.orderdtype == '秒杀'){
+			if(item.orderdtype == '秒杀' || item.orderdtype == '年货' || item.orderdtype == '组合商品' ){
 				
 				if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
-					orderdnote = '【秒杀】 '+item.goodsdetail;
+					orderdnote = '【'+item.orderdtype+'】 '+item.goodsdetail;
 				} else {
-					orderdnote = item.orderdtype;
+					orderdnote = '【'+item.orderdtype+'】 ';
 				}
 				
 //alert("秒杀结束");

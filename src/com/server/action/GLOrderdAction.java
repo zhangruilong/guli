@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.OrderdPoco;
+import com.server.pojo.Bkgoods;
 import com.server.pojo.Bkgoodsview;
 import com.server.pojo.Customer;
 import com.server.pojo.Givegoodsview;
@@ -56,7 +57,7 @@ public class GLOrderdAction extends OrderdAction {
 	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
 		Pageinfo pageinfo = new Pageinfo(0,selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
 				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+request.getParameter("customerid")+
-				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) and om.ordermtime >= '"+DateUtils.getDate()+
+				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' or od.orderdtype = '组合商品' ) and om.ordermtime >= '"+DateUtils.getDate()+
 				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdcode,od.orderdtype,od.orderdunits"));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
@@ -109,7 +110,7 @@ public class GLOrderdAction extends OrderdAction {
 					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
 				}
 				gvoList.add(gvo);
-			} else if(item.getOrderdtype().equals("预定")){
+			} else if(item.getOrderdtype().equals("年货") || item.getOrderdtype().equals("组合商品")){
 				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodscode = '"+
 						item.getOrderdcode()+"' and bv.bkgoodsunits = '"+item.getOrderdunits()+
 						"' and bv.bkgoodsstatue = '启用'");
@@ -232,9 +233,8 @@ public class GLOrderdAction extends OrderdAction {
 					}
 				}
 			} else if(svo.getOrderdtype().equals("秒杀")){
-				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
-						svo.getGoodscode()+"' and tv.timegoodsunits = '"+svo.getGoodsunits()+
-						"' and tv.timegoodsstatue = '启用' and timegoodsscope like '%"+customertype+"%'");
+				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodsid = '"+
+						svo.getGoodsid()+"' and tv.timegoodsstatue = '启用' and timegoodsscope like '%"+customertype+"%'");
 				if(tgviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
@@ -245,9 +245,8 @@ public class GLOrderdAction extends OrderdAction {
 					}
 				}
 			} else if(svo.getOrderdtype().equals("买赠")){
-				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
-						svo.getGoodscode()+"' and gv.givegoodsunits = '"+svo.getGoodsunits()+
-						"' and gv.givegoodsstatue = '启用' and givegoodsscope like '%"+customertype+"%'");
+				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodsid = '"+
+						svo.getGoodsid()+"' and gv.givegoodsstatue = '启用' and givegoodsscope like '%"+customertype+"%'");
 				if(ggviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
@@ -257,10 +256,9 @@ public class GLOrderdAction extends OrderdAction {
 						svoList.get(i).setPricesprice(Float.parseFloat(gp));							//修改价格
 					}
 				}
-			} else if(svo.getOrderdtype().equals("预定")){
-				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodscode = '"+
-						svo.getGoodscode()+"' and bv.bkgoodsunits = '"+svo.getGoodsunits()+
-						"' and bv.bkgoodsstatue = '启用' and bv.bkgoodsscope like '%"+customertype+"%'");
+			} else if(svo.getOrderdtype().equals("年货") || svo.getOrderdtype().equals("组合商品")){
+				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodsid = '"+
+						svo.getGoodsid()+"' and bv.bkgoodsstatue = '启用' and bv.bkgoodsscope like '%"+customertype+"%'");
 				if(bgviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
@@ -284,21 +282,22 @@ public class GLOrderdAction extends OrderdAction {
 	public Map<String, Object> checkSurplus(String customerid,Map<String, Object> infoMap){
 		List<SdishesVO> svoList = (List<SdishesVO>) infoMap.get("svoList");
 		List<SdishesVO> svoListremove = new ArrayList<SdishesVO>();
-		cuss = (ArrayList<Orderd>) selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
+		cuss = (ArrayList<Orderd>) selAll(Orderd.class, "select od.orderdgoods,od.orderdtype,sum(od.orderdnum) as orderdclass from orderm om "+
 				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
-				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' ) and om.ordermtime >= '"+DateUtils.getDate()+
-				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdcode,od.orderdtype,od.orderdunits");
+				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' or od.orderdtype = '组合商品') and om.ordermstatue!='已删除' and om.ordermtime >= '"+DateUtils.getDate()+
+				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdtype,od.orderdgoods");
 		String editNumMsg = "";
 		String deleGoodsMsg = "";
 		for (int i=0; i < svoList.size(); i++) {
 			SdishesVO svo = svoList.get(i);
 			Integer odNum = svo.getOrderdetnum();				//订单中购买的数量
 			//检查秒杀和买赠商品的每日限购
-			if((svo.getOrderdtype().equals("秒杀") || svo.getOrderdtype().equals("买赠")) && !svo.getTimegoodsnum().equals(-1)){
-				Integer daySur = svo.getTimegoodsnum() - odNum;
+			if((svo.getOrderdtype().equals("秒杀") || svo.getOrderdtype().equals("买赠") || svo.getOrderdtype().equals("组合商品")) && 
+					svo.getTimegoodsnum() != -1){
+				Integer daySur = svo.getTimegoodsnum() - odNum;	//限购数量 减 购买的数量
 				for (Orderd od : cuss) {
-					if(od.getOrderdtype().equals(svo.getOrderdtype()) && od.getOrderdcode().equals(svo.getGoodscode()) && od.getOrderdunits().equals(svo.getGoodsunits())){
-						daySur -= Integer.parseInt(od.getOrderdclass());
+					if(od.getOrderdtype().equals(svo.getOrderdtype()) && od.getOrderdgoods().equals(svo.getGoodsid())){
+						daySur -= Integer.parseInt(od.getOrderdclass());	//这里的 "orderdclass" 里面放的是订单数量
 					}
 				}
 				if(daySur >= 0){
@@ -315,12 +314,30 @@ public class GLOrderdAction extends OrderdAction {
 			}
 			
 			//检查秒杀商品的剩余数量
-			if(svo.getOrderdtype().equals("秒杀")){
-				List<Timegoods> tgList = selAll(Timegoods.class, "select * from timegoods tg where tg.timegoodscode = '"+
-						svo.getGoodscode()+"' and tg.timegoodsunits = '"+svo.getGoodsunits()+"'");
+			if(svo.getOrderdtype().equals("秒杀") ){
+				List<Timegoods> tgList = selAll(Timegoods.class, "select * from timegoods tg where tg.timegoodsid = '"+svo.getGoodsid()+"'");
 				if(CommonUtil.isNotEmpty(tgList)){
 					Integer surnum = tgList.get(0).getSurplusnum();			//剩余数量
 					if(odNum != -1 && tgList.get(0).getAllnum() > 0){						//如果有设置总限购，并且订单商品没有被删除。
+						if(surnum <= 0){									//判断剩余数量
+							svoListremove.add(svoList.get(i));
+							deleGoodsMsg += svo.getGoodsname()+",";									//提示信息
+						} else if(odNum > surnum && odNum.equals(svo.getOrderdetnum())){				//如果没有被修改过,并且下单数量大于剩余数量
+							editNumMsg += svo.getGoodsname()+",";									//提示信息
+							odNum = surnum;
+							svoList.get(i).setOrderdetnum(odNum);
+						} else {											//如果有被修改过
+							odNum = surnum;
+						}
+					}
+				}
+			}
+			//检查组合商品的剩余数量
+			if(svo.getOrderdtype().equals("组合商品")){
+				List<Bkgoods> tgList = selAll(Bkgoods.class, "select * from bkgoods bkg where bkg.bkgoodsid = '"+svo.getGoodsid()+"'");
+				if(CommonUtil.isNotEmpty(tgList)){
+					Integer surnum = tgList.get(0).getBkgoodssurplus();			//剩余数量
+					if(odNum != -1 && tgList.get(0).getBkgoodsallnum() > 0){						//如果有设置总限购，并且订单商品没有被删除。
 						if(surnum <= 0){									//判断剩余数量
 							svoListremove.add(svoList.get(i));
 							deleGoodsMsg += svo.getGoodsname()+",";									//提示信息
