@@ -157,7 +157,6 @@ function sortingData(){
 			customerid:customer.customerid
 		},
 		success:function(resp){
-				//alert("重置购物车");
 			var respText = eval('('+resp+')');
 			if(respText.msg != '您购买的：'){
 				alert('操作失败！');
@@ -165,7 +164,6 @@ function sortingData(){
 				return;
 			}
 			if(respText.msg == '您购买的：'){
-				//alert("重置购物车");
 				var jsds = respText.root;										//sdishes的json
 				window.localStorage.setItem("sdishes",JSON.stringify(jsds));
 				var newcartnum = 0;
@@ -181,7 +179,6 @@ function sortingData(){
 				window.localStorage.setItem("totalmoney",totalmoney.toFixed(2));
 				window.localStorage.setItem("totalnum",totalnum);
 				setscompany();		//设置供应商信息
-				//alert("重置购物车结束");
 				buy();
 			} else {
 				alert(respText.msg);
@@ -209,7 +206,7 @@ function sortingData(){
 			}
 		},
 		error : function(resp) {
-			$("#buyall").attr('onclick','sortingData();');								//启用按钮
+			$("#buyall").attr('onclick','buy();');								//启用按钮
 			var respText = eval('('+resp+')');
 			alert(respText.msg);
 		}
@@ -229,7 +226,6 @@ function buy(){
 				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermcuslevel":"' + customer.customerlevel
 				+ '","ordermcusshop":"' + customer.customershop
-				+ '","ordermemp":"补单'
 				+ '","ordermconnect":"' + $("#addressconnect").text()
 				+ '","ordermphone":"' + $("#addressphone").text()
 				+ '","ordermaddress":"' + $("#addressaddress").text()
@@ -241,12 +237,12 @@ function buy(){
 		$.each(sdishes, function(i, item) {
 			
 			var orderdnote = '';
-			if(item.orderdtype == '秒杀'){
+			if(item.orderdtype == '秒杀' || item.orderdtype == '年货' || item.orderdtype == '组合商品' ){
 				
 				if(typeof(item.goodsdetail)!='undefined' && item.goodsdetail){
-					orderdnote = '【秒杀】 '+item.goodsdetail;
+					orderdnote = '【'+item.orderdtype+'】 '+item.goodsdetail;
 				} else {
-					orderdnote = item.orderdtype;
+					orderdnote = '【'+item.orderdtype+'】 ';
 				}
 				
 //alert("秒杀结束");
@@ -283,7 +279,6 @@ function buy(){
 		saveOrder(ordermjson,orderdetjson);
      });
 }
-
 //保存订单和订单详情
 function saveOrder(ordermjson,orderdetjson){
 	$.ajax({

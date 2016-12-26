@@ -233,7 +233,7 @@ $(function(){
 		$(".gd-lower-liebiao span:eq(0)").text(data.givegoodsunits);
 		$(".gd-lower-liebiao span:eq(1)").text(changeStr(data.givegoodsbrand));
 		$(".gd-lower-liebiao span:eq(2)").text(data.givegoodsclass);
-	} else if(type == '预定'){
+	} else if(type == '年货' || type=='组合商品'){
 		var imgArr = data.bkgoodsimage.split(',');
 		$.each(imgArr,function(i,item){									//商品图
 			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
@@ -243,22 +243,46 @@ $(function(){
 				$('#position').append('<li class=""></li>');
 			}
 		});
-		$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.bkgoodsname+'（'+data.bkgoodsunits+'）<br><span style="color: #666;">'+data.bkgoodsdetail+'</span></span>');
-		$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsorgprice+'/'+data.bkgoodsunit+'</span>');
-		$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.bkgoodsid+'">'+
-	            '<span class="jian min"  onclick="subnum(this,'+data.bkgoodsorgprice+')"></span>'+
-	            '<input readonly="readonly" class="text_box shuliang" name="'+data.bkgoodsdetail+'" type="text" value="'+
-	             getcurrennumdanpin(data.bkgoodsid)+'"> '+
-	            ' <span class="jia add" onclick="addbkgoodsnum(this,'+data.bkgoodsorgprice
-				   +',\''+data.bkgoodsname+'\',\''+data.bkgoodsunit+'\',\''+data.bkgoodsunits
-				   +'\',\''+data.bkgoodscode+'\',\''+data.bkgoodsclass
-				   +'\',\''+data.bkgoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'
-				   +'\')"></span>'+
-				   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
-	        	'</div>');
+		$.ajax({
+			url:"GLOrderdAction.do?method=selCusXGOrderd",
+			type:"post",
+			data:{customerid:customer.customerid},
+			success : function(data2){
+				var cusOrder = JSON.parse(data2);
+				var dailySur = parseInt(data.bkgoodsnum);
+				if(cusOrder && cusOrder.root && cusOrder.root.length >0){
+					var itemGoodsCount = 0;
+					$.each(cusOrder.root,function(k,item3){
+						if(item3.orderdtype == data.bkgoodstype && item3.orderdgoods == data.bkgoodsid ){
+							itemGoodsCount += parseInt(item3.orderdclass);
+						}
+					});
+					dailySur = parseInt(data.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+				}
+				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.bkgoodsname+'（'+data.bkgoodsunits+'）<br><span style="color: #666;">'+changeStr(data.bkgoodsdetail)+'</span></span>');
+				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsorgprice+'/'+data.bkgoodsunit+'</span>');
+				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.bkgoodsid+'">'+
+			            '<span class="jian min"  onclick="subnum(this,'+data.bkgoodsorgprice+')"></span>'+
+			            '<input readonly="readonly" class="text_box shuliang" name="'+data.bkgoodsdetail+'" type="text" value="'+
+			             getcurrennumdanpin(data.bkgoodsid)+'"> '+
+			            ' <span name="'+dailySur+'" class="jia add" onclick="addbkgoodsnum(this,'+data.bkgoodsorgprice
+						   +',\''+data.bkgoodsname+'\',\''+data.bkgoodsunit+'\',\''+data.bkgoodsunits
+						   +'\',\''+data.bkgoodscode+'\',\''+changeStr(data.bkgoodsclass)
+						   +'\',\''+data.bkgoodscompany+'\',\''+data.companyshop+'\',\''+data.companydetail
+						   +'\')"></span>'+
+						   '<span hidden="ture">'+JSON.stringify(data)+'</span>'+
+			        	'</div>');
+			},
+			error : function(resp2){
+				var respText2 = eval('('+resp2+')');
+				alert(respText2.msg);
+			}
+		});
 		comImage(data.bkgoodscompany);									//广告图
 		$(".gd-lower-liebiao span:eq(0)").text(data.bkgoodsunits);
-		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodsclass);
+		$(".gd-lower-liebiao span:eq(1)").text(data.bkgoodsbrand);
+		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodstype);
+		
 	}
 	//弹窗
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
@@ -306,7 +330,7 @@ function docart(){
 		window.location.href = "cart.jsp";
 	}
 }
-//加号(预定商品)
+//加号(年货或组合商品)
 function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
 	if(!customer.customerid || customer.customerid == '' || typeof(customer.customerid) == 'undefined'){
 		$(".cd-popup").addClass("is-visible");
@@ -316,11 +340,11 @@ function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode
 		//数量
 		var numt = $(obj).prev(); 
 		var num = parseInt(numt.val());
-		//var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
-		/* if((parseInt(cusMSOrderNum) - num) <= 0){
+		var cusMSOrderNum = parseInt($(obj).attr("name"));				//每日限购剩余数量
+		if(item.bkgoodstype=='组合商品' && item.bkgoodsnum!=-1 && (parseInt(cusMSOrderNum) - num) <= 0){
 			alert('您购买的商品超过了限购数量。');
 			return;
-		} else { */
+		} else {
 			if(!window.localStorage.getItem("totalmoney")){
 				window.localStorage.setItem("totalmoney","0");
 			}
@@ -343,7 +367,7 @@ function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode
 				//新增订单
 				var mdishes = new Object();
 				mdishes.goodsid = item.bkgoodsid;
-				mdishes.goodsdetail = item.bkgoodsdetail;
+				mdishes.goodsdetail = changeStr(item.bkgoodsdetail);
 				mdishes.goodscompany = goodscompany;
 				mdishes.companyshop = companyshop;
 				mdishes.companydetail = companydetail;
@@ -354,8 +378,12 @@ function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode
 				mdishes.goodsname = goodsname;
 				mdishes.goodsunits = goodsunits;
 				mdishes.orderdetnum = num + 1;
-				mdishes.goodsimage = item.bkgoodsimage;
-				mdishes.orderdtype = '预定';
+				var bkgoodsimages = item.bkgoodsimage.split(',');
+				mdishes.goodsimage = bkgoodsimages[0];
+				mdishes.timegoodsnum = item.bkgoodsnum;
+				mdishes.goodsweight = item.bkgoodsweight;
+				mdishes.goodsbrand = item.bkgoodsbrand;
+				mdishes.orderdtype = type;
 				sdishes.push(mdishes);
 				//种类数
 				var tnum = parseInt(window.localStorage.getItem("totalnum"));
@@ -365,7 +393,7 @@ function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode
 				//修改订单
 				$.each(sdishes, function(i, item3) {
 					if(item3.goodsid==item.bkgoodsid
-							&&item3.goodsclassname==item.bkgoodsclass){
+							&&item3.orderdtype==item.bkgoodstype){
 						item3.orderdetnum = item3.orderdetnum + 1;
 						return false;
 					}
@@ -376,7 +404,7 @@ function addbkgoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode
 			var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 			$("#totalnum").text(cartnum+1);
 			window.localStorage.setItem("cartnum",cartnum+1);
-		//}
+		}
 }
 //加号(秒杀商品)
 function addtimegoodsnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsclassname,goodscompany,companyshop,companydetail){
