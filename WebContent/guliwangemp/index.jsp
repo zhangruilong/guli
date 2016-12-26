@@ -79,12 +79,8 @@
 			</ul>
 		</div>
 		
-		<div class="" style="padding-top: 10px;margin-bottom: 15%;">
+		<div id="index-area-box" class="" style="padding-top: 10px;margin-bottom: 15%;">
 			
-	        <a id="a_myshop" onclick="" href="miaosha.jsp"><img alt="秒杀商品" src="../images/index_miaosha.jpg"></a>
-	        <a id="a_mycollect" onclick="" href="give.jsp"><img alt="买赠商品" src="../images/index_maizeng.jpg"></a>
-	        <a onclick="doLuoJaGoods()" href="javascript:void(0);"><img alt="裸价商品" src="../images/index_luojia.jpg"></a>
-	        <a onclick="" href="hotgoods.jsp"><img alt="热销商品" src="../images/index_rexiao.jpg"></a>
 	    </div>
 		<div class="personal-center-nav">
     	<ul>
@@ -128,10 +124,38 @@ $(function(){
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	$(".citydrop").text(customer.customerxian);
+	initCustomer();
 });
 //跳转
 function dohrefJump(url){
 	window.location.href = url;
+}
+//得到客户信息
+function initCustomer(){
+		//首页图片和首页专区
+		$.ajax({
+			url:"GLSystem_attachAction.do?method=shouyeImg",
+			type:"post",
+			data:{
+				customerid:customer.customerid
+			},
+			success:function(resp){
+				var pageData = eval('('+resp+')');
+				if(pageData.msg=='操作成功'){
+					var href = "javascript:;";
+					var areaArray = pageData.area;		//首页区
+					$.each(areaArray,function(i,item){
+						$('#index-area-box').append('<a onclick="" href="'+item.indexareaurl+'"><img alt="'+item.indexareaname+'" src="../'+item.indexareaimage+'"></a>');
+					});
+				} else {
+					alert(pageData.msg);
+				}
+			},
+			error:function(resp){
+				var pageData = eval('('+resp+')');
+				alert(pageData.msg);
+			}
+		});
 }
 //到裸价商品
 function doLuoJaGoods(){

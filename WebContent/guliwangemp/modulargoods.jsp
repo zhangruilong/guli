@@ -41,7 +41,7 @@
 <script src="../js/jquery-dropdown.js"></script>
 <script src="../js/base.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var bkgoodscode = '${param.bkgoodscode}';
 $(function(){ 
 	//购物车图标上的数量
@@ -138,13 +138,11 @@ function initCarnivalPage(resp){
 					}
 				}
 				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
-				+changeStr(item2.bkgoodsdetail)+'</span>'
-				+ '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>';
-				//判断是否有原价
-				if(typeof(item2.bkgoodsprice)!='undefined' && item2.bkgoodsprice) {
-					liObj += ' <em>￥'+item2.bkgoodsprice+'</em>';
-				}
-				liObj += '</div>'+
+				+changeStr(item2.bkgoodsdetail)+'</span>';
+				/* alert(item2.companydetail);
+				return; */
+				liObj += '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>'+
+				' <em>￥'+item2.bkgoodsprice+'</em></div>'+
 					'<div class="miaosha_stock-num" name="'+item2.bkgoodsid+'">'+
 		            '<span class="jian min"  onclick="subnum(this,\''+item2.bkgoodsorgprice+'\',\''+item2.bkgoodsclass+'\')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
@@ -155,7 +153,8 @@ function initCarnivalPage(resp){
 					   +'\',\''+item2.bkgoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
 					   +'\',\''+item2.bkgoodssurplus+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
-		        	'</div></div></li>';
+		        	'</div></div>';
+		        liObj += '</li>';
 				$(".home-hot-commodity").append(liObj);
 			});
 		},

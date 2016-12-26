@@ -41,7 +41,7 @@
 <script src="../js/jquery-dropdown.js"></script>
 <script src="../js/base.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var bkgoodscode = '${param.bkgoodscode}';
 $(function(){ 
 	//购物车图标上的数量
@@ -110,11 +110,8 @@ function initCarnivalPage(resp){
 		'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+
 		'</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');" class="miaosha-detail" >'+
 		changeStr(item.bkgoodsdetail)+'</span>'+
-		'<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item.bkgoodsorgprice+'/'+item.bkgoodsunit+'</strong>';
-		if(typeof(item.bkgoodsprice)!='undefined' && item.bkgoodsprice){
-			liObj += ' <em>￥'+item.bkgoodsprice+'</em>';
-		}
-		liObj += '</div>'+
+		'<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item.bkgoodsorgprice+'/'+item.bkgoodsunit+'</strong>'+
+		' <em>￥'+item.bkgoodsprice+'</em></div>'+
 			'<div class="miaosha_stock-num" name="'+item.bkgoodsid+'">'+
             '<span class="jian min"  onclick="subnum(this,\''+item.bkgoodsorgprice+'\',\''+item.bkgoodsclass+'\')"></span>'+
             '<input readonly="readonly" class="text_box shuliang" type="text" value="'+
