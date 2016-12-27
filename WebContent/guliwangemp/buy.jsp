@@ -222,6 +222,7 @@ function buy(){
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
+				+ '","ordermemp":"补单'									//订单源
 				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermcuslevel":"' + customer.customerlevel
