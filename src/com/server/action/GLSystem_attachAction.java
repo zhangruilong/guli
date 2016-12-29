@@ -3,22 +3,17 @@ package com.server.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.server.pojo.Ccustomer;
-import com.server.pojo.Customer;
 import com.server.pojo.Indexarea;
 import com.system.action.System_attachAction;
-import com.system.poco.System_attachPoco;
 import com.system.pojo.System_attach;
 import com.system.tools.CommonConst;
 import com.system.tools.pojo.Fileinfo;
-import com.system.tools.pojo.Pageinfo;
-import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.FileUtil;

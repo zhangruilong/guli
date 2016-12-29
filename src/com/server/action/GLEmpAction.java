@@ -8,13 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.server.poco.EmpPoco;
 import com.server.pojo.Emp;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseActionDao;
-import com.system.tools.pojo.Fileinfo;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
-import com.system.tools.util.DateUtils;
-import com.system.tools.util.FileUtil;
 
 /**
  * 业务员 逻辑层

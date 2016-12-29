@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.GoodsclassPoco;
 import com.server.pojo.Ccustomer;
-import com.server.pojo.Company;
-import com.server.pojo.Customer;
 import com.server.pojo.Goodsclass;
 import com.system.tools.CommonConst;
 import com.system.tools.pojo.Pageinfo;

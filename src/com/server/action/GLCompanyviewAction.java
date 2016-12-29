@@ -1,6 +1,5 @@
 package com.server.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,11 +9,9 @@ import com.server.poco.CompanyviewPoco;
 import com.server.pojo.Ccustomer;
 import com.server.pojo.Companyview;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
-import com.system.tools.util.FileUtil;
 
 /**
  * 经销商 逻辑层

@@ -10,11 +10,9 @@ import com.server.pojo.Ccustomer;
 import com.server.pojo.Collect;
 import com.server.pojo.Goodsview;
 import com.system.tools.CommonConst;
-import com.system.tools.base.BaseActionDao;
 import com.system.tools.pojo.Pageinfo;
 import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
-import com.system.tools.util.FileUtil;
 
 /**
  * 商品 逻辑层
