@@ -73,8 +73,7 @@ public class GLOrderdAction extends OrderdAction {
 		for (Orderd item : cuss) {
 			GoodsVo gvo = new GoodsVo();
 			if(item.getOrderdtype().equals("商品")){
-				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodscode = '"+item.getOrderdcode()+
-							   "' and gv.goodsunits = '"+item.getOrderdunits()+
+				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodsid = '"+item.getOrderdgoods()+
 							   "' and gv.pricesclass = '"+customertype+
 							   "' and gv.priceslevel = "+customerlevel+
 							   " and gv.goodsstatue = '上架'");
@@ -86,34 +85,10 @@ public class GLOrderdAction extends OrderdAction {
 					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
 				}
 				gvoList.add(gvo);
-			} else if(item.getOrderdtype().equals("秒杀")){
-				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
-								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
-								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '%"+customertype+"%'");
-				if(tgviewList.size() >0){
-					gvo.setType(item.getOrderdtype());
-					gvo.setTgview(tgviewList.get(0));
-					gvo.setNowGoodsNum(item.getOrderdnum());
-				} else {
-					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
-				}
-				gvoList.add(gvo);
-			} else if(item.getOrderdtype().equals("买赠")){
-				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
-								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
-								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '%"+customertype+"%'");
-				if(ggviewList.size() >0){
-					gvo.setType(item.getOrderdtype());
-					gvo.setGgview(ggviewList.get(0));
-					gvo.setNowGoodsNum(item.getOrderdnum());
-				} else {
-					msg += item.getOrderdname()+"("+item.getOrderdunits()+")";
-				}
-				gvoList.add(gvo);
-			} else if(item.getOrderdtype().equals("年货") || item.getOrderdtype().equals("组合商品")){
-				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodscode = '"+
-						item.getOrderdcode()+"' and bv.bkgoodsunits = '"+item.getOrderdunits()+
-						"' and bv.bkgoodsstatue = '启用'");
+			} else if(item.getOrderdtype().equals("年货") || item.getOrderdtype().equals("组合商品") || 
+					item.getOrderdtype().equals("秒杀") || item.getOrderdtype().equals("买赠")){
+				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodsid = '"+
+						item.getOrderdgoods()+"' and bv.bkgoodsstatue = '启用'");
 				if(bgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setBgview(bgviewList.get(0));
@@ -232,36 +207,13 @@ public class GLOrderdAction extends OrderdAction {
 						svoList.get(i).setPricesprice(gp);							//修改价格
 					}
 				}
-			} else if(svo.getOrderdtype().equals("秒杀")){
-				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodsid = '"+
-						svo.getGoodsid()+"' and tv.timegoodsstatue = '启用' and timegoodsscope like '%"+customertype+"%'");
-				if(tgviewList.size() == 0){
-					svoListremove.add(svo);
-					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
-				} else {
-					String tp = tgviewList.get(0).getTimegoodsorgprice().toString();
-					if(!tp.equals(svo.getPricesprice())){
-						svoList.get(i).setPricesprice(Float.parseFloat(tp));							//修改价格
-					}
-				}
-			} else if(svo.getOrderdtype().equals("买赠")){
-				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodsid = '"+
-						svo.getGoodsid()+"' and gv.givegoodsstatue = '启用' and givegoodsscope like '%"+customertype+"%'");
-				if(ggviewList.size() == 0){
-					svoListremove.add(svo);
-					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
-				} else {
-					String gp = ggviewList.get(0).getGivegoodsprice().toString();
-					if(!gp.equals(svo.getPricesprice())){
-						svoList.get(i).setPricesprice(Float.parseFloat(gp));							//修改价格
-					}
-				}
-			} else if(svo.getOrderdtype().equals("年货") || svo.getOrderdtype().equals("组合商品")){
+			} else if(svo.getOrderdtype().equals("年货") || svo.getOrderdtype().equals("组合商品") || 
+					svo.getOrderdtype().equals("买赠") || svo.getOrderdtype().equals("秒杀") ){
 				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodsid = '"+
 						svo.getGoodsid()+"' and bv.bkgoodsstatue = '启用' and bv.bkgoodsscope like '%"+customertype+"%'");
 				if(bgviewList.size() == 0){
 					svoListremove.add(svo);
-					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
+					xjGoodsMsg += svo.getGoodsname()+",";							//提示信息
 				} else {
 					Float gp = bgviewList.get(0).getBkgoodsorgprice();
 					if(!gp.equals(svo.getPricesprice())){
@@ -313,27 +265,8 @@ public class GLOrderdAction extends OrderdAction {
 				}
 			}
 			
-			//检查秒杀商品的剩余数量
-			if(svo.getOrderdtype().equals("秒杀") ){
-				List<Timegoods> tgList = selAll(Timegoods.class, "select * from timegoods tg where tg.timegoodsid = '"+svo.getGoodsid()+"'");
-				if(CommonUtil.isNotEmpty(tgList)){
-					Integer surnum = tgList.get(0).getSurplusnum();			//剩余数量
-					if(odNum != -1 && tgList.get(0).getAllnum() > 0){						//如果有设置总限购，并且订单商品没有被删除。
-						if(surnum <= 0){									//判断剩余数量
-							svoListremove.add(svoList.get(i));
-							deleGoodsMsg += svo.getGoodsname()+",";									//提示信息
-						} else if(odNum > surnum && odNum.equals(svo.getOrderdetnum())){				//如果没有被修改过,并且下单数量大于剩余数量
-							editNumMsg += svo.getGoodsname()+",";									//提示信息
-							odNum = surnum;
-							svoList.get(i).setOrderdetnum(odNum);
-						} else {											//如果有被修改过
-							odNum = surnum;
-						}
-					}
-				}
-			}
 			//检查组合商品的剩余数量
-			if(svo.getOrderdtype().equals("组合商品")){
+			if(svo.getOrderdtype().equals("组合商品") || svo.getOrderdtype().equals("秒杀")){
 				List<Bkgoods> tgList = selAll(Bkgoods.class, "select * from bkgoods bkg where bkg.bkgoodsid = '"+svo.getGoodsid()+"'");
 				if(CommonUtil.isNotEmpty(tgList)){
 					Integer surnum = tgList.get(0).getBkgoodssurplus();			//剩余数量
