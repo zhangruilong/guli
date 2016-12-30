@@ -211,12 +211,12 @@ $(function(){
 					dailySur = parseInt(data.bkgoodsnum) - bkgoodsCount;																//每日限购剩余数量
 				}
 				$("#gdw_t_li2").html('<span class="goods_ti_gn">'+data.bkgoodsname+'（'+data.bkgoodsunits+'）<br><span style="color: #666;">'+data.bkgoodsdetail+'</span></span>');
-				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsprice+'/'+data.bkgoodsunit+'</span>');
+				$("#gdw_t_li2").append('<span class="gdw_t_li3_pri">￥'+data.bkgoodsorgprice+'/'+data.bkgoodsunit+'</span>');
 				$("#gdw_t_li2").append('<div class="gdw_t_li_stock_num" name="'+data.bkgoodsid+'">'+
-			            '<span class="jian min"  onclick="subnum(this,'+data.bkgoodsprice+')"></span>'+
+			            '<span class="jian min"  onclick="subnum(this,'+data.bkgoodsorgprice+')"></span>'+
 			            '<input readonly="readonly" class="text_box shuliang" name="'+data.bkgoodsdetail+'" type="text" value="'+
 			             getcurrennumdanpin(data.bkgoodsid)+'"> '+
-			            ' <span name="'+dailySur+'" class="jia add" onclick="addbkgoodsnum(this,'+data.bkgoodsprice
+			            ' <span name="'+dailySur+'" class="jia add" onclick="addbkgoodsnum(this,'+data.bkgoodsorgprice
 						   +',\''+data.bkgoodsname+'\',\''+data.bkgoodsunit+'\',\''+data.bkgoodsunits
 						   +'\',\''+data.bkgoodscode+'\',\''+data.bkgoodstype
 						   +'\',\''+data.bkgoodscompany+'\',\'海盐天然粮油有限公司\',\'送达时间：订单商品24小时内送达。'

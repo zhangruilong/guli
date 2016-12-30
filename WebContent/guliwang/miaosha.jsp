@@ -143,7 +143,7 @@ function initMiaoshaPage(resp){
 				+changeStr(item2.bkgoodsdetail)+'</span>'
 				+ '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>';
 				//判断是否有原价
-				if(typeof(item2.bkgoodsprice)!='undefined' && item2.bkgoodsprice) {
+				if(typeof(item2.bkgoodsprice)!='undefined' && item2.bkgoodsprice && item2.bkgoodsprice!=0) {
 					liObj += ' <em>￥'+item2.bkgoodsprice+'</em>';
 				}
 				liObj += '</div>'+

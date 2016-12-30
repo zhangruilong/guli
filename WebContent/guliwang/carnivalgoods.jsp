@@ -111,7 +111,7 @@ function initCarnivalPage(resp){
 		'</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');" class="miaosha-detail" >'+
 		changeStr(item.bkgoodsdetail)+'</span>'+
 		'<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item.bkgoodsorgprice+'/'+item.bkgoodsunit+'</strong>';
-		if(typeof(item.bkgoodsprice)!='undefined' && item.bkgoodsprice){
+		if(typeof(item.bkgoodsprice)!='undefined' && item.bkgoodsprice && item.bkgoodsprice!=0){
 			liObj += ' <em>￥'+item.bkgoodsprice+'</em>';
 		}
 		liObj += '</div>'+

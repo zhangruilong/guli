@@ -113,7 +113,7 @@ function initMaizengPage(resp){
 					'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');">'+item1.bkgoodsname+
 						'<span>（'+item1.bkgoodsunits+'）</span>'+
 					'</h1><div class="block"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
-					+item1.bkgoodsdetail+'</span><br> <span class="bkgoods_li_priceANDunit"> <strong>￥'+item1.bkgoodsprice+'/'+item1.bkgoodsunit+
+					+item1.bkgoodsdetail+'</span><br> <span class="bkgoods_li_priceANDunit"> <strong>￥'+item1.bkgoodsorgprice+'/'+item1.bkgoodsunit+
 					'</strong> ';
 				if(cusOrder && cusOrder.root && cusOrder.root.length >0 && parseInt(item1.bkgoodsnum) != -1){
 					var bkgoodsCount = 0;
@@ -129,10 +129,10 @@ function initMaizengPage(resp){
 				}
 				liObj += '</span><span hidden="ture" style="display:none;">'+JSON.stringify(item1)+'</span>';
 				liObj += '<div class="stock-num" name="'+item1.bkgoodsid+'">'+
-		            '<span class="jian min"  onclick="subnum(this,'+item1.bkgoodsprice+')"></span>'+
+		            '<span class="jian min"  onclick="subnum(this,'+item1.bkgoodsorgprice+')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="'+item1.bkgoodsdetail+'" type="text" value="'+
 		             getcurrennumdanpin(item1.bkgoodsid)+'"> '+
-		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item1.bkgoodsprice
+		            ' <span name="'+dailySur+'" class="jia add" onclick="addnum(this,'+item1.bkgoodsorgprice
 					   +',\''+item1.bkgoodsname+'\',\''+item1.bkgoodsunit+'\',\''+item1.bkgoodsunits
 					   +'\',\''+item1.bkgoodscode+'\',\''+item1.bkgoodsclass
 					   +'\',\''+item1.bkgoodscompany+'\',\''+item1.companyshop+'\',\''+item1.companydetail
