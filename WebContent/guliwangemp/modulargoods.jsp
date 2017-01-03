@@ -66,13 +66,13 @@ $(function(){
 		//companyid = emp.empcompany;
 	}
 	$.ajax({
-		url:"GLBkgoodsviewAction.do?method=carnivalGoods",	//组合商品
+		url:"GLBkgoodsviewAction.do?method=carnivalGoods",	//组合
 		type:"post",
 		data:{
 			companyid:companyid,
 			customerid:customer.customerid,
 			customertype:customer.customertype,
-			bkgoodstype:'组合商品',
+			bkgoodstype:'组合',
 			bkgoodscode:bkgoodscode
 		},
 		success : initCarnivalPage,
@@ -84,7 +84,7 @@ $(function(){
 });
 //到商品详情页
 function gotogoodsDetail(jsonitem){
-	window.location.href = 'goodsDetail.jsp?type=组合商品&goods='+jsonitem;
+	window.location.href = 'goodsDetail.jsp?type=组合&goods='+jsonitem;
 }
 //初始化页面
 function initCarnivalPage(resp){
@@ -119,7 +119,7 @@ function initCarnivalPage(resp){
 					if(item2.bkgoodsnum != -1){					//如果有每日限购
 						var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
-							if(item3.orderdtype == '组合商品' && item3.orderdgoods == item2.bkgoodsid ){
+							if(item3.orderdtype == '组合' && item3.orderdgoods == item2.bkgoodsid ){
 								itemGoodsCount += parseInt(item3.orderdclass);
 							}
 						});
@@ -138,11 +138,13 @@ function initCarnivalPage(resp){
 					}
 				}
 				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
-				+changeStr(item2.bkgoodsdetail)+'</span>';
-				/* alert(item2.companydetail);
-				return; */
-				liObj += '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>'+
-				' <em>￥'+item2.bkgoodsprice+'</em></div>'+
+				+changeStr(item2.bkgoodsdetail)+'</span>'
+				+ '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>';
+				//判断是否有原价
+				if(typeof(item2.bkgoodsprice)!='undefined' && item2.bkgoodsprice && item2.bkgoodsprice!=0) {
+					liObj += ' <em>￥'+item2.bkgoodsprice+'</em>';
+				}
+				liObj += '</div>'+
 					'<div class="miaosha_stock-num" name="'+item2.bkgoodsid+'">'+
 		            '<span class="jian min"  onclick="subnum(this,\''+item2.bkgoodsorgprice+'\',\''+item2.bkgoodsclass+'\')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
@@ -153,8 +155,7 @@ function initCarnivalPage(resp){
 					   +'\',\''+item2.bkgoodscompany+'\',\''+item2.companyshop+'\',\''+item2.companydetail
 					   +'\',\''+item2.bkgoodssurplus+'\')"></span>'+
 					   '<span hidden="ture">'+JSON.stringify(item2)+'</span>'+
-		        	'</div></div>';
-		        liObj += '</li>';
+		        	'</div></div></li>';
 				$(".home-hot-commodity").append(liObj);
 			});
 		},
@@ -228,7 +229,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 	 			bkgoodsimages[0] = 'images/default.jpg';
 	 		}
 			mdishes.goodsimage = bkgoodsimages[0];
-			mdishes.orderdtype = '组合商品';
+			mdishes.orderdtype = '组合';
 			mdishes.surplusnum = item.bkgoodssurplus;
 			mdishes.timegoodsnum = item.bkgoodsnum;
 			mdishes.goodsweight = item.bkgoodsweight;
@@ -242,7 +243,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 			//修改订单
 			$.each(sdishes, function(i, item3) {
 				if(item3.goodsid==$(obj).parent().attr('name')
-						&&item3.orderdtype==item.bkgoodstype){
+						&&item3.orderdtype=='组合'){
 					item3.orderdetnum = item3.orderdetnum + 1;
 					return false;
 				}
@@ -272,7 +273,7 @@ function subnum(obj,pricesprice,goodsclassname){
 			//删除订单
 			$.each(sdishes,function(i,item){
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.orderdtype=="组合商品"){
+						&&item.orderdtype=="组合"){
 					sdishes.splice(i,1);
 					return false;
 				}
@@ -286,7 +287,7 @@ function subnum(obj,pricesprice,goodsclassname){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.orderdtype=="组合商品"){
+						&&item.orderdtype=="组合"){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}
@@ -309,7 +310,7 @@ function getcurrennumdanpin(dishesid){
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==dishesid
-					&&item.orderdtype=="组合商品"){
+					&&item.orderdtype=="组合"){
 				orderdetnum = item.orderdetnum;
 				return false;
 			}

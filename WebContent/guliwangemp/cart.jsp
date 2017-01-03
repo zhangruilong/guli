@@ -169,21 +169,21 @@ function initDishes(data){
 		    		if(cusOrder.root && cusOrder.root.length > 0){
 		    			var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
-							if(item.orderdtype == item3.orderdtype && item3.orderdcode == item.goodscode && item3.orderdunits == item.goodsunits){
-								itemGoodsCount += parseInt(item3.orderdclass);
+							if(item.orderdtype == item3.orderdtype && item3.goodsid == item.goodsid ){
+								itemGoodsCount += parseInt(item3.orderdclass);				//orderdclass里面放的是订单数量
 							}
 						});
-						dailySur = parseInt(item.timegoodsnum) - itemGoodsCount;																//每日限购剩余数量
+						dailySur = parseInt(item.timegoodsnum) - itemGoodsCount;			//每日限购剩余数量
 		    		}
 		    		if(mcompany.ordermcompany==item.goodscompany)
 		            $(".cart-wrapper").append('<li name="'+item.goodsid+'">'+
 		                      	'<em><img src="../'+item.goodsimage+
 		         	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></em> '+
 		                      	'<h2>'+item.goodsname+' <span class="price">'+item.pricesprice+'元/'+item.pricesunit+'</span></h2>'+
-		          				'<span onclick="subnum(this,\''+item.pricesprice+'\',\''+item.goodsclassname+'\')" class="jian min"></span>'+
-		                          '<input class="text_box shuliang" readonly="readonly" name="'+item.goodsdetail+'" type="text" value="'+
-		       	                getcurrennum(item.goodsid,item.goodsdetail)+'"> '+
-		                          '<span name="'+dailySur+'" onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.goodsclassname+'\',\''+item.timegoodsnum+'\')" class="jia add"></span>'+
+		          				'<span onclick="subnum(this,\''+item.pricesprice+'\',\''+item.orderdtype+'\')" class="jian min"></span>'+
+		                          '<input class="text_box shuliang" readonly="readonly" name="'+item.orderdtype+'" type="text" value="'+
+		       	                getcurrennum(item.goodsid,item.orderdtype)+'"> '+
+		                          '<span name="'+dailySur+'" onclick="addnum(this,'+item.pricesprice+',\''+item.goodscode+'\',\''+item.orderdtype+'\',\''+item.timegoodsnum+'\')" class="jia add"></span>'+
 		                      '</li>');
 		       });
 		       $(".cart-wrapper").append('</ul><div class="songda">'+mcompany.companydetail+'</div>');		//添加供应商信息
@@ -196,7 +196,7 @@ function initDishes(data){
 	});
 }
 //得到商品数量
-function getcurrennum(dishesid,goodsdetail){
+function getcurrennum(dishesid,orderdtype){
 	//订单
 	if(window.localStorage.getItem("sdishes")==null){
 		return 0;
@@ -205,7 +205,7 @@ function getcurrennum(dishesid,goodsdetail){
 		var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==dishesid
-					&&item.goodsdetail==goodsdetail){
+					&&item.orderdtype==orderdtype){
 				orderdetnum = item.orderdetnum;
 				return false;
 			}
@@ -214,7 +214,7 @@ function getcurrennum(dishesid,goodsdetail){
 	}
 }
 //加号
-function addnum(obj,dishesprice,goodscode,goodsclassname,timegoodsnum){
+function addnum(obj,dishesprice,goodscode,orderdtype,timegoodsnum){
 	var sdishes = JSON.parse(window.localStorage.getItem("sdishes"));
 	var cusMSOrderNum = parseInt($(obj).attr("name"));
 	var numt = $(obj).prev(); 
@@ -237,7 +237,7 @@ function addnum(obj,dishesprice,goodscode,goodsclassname,timegoodsnum){
 		//修改订单
 		$.each(sdishes, function(i, item) {
 			if(item.goodsid==$(obj).parent().attr('name')
-					&&item.goodsclassname == goodsclassname ){
+					&&item.orderdtype == orderdtype ){
 				item.orderdetnum = item.orderdetnum + 1;
 				return false;
 			}
@@ -248,7 +248,7 @@ function addnum(obj,dishesprice,goodscode,goodsclassname,timegoodsnum){
 	}
 }
 //减号
-function subnum(obj,dishesprice,goodsclassname){
+function subnum(obj,dishesprice,orderdtype){
 	var numt = $(obj).next(); 
 	var num = parseInt(numt.val());
 	if(num > 0){
@@ -266,7 +266,7 @@ function subnum(obj,dishesprice,goodsclassname){
 		if(num == 1){
 			//删除订单
 			$.each(sdishes,function(i,item){
-				if(item.goodsid==$(obj).parent().attr('name')){
+				if(item.goodsid==$(obj).parent().attr('name')&&item.orderdtype==orderdtype){
 					sdishes.splice(i,1);
 					return false;
 				};
@@ -280,7 +280,7 @@ function subnum(obj,dishesprice,goodsclassname){
 			//修改订单
 			$.each(sdishes, function(i, item) {
 				if(item.goodsid==$(obj).parent().attr('name')
-						&&item.goodsclassname == goodsclassname ){
+						&&item.orderdtype == orderdtype ){
 					item.orderdetnum = item.orderdetnum - 1;
 					return false;
 				}

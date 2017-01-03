@@ -59,7 +59,7 @@
 <script> 
 var basePath = '<%=basePath%>';
 var openid = window.localStorage.getItem("openid");
-var customer = JSON.parse(window.localStorage.getItem("empcustomer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);

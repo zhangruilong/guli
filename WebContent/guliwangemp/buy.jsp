@@ -222,8 +222,8 @@ function buy(){
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
-				+ '","ordermemp":"补单'									//订单源
 				+ '","ordermmoney":"' + mcompany.ordermmoney
+				+ '","ordermemp":"补单'
 				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermcuslevel":"' + customer.customerlevel
 				+ '","ordermcusshop":"' + customer.customershop
@@ -253,6 +253,10 @@ function buy(){
 			}
 			//alert(JSON.stringify(item));
 			if(mcompany.ordermcompany == item.goodscompany){
+				var goodsweight = parseInt(item.goodsweight);
+				if(isNaN(goodsweight)){
+					goodsweight = 0;
+				}
 				//alert("正常开始");
 				orderdetjson += '{"orderdid":"' + item.goodsid
 						+ '","orderdcode":"' + item.goodscode
@@ -264,7 +268,7 @@ function buy(){
 						+ '","orderdunit":"' + item.pricesunit
 						+ '","orderdclass":"' + item.goodsclassname
 						+ '","orderdnum":"' + item.orderdetnum
-						+ '","orderdweight":"' + item.goodsweight
+						+ '","orderdweight":"' + goodsweight
 						+ '","orderdnote":"' + orderdnote					//订单备注
 						+ '","orderdgoods":"' + item.goodsid				//商品id
 						+ '","orderdbrand":"' + changeStr(item.goodsbrand)		//商品品牌

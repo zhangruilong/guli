@@ -101,60 +101,7 @@ function regoumai(){
 						mdishes.goodsweight = item.goodsview.goodsweight;
 						mdishes.goodsbrand = item.goodsview.goodsbrand;
 						money = (parseFloat(item.goodsview.pricesprice) * now_GNum).toFixed(2);
-					} else if(item.type == '秒杀' && item.statue != '下架'){
-						var mdishes = new Object();
-						mdishes.goodsid = item.tgview.timegoodsid;
-						mdishes.goodsdetail = item.tgview.timegoodsdetail;
-						mdishes.goodscompany = item.tgview.timegoodscompany;
-						mdishes.companyshop = item.tgview.companyshop;
-						mdishes.companydetail = item.tgview.companydetail;
-						mdishes.goodsclassname = item.tgview.timegoodsclass;
-						mdishes.goodscode = item.tgview.timegoodscode;
-						mdishes.pricesprice = item.tgview.timegoodsorgprice;
-						mdishes.pricesunit = item.tgview.timegoodsunit;
-						mdishes.goodsname = item.tgview.timegoodsname;
-						var timegoodsimages = [];
-				 		if(typeof(item.tgview.timegoodsimage)!='undefined'){
-				 			timegoodsimages = item.tgview.timegoodsimage.split(',');
-				 		} else {
-				 			timegoodsimages[0] = 'images/default.jpg';
-				 		}
-						mdishes.goodsimage = timegoodsimages[0];
-						mdishes.orderdtype = item.type;
-						mdishes.goodsunits = item.tgview.timegoodsunits;
-						mdishes.orderdetnum = item.nowGoodsNum;
-						mdishes.surplusnum = item.tgview.surplusnum;
-						mdishes.timegoodsnum = item.tgview.timegoodsnum;
-						mdishes.goodsweight = item.tgview.timegoodsweight;
-						mdishes.goodsbrand = item.tgview.timegoodsbrand;
-						money = (parseFloat(item.tgview.timegoodsorgprice) * now_GNum).toFixed(2);
-					} else if(item.type == '买赠' && item.statue != '下架'){
-						var mdishes = new Object();
-						mdishes.goodsid = item.ggview.givegoodsid;
-						mdishes.goodsdetail = item.ggview.givegoodsdetail;
-						mdishes.goodscompany = item.ggview.givegoodscompany;
-						mdishes.companyshop = item.ggview.companyshop;
-						mdishes.companydetail = item.ggview.companydetail;
-						mdishes.goodsclassname = item.ggview.givegoodsclass;
-						mdishes.goodscode = item.ggview.givegoodscode;
-						mdishes.pricesprice = item.ggview.givegoodsprice;
-						mdishes.pricesunit = item.ggview.givegoodsunit;
-						mdishes.goodsname = item.ggview.givegoodsname;
-						var givegoodsimages = [];
-						if(typeof(item.ggview.givegoodsimage)!='undefined'){
-							givegoodsimages = item.ggview.givegoodsimage.split(',');
-				 		} else {
-				 			givegoodsimages[0] = 'images/default.jpg';
-				 		}
-						mdishes.goodsimage = givegoodsimages[0];
-						mdishes.orderdtype = item.type;
-						mdishes.goodsunits = item.ggview.givegoodsunits;
-						mdishes.orderdetnum = item.nowGoodsNum;
-						mdishes.timegoodsnum = item.ggview.givegoodsnum;
-						mdishes.goodsweight = item.ggview.givegoodsweight;
-						mdishes.goodsbrand = item.ggview.givegoodsbrand;
-						money = (parseFloat(item.ggview.givegoodsprice) * now_GNum).toFixed(2);
-					} else if((item.type=='年货' || item.type=='组合商品') && item.statue != '下架'){
+					} else if((item.type=='年货' || item.type=='组合' || item.type=='秒杀' || item.type=='买赠') && item.statue != '下架'){
 						var mdishes = new Object();
 						mdishes.goodsid = item.bgview.bkgoodsid;
 						mdishes.goodsdetail = item.bgview.bkgoodsdetail;
@@ -170,10 +117,8 @@ function regoumai(){
 						mdishes.orderdtype = item.type;
 						mdishes.goodsunits = item.bgview.bkgoodsunits;
 						mdishes.goodsweight = item.bgview.bkgoodsweight;
-						if(item.type=='组合商品'){
-							mdishes.surplusnum = item.bgview.bkgoodssurplus;	//剩余数量
-							mdishes.timegoodsnum = item.bgview.bkgoodsnum;	//限购数量
-						}
+						mdishes.surplusnum = item.bgview.bkgoodssurplus;	//剩余数量
+						mdishes.timegoodsnum = item.bgview.bkgoodsnum;	//限购数量
 						mdishes.orderdetnum = item.nowGoodsNum;
 						money = (parseFloat(item.bgview.bkgoodsorgprice) * now_GNum).toFixed(2);
 					}
@@ -237,102 +182,7 @@ function regoumai(){
 								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
 								window.localStorage.setItem("cartnum",cartnum+now_GNum);
 							}
-						} else if(item.type == '秒杀' && item.statue != '下架'){
-							if( item1.goodsid == item.tgview.timegoodsid){
-								//如果商品id相同
-								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.tgview.timegoodsorgprice) * now_GNum ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+now_GNum);
-								return false;
-							} else if(j == (tnum-1)){
-								//如果最后一次进入时goodsid不相同
-								//新增订单
-								var mdishes = new Object();
-								mdishes.goodsid = item.tgview.timegoodsid;
-								mdishes.goodsdetail = item.tgview.timegoodsdetail;
-								mdishes.goodscompany = item.tgview.timegoodscompany;
-								mdishes.companyshop = item.tgview.companyshop;
-								mdishes.companydetail = item.tgview.companydetail;
-								mdishes.goodsclassname = item.tgview.timegoodsclass;
-								mdishes.goodscode = item.tgview.timegoodscode;
-								mdishes.pricesprice = item.tgview.timegoodsorgprice;
-								mdishes.pricesunit = item.tgview.timegoodsunit;
-								mdishes.goodsname = item.tgview.timegoodsname;
-								var timegoodsimages = [];
-								if(typeof(item.tgview.timegoodsimage)!='undefined'){
-						 			timegoodsimages = item.tgview.timegoodsimage.split(',');
-						 		} else {
-						 			timegoodsimages[0] = 'images/default.jpg';
-						 		}
-								mdishes.goodsimage = timegoodsimages[0];
-								mdishes.orderdtype = item.type;
-								mdishes.goodsunits = item.tgview.timegoodsunits;
-								mdishes.orderdetnum = item.nowGoodsNum;
-								mdishes.surplusnum = item.tgview.surplusnum;	//剩余数量
-								mdishes.timegoodsnum = item.tgview.timegoodsnum;	//限购数量
-								mdishes.goodsweight = item.tgview.timegoodsweight;
-								mdishes.goodsbrand = item.tgview.timegoodsbrand;
-								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.tgview.timegoodsorgprice) * now_GNum ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+now_GNum);
-							}
-						} else if(item.type == '买赠' && item.statue != '下架'){
-							if( item1.goodsid == item.ggview.givegoodsid){
-								//如果商品id相同
-								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.ggview.givegoodsprice) * now_GNum ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+now_GNum);
-								return false;
-							} else if(j == (tnum-1)){
-								//如果最后一次进入时goodsid不相同
-								//新增订单
-								var mdishes = new Object();
-								mdishes.goodsid = item.ggview.givegoodsid;
-								mdishes.goodsdetail = item.ggview.givegoodsdetail;
-								mdishes.goodscompany = item.ggview.givegoodscompany;
-								mdishes.companyshop = item.ggview.companyshop;
-								mdishes.companydetail = item.ggview.companydetail;
-								mdishes.goodsclassname = item.ggview.givegoodsclass;
-								mdishes.goodscode = item.ggview.givegoodscode;
-								mdishes.pricesprice = item.ggview.givegoodsprice;
-								mdishes.pricesunit = item.ggview.givegoodsunit;
-								mdishes.goodsname = item.ggview.givegoodsname;
-								var givegoodsimages = [];
-								if(typeof(item.ggview.givegoodsimage)!='undefined'){
-									givegoodsimages = item.ggview.givegoodsimage.split(',');
-						 		} else {
-						 			givegoodsimages[0] = 'images/default.jpg';
-						 		}
-								mdishes.goodsimage = givegoodsimages[0];
-								mdishes.orderdtype = item.type;
-								mdishes.goodsunits = item.ggview.givegoodsunits;
-								mdishes.orderdetnum = item.nowGoodsNum;
-								mdishes.timegoodsnum = item.ggview.givegoodsnum;	//限购数量
-								mdishes.goodsweight = item.ggview.givegoodsweight;
-								mdishes.goodsbrand = item.ggview.givegoodsbrand;
-								sdishes.push(mdishes); 												//往json对象中添加一个新的元素(订单)
-								window.localStorage.setItem("sdishes", JSON.stringify(sdishes));
-								window.localStorage.setItem("totalnum", tnum + 1);					//商品种类数加一
-								var tmoney = parseFloat(window.localStorage.getItem("totalmoney")); //从缓存中取出总金额
-								var newtmoney = ( tmoney + parseFloat(item.ggview.givegoodsprice) * now_GNum ).toFixed(2);
-								window.localStorage.setItem("totalmoney",newtmoney);	
-								var cartnum = parseInt(window.localStorage.getItem("cartnum"));
-								window.localStorage.setItem("cartnum",cartnum+now_GNum);
-							}
-						} else if((item.type=='年货' || item.type=='组合商品') && item.statue != '下架'){
+						} else if((item.type=='年货' || item.type=='组合' || item.type=='秒杀' || item.type=='买赠') && item.statue != '下架'){
 							if( item1.goodsid == item.bgview.bkgoodsid){
 								//如果商品id相同
 								sdishes[j].orderdetnum = parseInt(sdishes[j].orderdetnum) + now_GNum;
@@ -359,10 +209,8 @@ function regoumai(){
 								mdishes.goodsname = item.bgview.bkgoodsname;
 								mdishes.goodsimage = item.bgview.bkgoodsimage;
 								mdishes.orderdtype = item.type;
-								if(item.type=='组合商品'){
-									mdishes.surplusnum = item.bgview.bkgoodssurplus;	//剩余数量
-									mdishes.timegoodsnum = item.bgview.bkgoodsnum;	//限购数量
-								}
+								mdishes.surplusnum = item.bgview.bkgoodssurplus;	//剩余数量
+								mdishes.timegoodsnum = item.bgview.bkgoodsnum;	//限购数量
 								mdishes.goodsunits = item.bgview.bkgoodsunits;
 								mdishes.goodsweight = item.bgview.bkgoodsweight;
 								mdishes.goodsbrand = item.bgview.bkgoodsbrand;
