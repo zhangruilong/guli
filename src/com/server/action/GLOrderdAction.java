@@ -215,7 +215,7 @@ public class GLOrderdAction extends OrderdAction {
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";							//提示信息
 				} else {
-					Float gp = bgviewList.get(0).getBkgoodsorgprice();
+					Float gp = bgviewList.get(0).getBKGOODSORGPRICE();
 					if(!gp.equals(svo.getPricesprice())){
 						svoList.get(i).setPricesprice(gp);							//修改价格
 					}

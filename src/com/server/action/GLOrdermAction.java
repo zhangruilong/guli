@@ -7,8 +7,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.server.poco.BkgoodsPoco;
 import com.server.poco.OrdermPoco;
 import com.server.poco.TimegoodsPoco;
+import com.server.pojo.Bkgoods;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
 import com.server.pojo.Timegoods;
@@ -71,13 +73,14 @@ public class GLOrdermAction extends OrdermAction {
 			java.lang.reflect.Type sOrderdTYPE = new com.google.gson.reflect.TypeToken<ArrayList<Orderd>>() {}.getType();
 			sOrderd = CommonConst.GSON.fromJson(orderdetjson, sOrderdTYPE);
 			for(Orderd mOrderd:sOrderd){
-				if(mOrderd.getOrderdtype().equals("秒杀")){
+				if(mOrderd.getOrderdtype().equals("秒杀") || mOrderd.getOrderdtype().equals("买赠") || 
+						mOrderd.getOrderdtype().equals("年货") || mOrderd.getOrderdtype().equals("组合") ){
 					@SuppressWarnings("unchecked")
-					List<Timegoods> tgList = selAll(Timegoods.class,"select * from timegoods tg where tg.timegoodsid = '"+mOrderd.getOrderdid()+"'");
+					List<Bkgoods> tgList = selAll(Bkgoods.class,"select * from bkgoods bg where bg.bkgoodsid = '"+mOrderd.getOrderdid()+"'");
 					if(tgList.size() >0){
-						Timegoods editNumTG = tgList.get(0);
-						editNumTG.setSurplusnum(editNumTG.getSurplusnum() - mOrderd.getOrderdnum());
-						result = updSingle(editNumTG,TimegoodsPoco.KEYCOLUMN);
+						Bkgoods editNumTG = tgList.get(0);			//修改剩余数量
+						editNumTG.setBkgoodssurplus(editNumTG.getBkgoodssurplus() - mOrderd.getOrderdnum());
+						result = updSingle(editNumTG,BkgoodsPoco.KEYCOLUMN);
 					}
 				}
 				mOrderd.setOrderdid(CommonUtil.getNewId());
