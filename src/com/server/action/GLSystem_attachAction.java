@@ -63,7 +63,7 @@ public class GLSystem_attachAction extends System_attachAction {
 			System_attach temp = cuss.get(0);
 			String delsql = "delete from system_attach where classify='"+temp.getClassify()
 			+"' and fid='"+ temp.getFid()+"'";
-			result = doSingle(delsql);
+			result = doSingle(delsql,null);
 			
 			temp.setId(CommonUtil.getNewId());
 	        temp.setName(fileinfo.getFullname());

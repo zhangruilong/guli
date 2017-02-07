@@ -18,7 +18,6 @@ import com.server.pojo.Goodsview;
 import com.server.pojo.HotOrderdSumVO;
 import com.server.pojo.Orderd;
 import com.server.pojo.SdishesVO;
-import com.server.pojo.Timegoods;
 import com.server.pojo.Timegoodsview;
 import com.system.tools.CommonConst;
 import com.system.tools.pojo.Pageinfo;
@@ -53,7 +52,6 @@ public class GLOrderdAction extends OrderdAction {
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 	}
 	//查询客户今天购买的秒杀商品数量
-	@SuppressWarnings("unchecked")
 	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
 		Pageinfo pageinfo = new Pageinfo(0,selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
 				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+request.getParameter("customerid")+
@@ -215,7 +213,7 @@ public class GLOrderdAction extends OrderdAction {
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";							//提示信息
 				} else {
-					Float gp = bgviewList.get(0).getBKGOODSORGPRICE();
+					Float gp = bgviewList.get(0).getBkgoodsorgprice();
 					if(!gp.equals(svo.getPricesprice())){
 						svoList.get(i).setPricesprice(gp);							//修改价格
 					}

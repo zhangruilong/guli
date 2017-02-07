@@ -69,7 +69,7 @@ $(function(){
 			companyid:companyid,
 			customerid:customer.customerid,
 			customertype:customer.customertype,
-			bkgoodstype:'买赠',
+			bkgoodsclass:'买赠商品',
 			bkgoodscode:bkgoodscode
 		},
 		success : initMaizengPage,

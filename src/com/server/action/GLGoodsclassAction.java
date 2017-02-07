@@ -60,7 +60,7 @@ public class GLGoodsclassAction extends GoodsclassAction {
 		String sql = null;
 		Treeinfo temp = null;
 		ArrayList<Treeinfo> temps = new ArrayList<Treeinfo>();
-		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
+		Connection  conn=connectionMan.getConnection(null); 
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -84,7 +84,7 @@ public class GLGoodsclassAction extends GoodsclassAction {
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 		} finally{
-			connectionMan.freeConnection(CommonConst.DSNAME,conn,stmt,rs);
+			connectionMan.freeConnection(null,conn,stmt,rs);
 			return temps;
 		}
 	};
@@ -104,7 +104,7 @@ public class GLGoodsclassAction extends GoodsclassAction {
 			queryinfo.setWheresql(addSql);
 			queryinfo.setType(Goodsclass.class);
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
-			queryinfo.setOrder(" to_number(goodsclassorder) desc ,goodsclassid ");
+			queryinfo.setOrder(" goodsclassorder+0 desc ,goodsclassid ");
 			Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 			result = CommonConst.GSON.toJson(pageinfo);
 		}

@@ -41,7 +41,7 @@ public class GLCityAction extends CityAction {
 		String sql = null;
 		Treeinfo temp = null;
 		ArrayList<Treeinfo> temps = new ArrayList<Treeinfo>();
-		Connection  conn=connectionMan.getConnection(CommonConst.DSNAME); 
+		Connection  conn=connectionMan.getConnection(null); 
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -65,16 +65,8 @@ public class GLCityAction extends CityAction {
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 		} finally{
-			connectionMan.freeConnection(CommonConst.DSNAME,conn,stmt,rs);
+			connectionMan.freeConnection(null,conn,stmt,rs);
 			return temps;
 		}
 	};
-	//手机端index页面的 县 
-	/*public void indexXianQu(HttpServletRequest request, HttpServletResponse response){
-		Queryinfo queryinfo = getQueryinfo(request);
-		queryinfo.setType(City.class);
-		Pageinfo pageinfo = new Pageinfo(0, selAll("select ct.* from city ct left outer join city ct2 on ct.cityparent = ct2.cityid",queryinfo));
-		result = CommonConst.GSON.toJson(pageinfo);
-		responsePW(response, result);
-	}*/
 }

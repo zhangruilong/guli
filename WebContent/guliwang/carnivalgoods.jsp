@@ -72,7 +72,7 @@ $(function(){
 			companyid:companyid,
 			customerid:customer.customerid,
 			customertype:customer.customertype,
-			bkgoodstype:'年货',
+			bkgoodsclass:'年货商品',
 			bkgoodscode:bkgoodscode
 		},
 		success : initCarnivalPage,

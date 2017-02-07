@@ -41,6 +41,7 @@ public class GLCustomerAction extends CustomerAction {
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 	}
 	//查询所有
+	@SuppressWarnings("unchecked")
 	public void selCustomer(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setWheresql(queryinfo.getWheresql());
@@ -118,7 +119,8 @@ public class GLCustomerAction extends CustomerAction {
 					String sqlCcustomer = getInsSingleSql(newccustomer);						//得到插入的sql语句
 					sqlList.add(sqlCcustomer);
 				}*/
-				result = doAll(sqlList);
+				String[] sqls = sqlList.toArray(new String[0]);
+				result = doAll(sqls);
 				if(CommonConst.SUCCESS.equals(result)){
 					ArrayList<Customer> retCust = new ArrayList<Customer>();
 					retCust.add(temp);

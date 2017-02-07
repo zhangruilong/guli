@@ -35,8 +35,8 @@ public class GLGoodsviewAction extends GoodsviewAction {
 		return querysql.substring(0, querysql.length() - 4);
 	};
 	//分页查询
+	@SuppressWarnings("unchecked")
 	public void mselQuery(HttpServletRequest request, HttpServletResponse response){
-		String openid = request.getParameter("openid");
 		Queryinfo queryinfo = getQueryinfo(request);
 		queryinfo.setType(Goodsview.class);
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));

@@ -32,8 +32,8 @@ public class GLCompanyviewAction extends CompanyviewAction {
 			if(ccustomers.size() >0){
 				for (Ccustomer cc : ccustomers) {
 					for (Companyview company : comvList) {
-						if(company.getCOMPANYID().equals(cc.getCcustomercompany())){
-							company.setCREATETIME("已绑定");
+						if(company.getCompanyid().equals(cc.getCcustomercompany())){
+							company.setCreatetime("已绑定");
 						}
 					}
 				}

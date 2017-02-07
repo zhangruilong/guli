@@ -9,11 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.server.poco.BkgoodsPoco;
 import com.server.poco.OrdermPoco;
-import com.server.poco.TimegoodsPoco;
 import com.server.pojo.Bkgoods;
 import com.server.pojo.Orderd;
 import com.server.pojo.Orderm;
-import com.server.pojo.Timegoods;
 import com.system.tools.CommonConst;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
@@ -89,7 +87,8 @@ public class GLOrdermAction extends OrdermAction {
 				String sqlOrderd = getInsSingleSql(mOrderd);
 				sqls.add(sqlOrderd);
 			}
-			result = doAll(sqls);
+			String[] ss = sqls.toArray(new String[0]);
+			result = doAll(ss);
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'操作失败'}";

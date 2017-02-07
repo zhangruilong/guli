@@ -41,7 +41,7 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 		String cusid = request.getParameter("customerid");
 		String comid = request.getParameter("companyid");
 		String bkgoodscode = request.getParameter("bkgoodscode");
-		String bkgoodstype = request.getParameter("bkgoodstype");
+		String bkgoodsclass = request.getParameter("bkgoodsclass");
 		String wheresql = null;
 		if(CommonUtil.isEmpty(comid)){
 			//非业务员补单
@@ -52,8 +52,8 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 				Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+cusid+"'");
 				ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
 				if(Ccustomercuss.size()!=0){
-					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodstype='"+
-							bkgoodstype+"' and (";
+					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodsclass='"+
+							bkgoodsclass+"' and (";
 					for (Ccustomer ccustomer : Ccustomercuss) {
 						wheresql += "bkgoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
 					}

@@ -70,7 +70,7 @@ $(function(){
 					"' "
 		},
 		success:function(resp){
-			var jsonResp = JSON.parse(resp);
+			var jsonResp = eval('('+resp+')');
 			var data = jsonResp.root;
 			if(typeof(data) != 'undefined' && data.length > 0){
 				$.each(data,function(i,item){

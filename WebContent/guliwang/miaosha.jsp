@@ -74,7 +74,7 @@ $(function(){
 			companyid:companyid,
 			customerid:customer.customerid,
 			customertype:customer.customertype,
-			bkgoodstype:'秒杀',
+			bkgoodsclass:'秒杀商品',
 			bkgoodscode:bkgoodscode
 		},
 		success : initMiaoshaPage,
@@ -104,7 +104,7 @@ function initMiaoshaPage(resp){
 				return;
 			}
 			$.each(data.root,function(j,item2){
-				var jsonitem = JSON.stringify(item2);			
+				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.bkgoodsnum);			//剩余的每日限购数量
 				var bkgoodsimages = [];								//商品图片
 				if(typeof(item2.bkgoodsimage)!='undefined'){

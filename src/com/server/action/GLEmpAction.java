@@ -39,6 +39,7 @@ public class GLEmpAction extends EmpAction {
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 	}
 	//业务员登入控制
+	@SuppressWarnings("unchecked")
 	public void memplogin(HttpServletRequest request, HttpServletResponse response){
 		response.setContentType("text/html;charset=utf-8");
 		response.setHeader("Cache-Control", "no-cache");

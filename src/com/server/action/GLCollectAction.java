@@ -36,8 +36,13 @@ public class GLCollectAction extends CollectAction {
 	//删除
 	public void delAllByGoodsid(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
-		for(Collect temp:cuss){
-			result = delSingle(temp);
+		if(cuss.size()>0){
+			String sql = "delete from collect where collectcustomer='"+cuss.get(0).getCollectcustomer()+"' and (";
+			for (Collect temp : cuss) {
+				sql += "collectgoods='"+temp.getCollectgoods()+"' or ";
+			}
+			sql = sql.substring(0,sql.length()-3) + ")";
+			result = doSingle(sql, null);
 		}
 		responsePW(response, result);
 	}

@@ -37,21 +37,35 @@ public class GLAddressAction extends AddressAction {
 	//修改客户收货地址
 	public void updCusAdd(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
-		Address editAdd = cuss.get(0);
-		result = updSingle(editAdd,AddressPoco.KEYCOLUMN);
-		if(CommonConst.SUCCESS.equals(result) && editAdd.getAddressture() == 1){
-			updSingle(AddressPoco.TABLE, "addressture=0", "addressid!='"+editAdd.getAddressid()+"' and addresscustomer='"+editAdd.getAddresscustomer()+"'");
+		if(cuss.size()>0){
+			Address editAdd = cuss.get(0);
+			String updSQL = getUpdSingleSql(editAdd, AddressPoco.KEYCOLUMN);
+			if(editAdd.getAddressture() == 1){
+				String sql2 = "update address set addressture=0 where addressid!='"+editAdd.getAddressid()+"' and addresscustomer='"+editAdd.getAddresscustomer()+"'";
+				String[] sqls = {updSQL,sql2};
+				result = doAll(sqls);
+			} else {
+				String[] sqls = {updSQL};
+				result = doAll(sqls);
+			}
 		}
 		responsePW(response, result);
 	}
 	//新增收货地址
 	public void insertCusAdd(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
-		Address temp = cuss.get(0);
-		temp.setAddressid(CommonUtil.getNewId());
-		result = insSingle(temp);
-		if(CommonConst.SUCCESS.equals(result) && temp.getAddressture() == 1){
-			updSingle(AddressPoco.TABLE, "addressture=0", "addressid!='"+temp.getAddressid()+"' and addresscustomer='"+temp.getAddresscustomer()+"'");
+		if(cuss.size()>0){
+			Address temp = cuss.get(0);
+			temp.setAddressid(CommonUtil.getNewId());
+			String insSql = getInsSingleSql(temp);
+			if(temp.getAddressture() == 1){
+				String sql2 = "update address set addressture=0 where addressid!='"+temp.getAddressid()+"' and addresscustomer='"+temp.getAddresscustomer()+"'";
+				String[] sqls = {insSql,sql2};
+				result = doAll(sqls);
+			} else {
+				String[] sqls = {insSql};
+				result = doAll(sqls);
+			}
 		}
 		responsePW(response, result);
 	}
