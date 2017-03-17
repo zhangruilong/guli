@@ -89,7 +89,7 @@ body{
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 function uploadimg(){
 	if($("[name='fileName']").val() != null && $("[name='fileName']").val() != ''){
-		 $('form').attr('action','GLSystem_attachAction.do?method=uploadImg&other=getch&json='+'[{"code":"bianma","detail":"","classify":"客户","fid":"'+customer.customerid+',"}]');
+		 $('form').attr('action','GLSystem_attachAction.do?method=uploadImg&customerxian='+customer.customerxian+'&other=getch&json='+'[{"code":"bianma","detail":"","classify":"客户","fid":"'+customer.customerid+',"}]');
 		 document.forms[0].submit();
 	} else {
 		alert("请选择要上传的图片");

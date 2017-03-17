@@ -42,6 +42,7 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 var bkgoodscode = '${param.bkgoodscode}';
+var companyid = '';
 $(function(){
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		if($(event.target).is(".cd-popup-close") || $(event.target).is(".cd-popup-container")){
@@ -70,7 +71,8 @@ $(function(){
 			customerid:customer.customerid,
 			customertype:customer.customertype,
 			bkgoodsclass:'买赠商品',
-			bkgoodscode:bkgoodscode
+			bkgoodscode:bkgoodscode,
+			customerxian: customer.customerxian
 		},
 		success : initMaizengPage,
 		error: function(resp){
@@ -87,10 +89,14 @@ function gotogoodsDetail(jsonitem,dailySur){
 function initMaizengPage(resp){
 	var data = eval('('+resp+')');														//将返回的字符串转换为json
 	$(".home-hot-commodity").html("");													//清空商品列表
+	companyid = data.root[0].bkgoodscompany;
 	$.ajax({
 		url:"GLOrderdAction.do?method=selCusXGOrderd",
 		type:"post",
-		data:{customerid:customer.customerid},
+		data:{
+			customerid:customer.customerid,
+			companyid: companyid
+		},
 		success : function(data2){
 			var cusOrder = JSON.parse(data2);
 			if(cusOrder.msg == '操作失败'){

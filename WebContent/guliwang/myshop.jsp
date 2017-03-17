@@ -64,7 +64,8 @@ $(function(){
 		url:"GLCustomerAction.do?method=selAll",
 		type:"post",
 		data:{
-			wheresql:"customerid='"+customer.customerid+"'"
+			wheresql:"customerid='"+customer.customerid+"'",
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var data = JSON.parse(resp);
@@ -192,7 +193,8 @@ function doedit(){
 		url:"GLCustomerAction.do?method=updAll",
 		type:"post",
 		data:{
-			json:strjson
+			json:strjson,
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var data = eval('('+resp+')');

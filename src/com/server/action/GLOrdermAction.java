@@ -45,6 +45,11 @@ public class GLOrdermAction extends OrdermAction {
 	//新增
 	public void addOrder(HttpServletRequest request, HttpServletResponse response){
 		String json = request.getParameter("json");
+		String companyid = request.getParameter("companyid");
+		String dsName = null;
+		if(companyid.equals("1")){
+			dsName = "mysql";
+		}
 		System.out.println("json : " + json);
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 		Orderm temp = cuss.get(0);
@@ -53,7 +58,7 @@ public class GLOrdermAction extends OrdermAction {
 		temp.setOrdermid(mOrdermid);
 		
 		String odCode = DateUtils.formatDate(new Date(), "yyyyMMddhhmmss");
-		String todayOd = (getTotal("orderm", "ordermtime like '"+DateUtils.getDate()+"%' and ordermcompany='"+temp.getOrdermcompany()+"'")+1)+"";
+		String todayOd = (getTotal("select count(*) from orderm where ordermtime like '"+DateUtils.getDate()+"%' and ordermcompany='"+temp.getOrdermcompany()+"'", dsName)+1)+"";
 		odCode = "G"+odCode+"0000".substring(0, 4-todayOd.length())+todayOd ;
 		temp.setOrdermcode(odCode);
 		temp.setOrdermrightmoney(temp.getOrdermmoney());
@@ -74,7 +79,7 @@ public class GLOrdermAction extends OrdermAction {
 				if(mOrderd.getOrderdtype().equals("秒杀") || mOrderd.getOrderdtype().equals("买赠") || 
 						mOrderd.getOrderdtype().equals("年货") || mOrderd.getOrderdtype().equals("组合") ){
 					@SuppressWarnings("unchecked")
-					List<Bkgoods> tgList = selAll(Bkgoods.class,"select * from bkgoods bg where bg.bkgoodsid = '"+mOrderd.getOrderdid()+"'");
+					List<Bkgoods> tgList = selAll(Bkgoods.class,"select * from bkgoods bg where bg.bkgoodsid = '"+mOrderd.getOrderdid()+"'", dsName);
 					if(tgList.size() >0){
 						Bkgoods editNumTG = tgList.get(0);			//修改剩余数量
 						editNumTG.setBkgoodssurplus(editNumTG.getBkgoodssurplus() - mOrderd.getOrderdnum());
@@ -88,7 +93,7 @@ public class GLOrdermAction extends OrdermAction {
 				sqls.add(sqlOrderd);
 			}
 			String[] ss = sqls.toArray(new String[0]);
-			result = doAll(ss);
+			result = doAll(ss, dsName);
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'操作失败'}";

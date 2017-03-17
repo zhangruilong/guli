@@ -16,6 +16,20 @@ import com.system.tools.util.CommonUtil;
  */
 public class GLOrdermviewAction extends OrdermviewAction {
 
+	//查询所有
+	public void selAll(HttpServletRequest request, HttpServletResponse response){
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
+		Queryinfo queryinfo = getQueryinfo(request, Ordermview.class, OrdermviewPoco.QUERYFIELDNAME, OrdermviewPoco.ORDER, TYPE);
+		queryinfo.setDsname(dsName);
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}
+	
 	/**
     * 模糊查询语句
     * @param query
@@ -42,6 +56,11 @@ public class GLOrdermviewAction extends OrdermviewAction {
 		String beginmoney = request.getParameter("beginmoney");
 		String endmoney = request.getParameter("endmoney");
 		String companyname = request.getParameter("companyname");
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
 		String wheresql = "openid='"+openid+"' and ordermstatue!='已删除'";
 		if(CommonUtil.isNotNull(begindate)){
 			wheresql += " and ordermtime>='"+begindate+"'";
@@ -61,6 +80,7 @@ public class GLOrdermviewAction extends OrdermviewAction {
 //		if(CommonUtil.isNotNull(wheresql)){
 //			wheresql = wheresql.substring(5,wheresql.length());
 //		}
+		queryinfo.setDsname(dsName);
 		queryinfo.setWheresql(wheresql);
 		Pageinfo pageinfo = new Pageinfo(getTotal(queryinfo), selQuery(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);

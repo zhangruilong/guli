@@ -54,7 +54,10 @@ function submitform(){
 	$.ajax({
 		url:"GLFeedbackAction.do?method=insAll",
 		type:"post",
-		data:{json:'[{"feedbackdetail":"'+$("#feedbackdetail").val()+'","feedbackcustomer":"'+customer.customerid+'"}]'},
+		data:{
+			json:'[{"feedbackdetail":"'+$("#feedbackdetail").val()+'","feedbackcustomer":"'+customer.customerid+'"}]',
+			customerxian: customer.customerxian
+		},
 		success : function(resp){
 			var respText2 = eval('('+resp+')');
 			if(respText2.success == true){

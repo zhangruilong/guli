@@ -57,7 +57,7 @@ function companysearch(obj){
 }
 //查询供应商
 function companyload(query){
-	var data = { wheresql:"createtime like '%"+customer.customerxian+"%'",customerid:customer.customerid };
+	var data = { wheresql:"createtime like '%"+customer.customerxian+"%'", customerid:customer.customerid, xian:customer.customerxian };
 	$.ajax({
 		url:"GLCompanyviewAction.do?method=bdCityCom",
 		type:"post",

@@ -22,11 +22,17 @@ public class GLCompanyviewAction extends CompanyviewAction {
 	//查询我的供应商
 	@SuppressWarnings("unchecked")
 	public void bdCityCom(HttpServletRequest request, HttpServletResponse response){
+		String customerid = request.getParameter("customerid");
+		String xian = request.getParameter("xian");
 		Queryinfo queryinfo = getQueryinfo(request, Companyview.class, CompanyviewPoco.QUERYFIELDNAME, CompanyviewPoco.ORDER, TYPE);
 		queryinfo.setType(Companyview.class);
 		queryinfo.setOrder(CompanyviewPoco.ORDER);
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(xian)!=-1){
+			dsName = "mysql";
+		}
+		queryinfo.setDsname(dsName);
 		List<Companyview> comvList = selAll(queryinfo);
-		String customerid = request.getParameter("customerid");
 		if(comvList.size() >0 && CommonUtil.isNotEmpty(customerid) && !customerid.equals("undefined")){
 			List<Ccustomer> ccustomers = selAll(Ccustomer.class, "select * from ccustomer where ccustomercustomer='"+customerid+"'");
 			if(ccustomers.size() >0){

@@ -26,13 +26,18 @@ public class GLCcustomerAction extends CcustomerAction {
 	public void addCcus(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		if(cuss.size()>0){
+			Ccustomer temp = cuss.get(0);
+			String dsName = null;
+			if(temp.getCcustomercompany().equals("1")){
+				dsName = "mysql";
+			}
 			List<Ccustomer> ccli = selAll(Ccustomer.class,"select * from ccustomer cc where cc.ccustomercompany='"+
-					cuss.get(0).getCcustomercompany()+"' and cc.ccustomercustomer='"+cuss.get(0).getCcustomercustomer()+"'");
+					temp.getCcustomercompany()+"' and cc.ccustomercustomer='"+temp.getCcustomercustomer()+"'",dsName);
 			if(ccli.size()>0){						//判断是否已经有了这条关系
 				result=CommonConst.SUCCESS;
 			} else {
-				cuss.get(0).setCcustomerid(CommonUtil.getNewId());
-				result=insSingle(cuss.get(0));
+				temp.setCcustomerid(CommonUtil.getNewId());
+				result=insSingle(temp,dsName);
 			}
 		}
 		responsePW(response, result);
@@ -40,9 +45,14 @@ public class GLCcustomerAction extends CcustomerAction {
 	//删除客户已经绑定的关系
 	public void delCusNexus(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
-		for(Ccustomer temp:cuss){
+		if(cuss.size()>0){
+			Ccustomer temp = cuss.get(0);
+			String dsName = null;
+			if(temp.getCcustomercompany().equals("1")){
+				dsName = "mysql";
+			}
 			String[] primaryKeys = {"ccustomercompany","ccustomercustomer"};
-			result = delSingle(temp, primaryKeys);
+			result = delSingle(temp, primaryKeys, dsName);
 		}
 		responsePW(response, result);
 	}

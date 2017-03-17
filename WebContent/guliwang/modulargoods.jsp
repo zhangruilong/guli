@@ -73,7 +73,8 @@ $(function(){
 			customerid:customer.customerid,
 			customertype:customer.customertype,
 			bkgoodsclass:'组合商品',
-			bkgoodscode:bkgoodscode
+			bkgoodscode:bkgoodscode,
+			customerxian: customer.customerxian
 		},
 		success : initCarnivalPage,
 		error: function(resp){
@@ -92,10 +93,12 @@ function initCarnivalPage(resp){
 	$.ajax({
 		url:"GLOrderdAction.do?method=selCusXGOrderd",				//查询客户今天购买的秒杀商品数量
 		type:"post",
-		data:{customerid:customer.customerid,
-			wheresql: "bkgoodssurplus>'0'"},
+		data:{
+			customerid:customer.customerid,
+			wheresql: "bkgoodssurplus>'0'",
+			companyid: data.root[0].bkgoodscompany
+		},
 		success : function(data2){
-			
 			var cusOrder = JSON.parse(data2);						//买过的限购商品订单
 			$(".home-hot-commodity").html("");
 			if(typeof(data.root) == 'undefined' ||　!data.root){

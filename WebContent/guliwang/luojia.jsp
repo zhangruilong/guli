@@ -60,6 +60,7 @@
 var basePath = '<%=basePath%>';
 var openid = window.localStorage.getItem("openid");
 var customer = JSON.parse(window.localStorage.getItem("customer"));
+var comid = '';
 $(function(){
 	if(!window.localStorage.getItem("totalnum")){
 		window.localStorage.setItem("totalnum",0);
@@ -76,7 +77,7 @@ $(function(){
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	//通过ajax查询大类
-	getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:"裸价商品"},initDishes,null);
+	getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:"裸价商品", customerxian: customer.customerxian},initDishes,null);
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
@@ -87,12 +88,13 @@ function entersearch(){
     if (event.keyCode == 13)
     {
     	searchdishesvalue = $("#searchdishes").val();
-    	getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,query:searchdishesvalue,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
+    	getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,query:searchdishesvalue,customertype:customer.customertype,customerlevel:customer.customerlevel, customerxian: customer.customerxian},initDishes,null);
     }
 }
 
 //商品
 function initDishes(data){
+	comid = data.root[0].goodscompany;
      $(".home-hot-commodity").html("");
  	 $.each(data.root, function(i, item) {
  		var jsonitem = JSON.stringify(item);
@@ -294,7 +296,8 @@ function checkedgoods(goodsid){
 	$.ajax({
 		url : url,
 		data : {
-			json : json
+			json : json,
+			comid : comid
 		},
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 

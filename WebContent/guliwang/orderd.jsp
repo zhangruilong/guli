@@ -24,9 +24,9 @@
 <div class="order-detail-user">
 <i class="info-icon"></i>
 <div class="pdl-b8">
-  <p>收货人:王金宝 16535789623 </p>
-  <p>收货地址:嘉兴市海盐海东程璐89号706号</p>
-  <p>支付方式:货到付款</p>
+  <p>收货人: </p>
+  <p>收货地址:</p>
+  <p>支付方式:</p>
 </div>
 </div>
 <div class="order-detail-wrapper">
@@ -42,10 +42,15 @@
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 var ordermid = '<%=ordermid%>';
+var comid = '';
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){ 
 	if(ordermid!="null"&&ordermid!=""){
-		getJson(basePath+"GLOrderdAction.do",{method:"selAll",wheresql:"orderdorderm='"+ordermid+"'"},initOrderd,null);
+		getJson(basePath+"GLOrderdAction.do",{
+			method:"selAll",
+			wheresql:"orderdorderm='"+ordermid+"'",
+			customerxian: customer.customerxian
+		},initOrderd,null);
 	}
 })
 //重新购买
@@ -57,7 +62,8 @@ function regoumai(){
 		data:{
 			json:orderds,
 			customertype: customer.customertype,
-			customerlevel: customer.customerlevel
+			customerlevel: customer.customerlevel,
+			comid : comid
 		},
 		success: function(resp){
 			var jsonResp = JSON.parse(resp);
@@ -247,9 +253,11 @@ function initOrderd(data){
  				item.orderdnum +'</span><span class="fr"> '+item.orderdmoney+'元</span></li>');
      });
  	$(".order-detail-wrapper").append('</ul>');
- 	getJson(basePath+"GLOrdermviewAction.do",{method:"selAll",wheresql:"ordermid='"+ordermid+"'"},initOrderm,null);
+ 	getJson(basePath+"GLOrdermviewAction.do",{method:"selAll",wheresql:"ordermid='"+ordermid+"'",
+		customerxian: customer.customerxian},initOrderm,null);
 }
 function initOrderm(data){
+	comid = data.root[0].ordermcompany;
      $(".order-detail-info").html("");
      $(".pdl-b8").html("");
  	 $.each(data.root, function(i, item) {

@@ -1,6 +1,7 @@
 package com.server.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,15 +42,23 @@ public class GLGivegoodsviewAction extends GivegoodsviewAction {
 		String customertype = request.getParameter("customertype");
 		String givegoodscode = request.getParameter("givegoodscode");
 		String wheresql = null;
+		String dsName = null;
 		if(CommonUtil.isEmpty(companyid)){
 			//如果不是业务员补单
 			Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
 			Ccustomerqueryinfo.setType(Ccustomer.class);
 			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
-			ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
+			List<Ccustomer> Ccustomercuss = selAll(Ccustomerqueryinfo);
+			if(Ccustomercuss.size()==0){
+				Ccustomerqueryinfo.setDsname("mysql");
+				Ccustomercuss = selAll(Ccustomerqueryinfo);
+			}
 			if(Ccustomercuss.size()!=0){
 				wheresql = "givegoodsstatue='启用' and givegoodsscope like '%"+customertype+"%' and (";
 				for (Ccustomer ccustomer : Ccustomercuss) {
+					if(ccustomer.getCcustomercompany().equals("1")){
+						dsName = "mysql";
+					}
 					wheresql += "givegoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
 				}
 				wheresql = wheresql.substring(0, wheresql.length()-3) +") ";
@@ -61,6 +70,7 @@ public class GLGivegoodsviewAction extends GivegoodsviewAction {
 				queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 				queryinfo.setWheresql(wheresql);
 				queryinfo.setOrder("givegoodsseq");
+				queryinfo.setDsname(dsName);
 				cuss = (ArrayList<Givegoodsview>) selAll(queryinfo);
 				Pageinfo pageinfo = new Pageinfo(0, cuss);
 				result = CommonConst.GSON.toJson(pageinfo);
@@ -71,11 +81,15 @@ public class GLGivegoodsviewAction extends GivegoodsviewAction {
 			if(CommonUtil.isNotEmpty(givegoodscode)){
 				wheresql += "and givegoodscode='"+givegoodscode+"' ";
 			}
+			if(companyid.equals("1")){
+				dsName = "mysql";
+			}
 			Queryinfo queryinfo = getQueryinfo(request);
 			queryinfo.setType(Givegoodsview.class);
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 			queryinfo.setWheresql(wheresql);
 			queryinfo.setOrder("givegoodsseq");
+			queryinfo.setDsname(dsName);
 			cuss = (ArrayList<Givegoodsview>) selAll(queryinfo);
 			Pageinfo pageinfo = new Pageinfo(0, cuss);
 			result = CommonConst.GSON.toJson(pageinfo);

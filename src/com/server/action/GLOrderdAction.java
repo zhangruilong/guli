@@ -21,6 +21,7 @@ import com.server.pojo.SdishesVO;
 import com.server.pojo.Timegoodsview;
 import com.system.tools.CommonConst;
 import com.system.tools.pojo.Pageinfo;
+import com.system.tools.pojo.Queryinfo;
 import com.system.tools.util.CommonUtil;
 import com.system.tools.util.DateUtils;
 import com.system.tools.util.TypeUtil;
@@ -31,6 +32,20 @@ import com.system.tools.util.TypeUtil;
  */
 public class GLOrderdAction extends OrderdAction {
 
+	//查询所有
+	public void selAll(HttpServletRequest request, HttpServletResponse response){
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
+		Queryinfo queryinfo = getQueryinfo(request, Orderd.class, OrderdPoco.QUERYFIELDNAME, OrderdPoco.ORDER, TYPE);
+		queryinfo.setDsname(dsName);
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}
+	
 	/**
     * 模糊查询语句
     * @param query
@@ -53,10 +68,16 @@ public class GLOrderdAction extends OrderdAction {
 	}
 	//查询客户今天购买的秒杀商品数量
 	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
+		String dsName = null;
+		String companyid = request.getParameter("companyid");
+		if(companyid.equals("1")){
+			dsName = "mysql";
+		}
+		String customerid = request.getParameter("customerid");
 		Pageinfo pageinfo = new Pageinfo(0,selAll(Orderd.class, "select od.orderdcode,od.orderdtype,od.orderdunits,sum(od.orderdnum) as orderdclass from orderm om "+
-				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+request.getParameter("customerid")+
+				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
 				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' or od.orderdtype = '组合商品' ) and om.ordermtime >= '"+DateUtils.getDate()+
-				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdcode,od.orderdtype,od.orderdunits"));
+				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59' group by od.orderdcode,od.orderdtype,od.orderdunits",dsName));
 		result = CommonConst.GSON.toJson(pageinfo);
 		responsePW(response, result);
 	}
@@ -67,14 +88,20 @@ public class GLOrderdAction extends OrderdAction {
 		String msg = "";
 		String customertype = request.getParameter("customertype");
 		String customerlevel = request.getParameter("customerlevel");
+		String comid = request.getParameter("comid");
 		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
+		String dsName = null;
+		if(comid.equals("1")){
+			dsName = "mysql";
+		}
 		for (Orderd item : cuss) {
 			GoodsVo gvo = new GoodsVo();
 			if(item.getOrderdtype().equals("商品")){
+				
 				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodsid = '"+item.getOrderdgoods()+
 							   "' and gv.pricesclass = '"+customertype+
 							   "' and gv.priceslevel = "+customerlevel+
-							   " and gv.goodsstatue = '上架'");
+							   " and gv.goodsstatue = '上架'", dsName);
 				if(gList.size() > 0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGoodsview(gList.get(0));
@@ -86,7 +113,7 @@ public class GLOrderdAction extends OrderdAction {
 			} else if(item.getOrderdtype().equals("年货") || item.getOrderdtype().equals("组合商品") || 
 					item.getOrderdtype().equals("秒杀") || item.getOrderdtype().equals("买赠")){
 				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodsid = '"+
-						item.getOrderdgoods()+"' and bv.bkgoodsstatue = '启用'");
+						item.getOrderdgoods()+"' and bv.bkgoodsstatue = '启用'", dsName);
 				if(bgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setBgview(bgviewList.get(0));
@@ -111,14 +138,29 @@ public class GLOrderdAction extends OrderdAction {
 		String staTime = request.getParameter("staTime");
 		String endTime = request.getParameter("endTime");
 		String customerxian = request.getParameter("customerxian");
-		String sql = "select * from (select A.*, ROWNUM RN from ( "+
-			"select sum(od.orderdnum) odgoodsnum,od.orderdcode,od.orderdtype,od.orderdunits "+
-			"from orderd od left join orderm om on om.ordermid = od.orderdorderm  "+
-			"left join company cp on om.ordermcompany = cp.companyid left join city ct on ct.cityid = cp.companycity "+
-			"where om.ordermtime >= '"+staTime+"' and om.ordermtime <= '"+endTime+"' and ct.cityname = '"+customerxian+
-			"' group by od.orderdcode,od.orderdtype,od.orderdunits order by odgoodsnum desc "+
-			") A where ROWNUM  <= (1*10) ) where RN > ((1-1)*10)";
-		List<HotOrderdSumVO> hos = (ArrayList<HotOrderdSumVO>) selAll(HotOrderdSumVO.class, sql);
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
+		String sql = null;
+		if(null == dsName){
+			sql = "select * from (select A.*, ROWNUM RN from ( "+
+					"select sum(od.orderdnum) odgoodsnum,od.orderdcode,od.orderdtype,od.orderdunits "+
+					"from orderd od left join orderm om on om.ordermid = od.orderdorderm  "+
+					"left join company cp on om.ordermcompany = cp.companyid left join city ct on ct.cityid = cp.companycity "+
+					"where om.ordermtime >= '"+staTime+"' and om.ordermtime <= '"+endTime+"' and ct.cityname = '"+customerxian+
+					"' group by od.orderdcode,od.orderdtype,od.orderdunits order by odgoodsnum desc "+
+					") A where ROWNUM  <= (1*10) ) where RN > ((1-1)*10)";
+		} else {
+			sql = 
+					"select sum(od.orderdnum) odgoodsnum,od.orderdcode,od.orderdtype,od.orderdunits "+
+					"from orderd od left join orderm om on om.ordermid = od.orderdorderm  "+
+					"left join company cp on om.ordermcompany = cp.companyid left join city ct on ct.cityid = cp.companycity "+
+					"where om.ordermtime >= '"+staTime+"' and om.ordermtime <= '"+endTime+"' and ct.cityname = '"+customerxian+
+					"' group by od.orderdcode,od.orderdtype,od.orderdunits order by odgoodsnum desc "+
+					"limit 0,10";
+		}
+		List<HotOrderdSumVO> hos = selAll(HotOrderdSumVO.class, sql, dsName);
 		ArrayList<GoodsVo> gvoList = new ArrayList<GoodsVo>();
 		for (HotOrderdSumVO item : hos) {
 			GoodsVo gvo = new GoodsVo();
@@ -127,7 +169,7 @@ public class GLOrderdAction extends OrderdAction {
 							   "' and gv.goodsunits = '"+item.getOrderdunits()+
 							   "' and gv.pricesclass = '"+request.getParameter("customertype")+
 							   "' and gv.priceslevel = "+request.getParameter("customerlevel")+
-							   " and gv.goodsstatue = '上架'");
+							   " and gv.goodsstatue = '上架'", dsName);
 				if(tgviewList.size() > 0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGoodsview(tgviewList.get(0));
@@ -136,7 +178,7 @@ public class GLOrderdAction extends OrderdAction {
 			} else if(item.getOrderdtype().equals("秒杀")){
 				List<Timegoodsview> tgviewList = selAll(Timegoodsview.class,"select * from timegoodsview tv where tv.timegoodscode = '"+
 								item.getOrderdcode()+"' and tv.timegoodsunits = '"+item.getOrderdunits()+
-								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '%"+request.getParameter("customertype")+"%'");
+								"' and tv.timegoodsstatue = '启用' and tv.timegoodsscope like '%"+request.getParameter("customertype")+"%'", dsName);
 				if(tgviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setTgview(tgviewList.get(0));
@@ -145,7 +187,7 @@ public class GLOrderdAction extends OrderdAction {
 			} else if(item.getOrderdtype().equals("买赠")){
 				List<Givegoodsview> ggviewList = selAll(Givegoodsview.class,"select * from givegoodsview gv where gv.givegoodscode = '"+
 								item.getOrderdcode()+"' and gv.givegoodsunits = '"+item.getOrderdunits()+
-								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '%"+request.getParameter("customertype")+"%'");
+								"' and gv.givegoodsstatue = '启用' and gv.givegoodsscope like '%"+request.getParameter("customertype")+"%'", dsName);
 				if(ggviewList.size() >0){
 					gvo.setType(item.getOrderdtype());
 					gvo.setGgview(ggviewList.get(0));
@@ -162,10 +204,15 @@ public class GLOrderdAction extends OrderdAction {
 		Map<String, Object> infoMap = new HashMap<String, Object>();
 		String json = request.getParameter("json");
 		String customerid = request.getParameter("customerid");
+		String companyid = request.getParameter("companyid");
+		String dsName = null;
+		if(companyid.equals("1")){
+			dsName = "mysql";
+		}
 		String customertype = "";
 		String customerlevel = "";
 		@SuppressWarnings("unchecked")
-		List<Customer> cusLi = selAll(Customer.class, "select * from customer where customerid='"+customerid+"'");
+		List<Customer> cusLi = selAll(Customer.class, "select * from customer where customerid='"+customerid+"'",dsName);
 		if(cusLi.size() ==1){
 			customertype = cusLi.get(0).getCustomertype();
 			customerlevel = cusLi.get(0).getCustomerlevel().toString();
@@ -173,8 +220,8 @@ public class GLOrderdAction extends OrderdAction {
 			List<SdishesVO> svoList = null;
 			if(CommonUtil.isNotEmpty(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<SdishesVO>>() {}.getType());
 			infoMap.put("svoList", svoList);
-			infoMap = checkXJ(infoMap, customertype, customerlevel);				//检查商品是否下架
-			infoMap = checkSurplus(customerid,infoMap);								//检查剩余限量是否足够 并修改
+			infoMap = checkXJ(infoMap, customertype, customerlevel, dsName);				//检查商品是否下架
+			infoMap = checkSurplus(customerid,infoMap, dsName);								//检查剩余限量是否足够 并修改
 			@SuppressWarnings("unchecked")
 			Pageinfo pageinfo = new Pageinfo((List<SdishesVO>)infoMap.get("svoList"));
 			pageinfo.setMsg("您购买的："+TypeUtil.objToString(infoMap.get("xjGoodsMsg"))+
@@ -185,7 +232,7 @@ public class GLOrderdAction extends OrderdAction {
 	}
 	//检查商品是否下架了
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> checkXJ(Map<String, Object> infoMap,String customertype,String customerlevel){
+	public Map<String, Object> checkXJ(Map<String, Object> infoMap,String customertype,String customerlevel, String dsName){
 		List<SdishesVO> svoList = (List<SdishesVO>) infoMap.get("svoList");
 		List<SdishesVO> svoListremove = new ArrayList<SdishesVO>();
 		String xjGoodsMsg = "";
@@ -195,7 +242,7 @@ public class GLOrderdAction extends OrderdAction {
 				List<Goodsview> gList = selAll(Goodsview.class,"select * from goodsview gv where gv.goodsid = '"+svo.getGoodsid()+
 						   "' and gv.pricesclass = '"+customertype+
 						   "' and gv.priceslevel = "+customerlevel+
-						   " and gv.goodsstatue = '上架'");
+						   " and gv.goodsstatue = '上架'", dsName);
 				if(gList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";									//提示信息
@@ -208,7 +255,7 @@ public class GLOrderdAction extends OrderdAction {
 			} else if(svo.getOrderdtype().equals("年货") || svo.getOrderdtype().equals("组合商品") || 
 					svo.getOrderdtype().equals("买赠") || svo.getOrderdtype().equals("秒杀") ){
 				List<Bkgoodsview> bgviewList = selAll(Bkgoodsview.class,"select * from bkgoodsview bv where bv.bkgoodsid = '"+
-						svo.getGoodsid()+"' and bv.bkgoodsstatue = '启用' and bv.bkgoodsscope like '%"+customertype+"%'");
+						svo.getGoodsid()+"' and bv.bkgoodsstatue = '启用' and bv.bkgoodsscope like '%"+customertype+"%'", dsName);
 				if(bgviewList.size() == 0){
 					svoListremove.add(svo);
 					xjGoodsMsg += svo.getGoodsname()+",";							//提示信息
@@ -229,13 +276,13 @@ public class GLOrderdAction extends OrderdAction {
 	}
 	//检查剩余限量是否足够 并修改
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> checkSurplus(String customerid,Map<String, Object> infoMap){
+	public Map<String, Object> checkSurplus(String customerid,Map<String, Object> infoMap, String dsName){
 		List<SdishesVO> svoList = (List<SdishesVO>) infoMap.get("svoList");
 		List<SdishesVO> svoListremove = new ArrayList<SdishesVO>();
 		cuss = (ArrayList<Orderd>) selAll(Orderd.class, "select od.orderdgoods,od.orderdtype,sum(od.orderdnum) as orderdclass from orderm om "+
 				"left join orderd od on od.orderdorderm = om.ordermid where om.ordermcustomer = '"+customerid+
 				"' and (od.orderdtype = '买赠' or od.orderdtype = '秒杀' or od.orderdtype = '组合商品') and om.ordermstatue!='已删除' and om.ordermtime >= '"+DateUtils.getDate()+
-				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdtype,od.orderdgoods");
+				" 00:00:00' and om.ordermtime <= '"+DateUtils.getDate()+" 23:59:59'  group by od.orderdtype,od.orderdgoods", dsName);
 		String editNumMsg = "";
 		String deleGoodsMsg = "";
 		for (int i=0; i < svoList.size(); i++) {
@@ -265,7 +312,7 @@ public class GLOrderdAction extends OrderdAction {
 			
 			//检查组合商品的剩余数量
 			if(svo.getOrderdtype().equals("组合商品") || svo.getOrderdtype().equals("秒杀")){
-				List<Bkgoods> tgList = selAll(Bkgoods.class, "select * from bkgoods bkg where bkg.bkgoodsid = '"+svo.getGoodsid()+"'");
+				List<Bkgoods> tgList = selAll(Bkgoods.class, "select * from bkgoods bkg where bkg.bkgoodsid = '"+svo.getGoodsid()+"'", dsName);
 				if(CommonUtil.isNotEmpty(tgList)){
 					Integer surnum = tgList.get(0).getBkgoodssurplus();			//剩余数量
 					if(odNum != -1 && tgList.get(0).getBkgoodsallnum() > 0){						//如果有设置总限购，并且订单商品没有被删除。

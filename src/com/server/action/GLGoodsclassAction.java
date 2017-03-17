@@ -56,6 +56,7 @@ public class GLGoodsclassAction extends GoodsclassAction {
 		}
 		responsePW(response, result);
 	}
+	@SuppressWarnings("finally")
 	public ArrayList<Treeinfo> selTree(String wheresql) {
 		String sql = null;
 		Treeinfo temp = null;
@@ -92,7 +93,12 @@ public class GLGoodsclassAction extends GoodsclassAction {
 	@SuppressWarnings("unchecked")
 	public void mselAll(HttpServletRequest request, HttpServletResponse response){
 		String cusid = request.getParameter("cusid");
-		List<Ccustomer> comLi = selAll(Ccustomer.class,"select * from ccustomer cc where cc.ccustomercustomer='"+cusid+"'");
+		String dsName = null;
+		String customerxian = request.getParameter("customerxian");
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
+		List<Ccustomer> comLi = selAll(Ccustomer.class,"select * from ccustomer cc where cc.ccustomercustomer='"+cusid+"'", dsName);
 		if(comLi.size()>0){
 			String addSql = request.getParameter("wheresql")+" and (";
 			for (Ccustomer cc : comLi) {
@@ -105,6 +111,7 @@ public class GLGoodsclassAction extends GoodsclassAction {
 			queryinfo.setType(Goodsclass.class);
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 			queryinfo.setOrder(" goodsclassorder+0 desc ,goodsclassid ");
+			queryinfo.setDsname(dsName);
 			Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 			result = CommonConst.GSON.toJson(pageinfo);
 		}

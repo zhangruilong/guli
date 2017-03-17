@@ -42,15 +42,21 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 		String comid = request.getParameter("companyid");
 		String bkgoodscode = request.getParameter("bkgoodscode");
 		String bkgoodsclass = request.getParameter("bkgoodsclass");
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
 		String wheresql = null;
 		if(CommonUtil.isEmpty(comid)){
 			//非业务员补单
-			List<Customer> cusli = selAll(Customer.class, "select * from customer where customerid='"+cusid+"'");
+			List<Customer> cusli = selAll(Customer.class, "select * from customer where customerid='"+cusid+"'", dsName);
 			if(cusli.size() == 1){
 				Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
 				Ccustomerqueryinfo.setType(Ccustomer.class);
 				Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+cusid+"'");
-				ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
+				Ccustomerqueryinfo.setDsname(dsName);
+				List<Ccustomer> Ccustomercuss = selAll(Ccustomerqueryinfo);
 				if(Ccustomercuss.size()!=0){
 					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodsclass='"+
 							bkgoodsclass+"' and (";
@@ -66,6 +72,7 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 					queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 					queryinfo.setWheresql(wheresql);
 					queryinfo.setOrder("bkgoodsseq");
+					queryinfo.setDsname(dsName);
 					cuss = (ArrayList<Bkgoodsview>) selAll(queryinfo);
 					Pageinfo pageinfo = new Pageinfo(0, cuss);
 					result = CommonConst.GSON.toJson(pageinfo);
@@ -77,7 +84,6 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 		responsePW(response, result);
 	}
 }
-
 
 
 

@@ -52,8 +52,10 @@ public class GLEmpAction extends EmpAction {
 		queryinfo.setWheresql(wheresql);
 		cuss = (ArrayList<Emp>) selAll(queryinfo);
 		if(cuss.size()==0){
+			queryinfo.setDsname("mysql");
+			cuss = (ArrayList<Emp>) selAll(queryinfo);
 			responsePW(response, "{success:true,code:403,msg:'账号密码错误'}");
-		}else{
+		} else {
 			Pageinfo pageinfo = new Pageinfo(0,cuss);
 			result = CommonConst.GSON.toJson(pageinfo);
 			responsePW(response, result);

@@ -1,6 +1,7 @@
 package com.server.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,10 +66,16 @@ public class GLGoodsviewAction extends GoodsviewAction {
 		String customertype = request.getParameter("customertype");
 		String customerlevel = request.getParameter("customerlevel");
 		String goodsclassname = request.getParameter("goodsclassname");
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
 		//查询该客户的供应商关系表
 		Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
 		Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
-		ArrayList<Ccustomer> Ccustomercuss = (ArrayList<Ccustomer>) selAll(Ccustomerqueryinfo);
+		Ccustomerqueryinfo.setDsname(dsName);
+		List<Ccustomer> Ccustomercuss = selAll(Ccustomerqueryinfo);
 		if(Ccustomercuss.size()!=0){
 			String wheresql = "goodsstatue ='上架' and pricesclass='"+customertype+"' and priceslevel='"+customerlevel+"'";
 			if(CommonUtil.isNotEmpty(companyid)){
@@ -76,6 +83,9 @@ public class GLGoodsviewAction extends GoodsviewAction {
 			}else{
 				wheresql += " and (";
 				for(Ccustomer mCcustomer:Ccustomercuss){
+					if(mCcustomer.getCcustomercompany().equals("1")){
+						dsName = "mysql";
+					}
 					wheresql += "goodscompany ='"+mCcustomer.getCcustomercompany()+"' or ";
 				}
 				wheresql = wheresql.substring(0, wheresql.length()-3) +")";
@@ -91,11 +101,13 @@ public class GLGoodsviewAction extends GoodsviewAction {
 			queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 			queryinfo.setWheresql(wheresql);
 			queryinfo.setOrder(" goodsorder desc,goodsname,goodsclass,goodsunits ");
+			queryinfo.setDsname(dsName);
 			cuss = (ArrayList<Goodsview>) selAll(queryinfo);
 			
 			Queryinfo collectqueryinfo = getQueryinfo(Collect.class, null, null, null);
 			collectqueryinfo.setWheresql("collectcustomer='"+customerid+"'");
-			ArrayList<Collect> cussCollect = (ArrayList<Collect>) selAll(collectqueryinfo);
+			collectqueryinfo.setDsname(dsName);
+			List<Collect> cussCollect = selAll(collectqueryinfo);
 			for(Goodsview mGoodsview:cuss){
 				for(Collect mCollect:cussCollect){
 					if(mGoodsview.getGoodsid().equals(mCollect.getCollectgoods())){

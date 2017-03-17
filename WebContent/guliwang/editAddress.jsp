@@ -42,10 +42,11 @@
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$.ajax({
-		url:"GLAddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=cusAddress",
 		type:"post",
 		data:{
-			wheresql:"addressid='${param.id}'"
+			wheresql:"addressid='${param.id}'",
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var data = JSON.parse(resp).root[0];
@@ -95,7 +96,8 @@ function saveAddress(){
 				'","addressaddress":"'+$("input[name='addressaddress']").val()+
 				'","addresscustomer":"'+customer.customerid+
 				'","addressture":"'+addressture+
-				'"}]'
+				'"}]',
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
@@ -111,10 +113,11 @@ function saveAddress(){
 //删除地址
 function delAddress(){
 	$.ajax({
-		url:"GLAddressAction.do?method=delAll",
+		url:"GLAddressAction.do?method=delCusAddress",
 		type:"post",
 		data:{
-			json:'[{"addressid":"'+$("input[name='addressid']").val()+'"}]'
+			json:'[{"addressid":"'+$("input[name='addressid']").val()+'"}]',
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');

@@ -32,11 +32,12 @@
 var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$.ajax({
-		url:"GLAddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=cusAddress",
 		type:"post",
 		data:{
 			wheresql:"addresscustomer='"+customer.customerid+"'",
-			order : "addressture desc"
+			order : "addressture desc",
+			customerxian: customer.customerxian
 		},
 		success : function(resp){
 			var data = JSON.parse(resp);

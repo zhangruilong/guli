@@ -127,19 +127,19 @@ function initMiaoshaPage(resp){
 		if(item.type == '商品'){
 			var liObj = '<li onclick="purchaseGoods(\''+item.goodsview.goodscode+'\')">'+
 	         	'<span class="fl"><img src="../'+item.goodsview.goodsimage+
-	         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
+	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
 	         	'<h1>'+item.goodsview.goodsname+'<br><span>('+item.goodsview.goodsunits+')</span></h1>'+
 	           '  <div class="block"> </div></li>';
 		} else if(item.type == '秒杀'){
 			var liObj = '<li onclick="purchaseMiaosha(\''+item.tgview.timegoodscode+'\')">'+
          	'<span class="fl"><img src="../'+item.tgview.timegoodsimage+
-         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
+         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
          	'<h1>'+item.tgview.timegoodsname+'<br><span>('+item.tgview.timegoodsunits+')</span></h1>'+
            '  <div class="block"> </div></li>';
 		} else {
 			var liObj = '<li onclick="purchaseGiveGoods(\''+item.ggview.givegoodscode+'\')">'+
          	'<span class="fl"><img src="../'+item.ggview.givegoodsimage+
-         	'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span> '+
+         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
          	'<h1>'+item.ggview.givegoodsname+'<br><span>('+item.ggview.givegoodsunits+')</span></h1>'+
            '  <div class="block"> </div></li>';
 		}

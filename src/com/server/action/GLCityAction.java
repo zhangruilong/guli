@@ -37,6 +37,7 @@ public class GLCityAction extends CityAction {
 		}
 		responsePW(response, result);
 	}
+	@SuppressWarnings("finally")
 	public ArrayList<Treeinfo> selTree(String wheresql) {
 		String sql = null;
 		Treeinfo temp = null;

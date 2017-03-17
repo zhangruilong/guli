@@ -73,7 +73,8 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 				'","addressaddress":"'+detaAddressa+
 				'","addresscustomer":"'+customer.customerid+
 				'","addressture":"'+addressture+
-				'"}]'
+				'"}]',
+				customerxian: customer.customerxian
 			},
 			success:function(resp){
 				var respText = eval('('+resp+')');

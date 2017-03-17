@@ -187,7 +187,8 @@
 				url:"GLSystem_attachAction.do?method=shouyeImg",
 				type:"post",
 				data:{
-					customerid:data.root[0].customerid
+					customerid : data.root[0].customerid,
+					customerxian : data.root[0].customerxian
 				},
 				success:function(resp){
 					var pageData = eval('('+resp+')');

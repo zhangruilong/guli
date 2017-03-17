@@ -197,7 +197,7 @@ function initDishes(data){
 					   +'\')"></span>'+
 					'<span hidden="ture">'+jsonitem+'</span>'+
  	                ' <input type="checkbox" id="'+item.goodsid+'checkbox" class="chk_1" '+item.goodsdetail+'>'+
- 	            		'<label for="'+item.goodsid+'checkbox" onclick="checkedgoods(\''+item.goodsid+'\');"></label>'+
+ 	            		'<label for="'+item.goodsid+'checkbox" onclick="checkedgoods(\''+item.goodsid+'\',\''+item.goodscompany+'\');"></label>'+
  	             '</div>'+
  	         '</li>');
  			if(item.pricesunit2==null||item.pricesunit2==''||item.pricesunit2==undefined){
@@ -353,7 +353,7 @@ function gotogoodsDetail(jsonitem){
 	window.location.href = 'goodsDetail.jsp?type=商品&goods='+jsonitem;
 }
 //收藏商品
-function checkedgoods(goodsid){
+function checkedgoods(goodsid,goodscompany){
 	if(!customer.customerid || typeof(customer.customerid) == 'undefined'){
 		$("#"+goodsid+"checkbox").prop("checked",false);
 		$("#"+goodsid+"checkbox").attr("checked","");
@@ -374,7 +374,8 @@ function checkedgoods(goodsid){
 	$.ajax({
 		url : url,
 		data : {
-			json : json
+			json : json,
+			comid: goodscompany
 		},
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 

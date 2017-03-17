@@ -79,10 +79,11 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 $(function(){
 	$("#myshopname").text(customer.customershop);
 	$.ajax({
-		url:"GLSystem_attachAction.do?method=selAll",
+		url:"GLSystem_attachAction.do?method=cusImage",
 		type:"post",
 		data:{
-			wheresql:"classify='客户' and fid = '"+customer.customerid+",'"
+			wheresql: "classify='客户' and fid = '"+customer.customerid+",'",
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var data = JSON.parse(resp);

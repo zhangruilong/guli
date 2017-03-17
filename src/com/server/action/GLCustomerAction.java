@@ -19,7 +19,37 @@ import com.system.tools.util.DateUtils;
  *@author ZhangRuiLong
  */
 public class GLCustomerAction extends CustomerAction {
-
+	
+	//修改
+	public void updAll(HttpServletRequest request, HttpServletResponse response){
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
+		String json = request.getParameter("json");
+		System.out.println("json : " + json);
+		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
+		for(Customer temp:cuss){
+			result = updSingle(temp,CustomerPoco.KEYCOLUMN,dsName);
+		}
+		responsePW(response, result);
+	}
+	
+	//查询所有
+	public void selAll(HttpServletRequest request, HttpServletResponse response){
+		String customerxian = request.getParameter("customerxian");
+		String dsName = null;
+		if("海盐县/平湖区/海宁市".indexOf(customerxian) != -1){
+			dsName = "mysql";
+		}
+		Queryinfo queryinfo = getQueryinfo(request, Customer.class, CustomerPoco.QUERYFIELDNAME, CustomerPoco.ORDER, TYPE);
+		queryinfo.setDsname(dsName);
+		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
+		result = CommonConst.GSON.toJson(pageinfo);
+		responsePW(response, result);
+	}
+	
 	/**
     * 模糊查询语句
     * @param query
@@ -40,7 +70,7 @@ public class GLCustomerAction extends CustomerAction {
 		System.out.println("json : " + json);
 		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 	}
-	//查询所有
+	//查询客户信息
 	@SuppressWarnings("unchecked")
 	public void selCustomer(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request);
@@ -50,14 +80,18 @@ public class GLCustomerAction extends CustomerAction {
 		queryinfo.setOrder(CustomerPoco.ORDER);
 		cuss = (ArrayList<Customer>) selAll(queryinfo);
 		if(cuss.size()==0){
-			Customer mCustomer = new Customer();
-			mCustomer.setCustomercity("嘉兴市");
-			mCustomer.setCustomerxian("海盐县");
-			mCustomer.setCustomershop("我的店铺");
-			mCustomer.setCustomerlevel(3);
-			mCustomer.setCustomertype("3");
-			mCustomer.setCustomerstatue("启用");
-			cuss.add(mCustomer);
+			queryinfo.setDsname("msyql");
+			cuss = (ArrayList<Customer>) selAll(queryinfo);
+			if(cuss.size()==0){
+				Customer mCustomer = new Customer();
+				mCustomer.setCustomercity("嘉兴市");
+				mCustomer.setCustomerxian("海盐县");
+				mCustomer.setCustomershop("我的店铺");
+				mCustomer.setCustomerlevel(3);
+				mCustomer.setCustomertype("3");
+				mCustomer.setCustomerstatue("启用");
+				cuss.add(mCustomer);
+			}
 		}
 		Pageinfo pageinfo = new Pageinfo(0, cuss);
 		result = CommonConst.GSON.toJson(pageinfo);
@@ -68,7 +102,7 @@ public class GLCustomerAction extends CustomerAction {
 	public void regCustomer(HttpServletRequest request, HttpServletResponse response){
 		json2cuss(request);
 		for(Customer temp:cuss){
-			ArrayList<String> sqlList = new ArrayList<String>();							//sql语句的list集合
+			ArrayList<String> sqlList = new ArrayList<String>();				//sql语句的list集合
 			ArrayList<Customer> cusList = (ArrayList<Customer>) selAll(Customer.class, "select * from customer c where c.customerphone='"+
 					temp.getCustomerphone()+"' or c.openid='"+temp.getOpenid()+"'");
 			if(cusList != null && cusList.size() > 0){
@@ -92,36 +126,12 @@ public class GLCustomerAction extends CustomerAction {
 				address.setAddressconnect(temp.getCustomername());
 				String sqlAddress = getInsSingleSql(address);
 				sqlList.add(sqlAddress);
-				/*Queryinfo comqueryinfo = new Queryinfo();
-				comqueryinfo.setType(Companyview.class);
-				comqueryinfo.setQuery(getQuerysql(comqueryinfo.getQuery()));
-				comqueryinfo.setOrder(CompanyviewPoco.ORDER);
-				comqueryinfo.setWheresql("cityname='"+temp.getCustomerxian()+"'");
-				List<Companyview> cviewLi = selAll(comqueryinfo);
-				if(cviewLi.size() >0){
-					for (Companyview cview : cviewLi) {
-						//添加与唯一客户的关系
-						Ccustomer newccustomer = new Ccustomer();
-						newccustomer.setCcustomerid(CommonUtil.getNewId());
-						newccustomer.setCcustomercompany(cview.getCompanyid());
-						newccustomer.setCcustomercustomer(newId);
-						newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
-						String sqlCcustomer = getInsSingleSql(newccustomer);						//得到插入的sql语句
-						sqlList.add(sqlCcustomer);
-					}
-				} else {
-					//添加与海盐天然的客户关系
-					Ccustomer newccustomer = new Ccustomer();
-					newccustomer.setCcustomerid(CommonUtil.getNewId());
-					newccustomer.setCcustomercompany("1");
-					newccustomer.setCcustomercustomer(newId);
-					newccustomer.setCcustomerdetail(Integer.toString(temp.getCustomerlevel()));
-					String sqlCcustomer = getInsSingleSql(newccustomer);						//得到插入的sql语句
-					sqlList.add(sqlCcustomer);
-				}*/
 				String[] sqls = sqlList.toArray(new String[0]);
-				result = doAll(sqls);
+				//注册信息到Oracle
+				result = doAll(sqls, "oracle");
 				if(CommonConst.SUCCESS.equals(result)){
+					//注册信息到MySQL
+					doAll(sqls, "mysql");
 					ArrayList<Customer> retCust = new ArrayList<Customer>();
 					retCust.add(temp);
 					Pageinfo pageinfo = new Pageinfo(0, retCust);
