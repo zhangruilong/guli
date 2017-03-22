@@ -41,11 +41,15 @@
 <script> 
 var searchclassesvalue = window.localStorage.getItem("goodsclassname");
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+var companyid = '';
 $(function(){
 	$.ajax({
-		url:"GLAddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=cusAddress",
 		type:"post",
-		data:{wheresql:"address.addresscustomer='"+customer.customerid+"'"},
+		data:{
+			wheresql:"address.addresscustomer='"+customer.customerid+"'",
+			customerxian: customer.customerxian
+		},
 		success : function(resp){
 			var respText = eval('('+resp+')'); 
 			if(typeof(respText.root) == 'undefined' || !respText.root){
@@ -99,7 +103,8 @@ function nextpage(){
 		type:"post",
 		data:{
 			json:window.localStorage.getItem("sdishes"),
-			customerid:customer.customerid
+			customerid:customer.customerid,
+			companyid: companyid
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
@@ -155,15 +160,20 @@ function nextpage(){
 //初始化的页面信息
 function initDishes(data){
 	var scompany = setscompany();
+	companyid = scompany[0].ordermcompany;
 	$.ajax({
 		url:"GLOrderdAction.do?method=selCusXGOrderd",
 		type:"post",
-		data:{customerid:customer.customerid},
+		data:{
+			customerid : customer.customerid,
+			companyid: companyid
+		},
 		success : function(data2){
     		var cusOrder = JSON.parse(data2);
 			$(".cart-wrapper").html("");
+			
 		    $.each(scompany, function(y, mcompany) {
-		    	$(".cart-wrapper").append('<h1 name="'+mcompany.companyid +'">'+mcompany.companyshop+'</h1><ul>');
+		    	$(".cart-wrapper").append('<h1 name="'+mcompany.ordermcompany +'">'+mcompany.companyshop+'</h1><ul>');
 		    	$.each(data, function(i, item) {
 		    		var dailySur = parseInt(item.timegoodsnum);
 		    		if(cusOrder.root && cusOrder.root.length > 0){

@@ -81,6 +81,7 @@
 <script type="text/javascript" src="../js/base.js"></script>
 <script> 
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+var companyid = '';
 jQuery(document).ready(function($){
 	//open popup 
 	$('.cd-popup-trigger').on('click', function(event){
@@ -107,11 +108,12 @@ $(function(){
 		$("#addressaddress").text(item.addressaddress);
 	} else {
 		$.ajax({
-			url:"GLAddressAction.do?method=selAll",
+			url:"GLAddressAction.do?method=cusAddress",
 			type:"post",
 			data:{
 				wheresql:"addresscustomer='"+customer.customerid+"'",
-				order : "addressture desc"
+				order : "addressture desc",
+				customerxian: customer.customerxian
 			},
 			success : function(resp){
 				var data = JSON.parse(resp);
@@ -135,6 +137,9 @@ $(function(){
 		$("#totalmoney").text(window.localStorage.getItem("totalmoney"));
 	}
 	var scompany = JSON.parse(window.localStorage.getItem("scompany"));
+	if(scompany.length>0){
+		companyid = scompany[0].ordermcompany;
+	}
 	initDishes(scompany);
 });
 function initDishes(data){
@@ -154,7 +159,8 @@ function sortingData(){
 		type:"post",
 		data:{
 			json:window.localStorage.getItem("sdishes"),
-			customerid:customer.customerid
+			customerid:customer.customerid,
+			companyid: companyid
 		},
 		success:function(resp){
 			var respText = eval('('+resp+')');
@@ -222,8 +228,8 @@ function buy(){
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
-				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermemp":"补单'
+				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermcuslevel":"' + customer.customerlevel
 				+ '","ordermcusshop":"' + customer.customershop
@@ -291,7 +297,8 @@ function saveOrder(ordermjson,orderdetjson){
 		type:"post",
 		data : {
 			json : ordermjson,
-			orderdetjson : orderdetjson
+			orderdetjson : orderdetjson,
+			companyid: companyid
 		},
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 

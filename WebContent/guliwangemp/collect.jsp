@@ -60,19 +60,22 @@ input:checked {
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
+var comid = '';
 $(function(){
 	$.ajax({
-		url:"GLCollectviewAction.do?method=selAll",
+		url:"GLCollectviewAction.do?method=cusColl",
 		type:"post",
 		data:{
 			wheresql:"collectcustomer='"+customer.customerid+"' and pricesclass='"+
 					customer.customertype+"' and priceslevel='"+customer.customerlevel+
-					"' "
+					"' ",
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
-			var jsonResp = JSON.parse(resp);
+			var jsonResp = eval('('+resp+')');
 			var data = jsonResp.root;
 			if(typeof(data) != 'undefined' && data.length > 0){
+				comid = data[0].goodscompany;
 				$.each(data,function(i,item){
 					var jsonitem = JSON.stringify(item);
 					var goodsimages = [];
@@ -247,7 +250,8 @@ $(function(){
 				url:"GLCollectAction.do?method=delAllByGoodsid",
 				type:"post",
 				data:{
-					json:collectids
+					json:collectids,
+					comid: comid
 				},
 				success:function(resp){
 					var respText = eval('('+resp+')');

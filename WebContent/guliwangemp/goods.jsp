@@ -92,29 +92,25 @@ $(function(){
 		$("#totalnum").text(window.localStorage.getItem("cartnum"));
 	}
 	//通过ajax查询大类
-	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent='root' and goodsclassstatue='启用'"},initGoodsclass,null);
+	getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent='root' and goodsclassstatue='启用'", customerxian: customer.customerxian},initGoodsclass,null);
 	if(searchdishesvalue!="null"&&searchdishesvalue!=""){
-		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",query:searchdishesvalue,companyid:emp.empcompany,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
+		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",query:searchdishesvalue,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel, customerxian: customer.customerxian},initDishes,null);
 	}else if(searchclassesvalue!="null"&&searchclassesvalue!=""){
 		$("#curgoodsclass").html(searchclassesvalue);
-		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",companyid:emp.empcompany,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:searchclassesvalue},initDishes,null);
+		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:searchclassesvalue, customerxian: customer.customerxian},initDishes,null);
 	}else{
-		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",companyid:emp.empcompany,customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:"大米"},initDishes,null);
+		getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,customertype:customer.customertype,customerlevel:customer.customerlevel,goodsclassname:"大米", customerxian: customer.customerxian},initDishes,null);
 	}
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
 })
-function initCustomer(data){			//将customer(客户信息放入缓存)
-	window.localStorage.setItem("customer",JSON.stringify(data.root[0]));
-	customer = data.root[0];
-}
 function entersearch(){
     var event = window.event || arguments.callee.caller.arguments[0];
     if (event.keyCode == 13)
     {
     	searchdishesvalue = $("#searchdishes").val();
-    	getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,query:searchdishesvalue,customertype:customer.customertype,customerlevel:customer.customerlevel},initDishes,null);
+    	getJson(basePath+"GLGoodsviewAction.do",{method:"mselAll",customerid:customer.customerid,query:searchdishesvalue,customertype:customer.customertype,customerlevel:customer.customerlevel, customerxian: customer.customerxian},initDishes,null);
     }
 }
 //商品大小类
@@ -123,7 +119,7 @@ function initGoodsclass(data){																								//初始化商品大小类
 	 $.each(data.root, function(i, item) {				//遍历 data 中的 root 
 		if(item.goodsclassid==window.localStorage.getItem("goodsclassparent")){
 			$("#fenlei-left").append('<li class="active" name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
-			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
+			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+item.goodsclassid+"' and goodsclassstatue='启用'", customerxian: customer.customerxian},initGoodsclassright,null);
 		}else{
 			$("#fenlei-left").append('<li name="'+item.goodsclassid+'"><a href="#"><img src="../'+item.goodsclassdetail+'" > '+item.goodsclassname+'</a></li>');
 		}
@@ -132,7 +128,7 @@ function initGoodsclass(data){																								//初始化商品大小类
 		$(this).click(function(){
 			$(this).addClass('active').siblings().removeClass('active');	//当前元素被点击时添加 class 'active' 同时把其他同级元素 去除  class 'active'
 			//ajax查询小类并初始化
-			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+$(this).attr('name')+"' and goodsclassstatue='启用'"},initGoodsclassright,null);
+			getJson(basePath+"GLGoodsclassAction.do",{method:"mselAll",cusid :customer.customerid,wheresql:"goodsclassparent = '"+$(this).attr('name')+"' and goodsclassstatue='启用'", customerxian: customer.customerxian},initGoodsclassright,null);
 			window.localStorage.setItem("goodsclassparent",$(this).attr('name'));
 		})
 	});
@@ -153,6 +149,7 @@ function gotogoods(goodsclassname){
 	window.localStorage.setItem("goodsclassname",goodsclassname);
 	window.location.href = "goods.jsp?searchclasses="+goodsclassname;
 }
+
 //商品
 function initDishes(data){
      $(".home-hot-commodity").html("");

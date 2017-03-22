@@ -45,7 +45,7 @@
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var bkgoodscode = '${param.bkgoodscode}';
-var emp = JSON.parse(window.localStorage.getItem("emp"));
+var companyid = '';
 $(function(){ 
 	//购物车图标上的数量
 	if(!window.localStorage.getItem("cartnum")){
@@ -66,17 +66,18 @@ $(function(){
 	});
 	var companyid = '';
 	if(typeof(emp) != 'undefined'){
-		//companyid = emp.empcompany;
+//		companyid = emp.empcompany;
 	}
 	$.ajax({
 		url:"GLBkgoodsviewAction.do?method=carnivalGoods",
 		type:"post",
 		data:{
-			companyid:companyid,
-			customerid:customer.customerid,
-			customertype:customer.customertype,
-			bkgoodstype:'秒杀',
-			bkgoodscode:bkgoodscode
+//			companyid:companyid,
+			customerid: customer.customerid,
+			customertype: customer.customertype,
+			bkgoodsclass: '秒杀商品',
+			bkgoodscode: bkgoodscode,
+			customerxian: customer.customerxian
 		},
 		success : initMiaoshaPage,
 		error: function(resp){
@@ -92,20 +93,23 @@ function gotogoodsDetail(jsonitem){
 //初始化页面
 function initMiaoshaPage(resp){
 	var data = eval('('+resp+')');
+	companyid = data.root[0].bkgoodscompany;
 	$.ajax({
 		url:"GLOrderdAction.do?method=selCusXGOrderd",				//查询客户今天购买的秒杀商品数量
 		type:"post",
-		data:{customerid:customer.customerid,
-			wheresql: "bkgoodssurplus>'0'"},
+		data:{
+			customerid:customer.customerid,
+			wheresql: "bkgoodssurplus>'0'",
+			companyid: companyid
+		},
 		success : function(data2){
-			
 			var cusOrder = JSON.parse(data2);						//买过的限购商品订单
 			$(".home-hot-commodity").html("");
 			if(typeof(data.root) == 'undefined' ||　!data.root){
 				return;
 			}
 			$.each(data.root,function(j,item2){
-				var jsonitem = JSON.stringify(item2);			
+				var jsonitem = JSON.stringify(item2);
 				var dailySur = parseInt(item2.bkgoodsnum);			//剩余的每日限购数量
 				var bkgoodsimages = [];								//商品图片
 				if(typeof(item2.bkgoodsimage)!='undefined'){

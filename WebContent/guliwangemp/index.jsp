@@ -137,7 +137,8 @@ function initCustomer(){
 			url:"GLSystem_attachAction.do?method=shouyeImg",
 			type:"post",
 			data:{
-				customerid:customer.customerid
+				customerid:customer.customerid,
+				customerxian:customer.customerxian
 			},
 			success:function(resp){
 				var pageData = eval('('+resp+')');

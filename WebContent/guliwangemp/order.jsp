@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>谷粒网</title>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
 <link href="../css/layout.css" type="text/css" rel="stylesheet">
@@ -21,11 +22,13 @@
 <div class="gl-box">
 </div>
 <div class="personal-center-nav">
-    <ul>
-        	<li><a href="index.jsp"><em class="icon-shouye1"></em>首页</a></li>
+    <ul>	
+    		<li><a href="index.jsp">
+        	<em class="icon-shouye1"></em>首页</a></li>
             <li><a href="goodsclass.jsp"><em class="icon-fenlei1"></em>商城</a></li>
             <li class="active"><a href="order.jsp"><em class="ion-clipboard"></em>订单</a></li>
-            <li><a href="customerlist.jsp"><em class="ion-android-person"></em>客户</a></li>
+            <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
+            
     </ul>
 </div>
 <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
@@ -35,6 +38,7 @@ var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	var openid = customer.openid;
 	getJson(basePath+"GLOrdermviewAction.do",{method:"mselQuery",
+		customerxian: customer.customerxian,
 		openid : openid,
 		begindate : "<%=request.getParameter("begindate")%>",
 		enddate : "<%=request.getParameter("enddate")%>",

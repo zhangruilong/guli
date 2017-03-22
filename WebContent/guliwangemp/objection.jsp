@@ -8,23 +8,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 
 </head>
 
 <body>
-<form action="feedbackof.action" method="post">
-<input id="feedbackcustomer" type="hidden" name="feedbackcustomer" value="">
 <div class="view-box">
 <div class="wapper-nav">意见反馈</div>
 <textarea id="feedbackdetail" name="feedbackdetail" cols="" rows="" placeholder="请输入您的反馈意见（字数200字以内）"></textarea>
 <a onclick="subform()" class="view-tj">提交</a>
 </div>
-</form>
 <!--弹框-->
 <div class="cd-popup" role="alert">
 	<div class="cd-popup-container">
@@ -36,9 +34,8 @@
 	</div>
 </div>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
-	$("#feedbackcustomer").val(customer.customerid);
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
@@ -49,8 +46,40 @@ function subform(){
 		$(".cd-popup").addClass("is-visible");	//弹出窗口
 		return;
 	}
-	document.forms[0].submit();
+	$(".meg").text("感谢您的反馈！");
+	$(".cd-buttons a").attr("onclick","submitform()");
+	$(".cd-popup").addClass("is-visible");	//弹出窗口
+}
+function submitform(){
+	$.ajax({
+		url:"GLFeedbackAction.do?method=insAll",
+		type:"post",
+		data:{
+			json:'[{"feedbackdetail":"'+$("#feedbackdetail").val()+'","feedbackcustomer":"'+customer.customerid+'"}]',
+			customerxian: customer.customerxian
+		},
+		success : function(resp){
+			var respText2 = eval('('+resp+')');
+			if(respText2.success == true){
+				history.go(-1);
+			} else {
+				alert(respText2.msg);
+			}
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
 }
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+

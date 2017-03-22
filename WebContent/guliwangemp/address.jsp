@@ -27,14 +27,15 @@
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
 	$.ajax({
-		url:"GLAddressAction.do?method=selAll",
+		url:"GLAddressAction.do?method=cusAddress",
 		type:"post",
 		data:{
 			wheresql:"addresscustomer='"+customer.customerid+"'",
-			order:"addressture desc"
+			order:"addressture desc",
+			customerxian: customer.customerxian
 		},
 		success:function(resp){
 			var data = JSON.parse(resp).root;

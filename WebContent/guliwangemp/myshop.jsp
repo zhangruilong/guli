@@ -8,11 +8,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>谷粒网</title>
-<link href="css/base.css" type="text/css" rel="stylesheet">
-<link href="css/layout.css" type="text/css" rel="stylesheet">
-<link href="css/dig.css" type="text/css" rel="stylesheet">
-<link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet">
+<link href="../css/base.css" type="text/css" rel="stylesheet">
+<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link href="../css/dig.css" type="text/css" rel="stylesheet">
+<!-- <link href="../ExtJS/resources/css/ext-all.css" type="text/css" rel="stylesheet"> -->
 <style type="text/css">
 #result{ width:auto; position: absolute; right:0; top:0}
 #result img{ width:30px; height:30px; border-radius:50px}
@@ -23,54 +24,21 @@ input:focus{ outline:none}
 
 #uploadImg{ width:69%; height:34px; float:left; position:relative; font-size:12px; overflow:hidden}
 #uploadImg a{ display:block; text-align:right;  height:34px; line-height:34px; font-size:1.4em; color:#aaa}
-#file_input{ width:auto; position:absolute; z-index:100; margin-left:-180px; font-size:60px;opacity:0;filter:alpha(opacity=0); margin-top:-5px;}
+/* #file_input{ width:auto; position:absolute; z-index:100; margin-left:-180px; font-size:60px;opacity:0;filter:alpha(opacity=0); margin-top:-5px;} */
 </style>
 </head>
 
 <body>
-<form action="editCus.action" method="post">
-<input type="hidden" name="customerid" value="${requestScope.customer.customerid }">
 <div class="reg-wrapper">
 	<ul>
-    	<li><span>店铺名称</span> <input name="customershop" type="text" value="${requestScope.customer.customershop }" placeholder="请输入店铺名称"></li>
-        <li><span>联系人</span> <input name="customername" type="text" value="${requestScope.customer.customername }" placeholder="请输入联系人"></li>
-        <li><span>联系电话</span> <input name="customerphone" type="text" value="${requestScope.customer.customerphone }" placeholder="请输入联系电话"></li>
-        <li>
-        	<span>店铺照片</span> 
-        	<div id="uploadImg">
-                <input type="file" id="file_input" />
-                <a href="#" id="clo">点击上传</a> 
-                <span id="result">
-                  <!-- 这里显示读取结果 -->
-                </span> 
-            </div><i></i>
-        </li>
-        <li><span>所在城市</span> 
-			<span style="position:absolute;overflow:hidden;margin-left: 170px;"> 
-			<select id="city" style="width:118px;">
-				<option></option>
-				<c:forEach items="${requestScope.cityList }" var="cyty">
-					<option>${cyty.cityname }</option>
-				</c:forEach>
-			</select>
-			</span><i></i> 
-			<span style="position:absolute;display: table;">
-				<input id="customercity" name="customercity" type="text" value="${requestScope.customer.customercity }" 
-				placeholder="请输入城市" style="width:118px;margin-left: 200px;">
-			</span>
-			</li>
-			<li><span>服务区域</span> 
-			<span style="position:absolute;overflow:hidden;margin-left: 170px;"> 
-			<select id="xian" style="width:118px;">
-				<option></option>
-			</select>
-			</span><i></i> 
-			<span style="position:absolute;display: table;">
-				<input id="customerxian" name="customerxian" type="text" value="${requestScope.customer.customerxian }" 
-				placeholder="请输入地区" style="width:118px;margin-left: 200px;">
-			</span>
-			</li>
-        <li><span>店铺地址</span> <input name="customeraddress" type="text" value="${requestScope.customer.customeraddress }"
+    	<li><span>店铺名称</span> <input name="customershop" type="text" value="" placeholder="请输入店铺名称"></li>
+        <li><span>联系人</span> <input name="customername" type="text" value="" placeholder="请输入联系人"></li>
+        <li><span>手机号码</span> <input name="customerphone" type="text" value="" placeholder="请输入联系电话"></li>
+        <!-- <li><span>所在城市</span> <select name="customercity" id="city">
+			</select><i></i></li>
+        <li><span>所在区域</span> <select name="customerxian" id="xian">
+			</select><i></i></li> -->
+        <li><span>店铺地址</span> <input name="customeraddress" type="text" value=""
          placeholder="请输入店铺地址"></li>
     </ul>
 </div>
@@ -78,107 +46,166 @@ input:focus{ outline:none}
 <div class="confirm-reg">
 	<a onclick="doedit()" class="confirm-reg-btn">保存修改</a>
 </div>
-</form>
 <!--弹框-->
 <div class="cd-popup" role="alert">
 	<div class="cd-popup-container">
 		<div class="cd-buttons">
         	<h1>谷粒网提示</h1>
-			<p class="meg">是否现在登录?</p>
+			<p class="meg"></p>
             <a class="cd-popup-close">确定</a>
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-all.js"></script>
-<script type="text/javascript" src="../ExtJS/ext-lang-zh_CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 $(function(){
-	$("#city").change(function(){
-		var city = $("#city").val();		//得到城市复选框的值
-		$("#city").val("");					//将城市复选框清空
-		$("#customercity").val(city);		//将城市输入框的值变为城市复选框的值
-		Ext.Ajax.request({
-			//通过ajax查询到地区复选框的值
-			url:"querycity.action",
-			method:"POST",
-			params:{
-				"cityname":city
-			},
-			success:function(response,option){
-				var result = response.responseText;			//得到返回的文本信息
-				var $result = Ext.util.JSON.decode(result);	//转化为json对象
-				$("#xian").empty();							//清空
-				var $option = $("<option></option>");		//添加第一个option
-				$("#xian").append($option);
-				for (var i=0; i<$result.length;i++ ){
-					var city = $result[i];
-					$option = $("<option>"+city.cityname+"</option>");
-					$("#xian").append($option);
+	$.ajax({
+		url:"GLCustomerAction.do?method=selAll",
+		type:"post",
+		data:{
+			wheresql:"customerid='"+customer.customerid+"'",
+			customerxian: customer.customerxian
+		},
+		success:function(resp){
+			var data = JSON.parse(resp);
+			$("input[name='customershop']").val(data.root[0].customershop);
+			$("input[name='customername']").val(data.root[0].customername);
+			$("input[name='customerphone']").val(data.root[0].customerphone);
+			/* $.ajax({
+				url:"CityAction.do?method=selAll",
+				type:"post",
+				data:{
+					wheresql:"cityparent='root'"
+				},
+				success:function(resp){
+					var data2 = JSON.parse(resp).root;
+					$("#city option").remove();
+					$.each(data2,function(i,item){
+						if(item.cityname == data.root[0].customercity){
+							$("#city").append('<option value="'+item.cityid+'" selected="selected">'+item.cityname+'</option>');
+						} else {
+							$("#city").append('<option value="'+item.cityid+'" >'+item.cityname+'</option>');
+						}
+					});
+					cityChaEve();
+					initxian();
+				},
+				error: function(resp){
+					var respText = eval('('+resp+')'); 
+					alert(respText.msg);
 				}
-			},
-			failure:function(response,option){
-				Ext.Msg.alert("提示","网络出现问题,请稍后再试");
-			}
-		});
+			}); */
+			$("input[name='customeraddress']").val(data.root[0].customeraddress);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
 	});
-	$("#xian").change(function(){
+	
+	/* $("#xian").change(function(){
 		var xian = $("#xian").val();
 		$("#xian").val("");
 		$("#customerxian").val(xian);
-	});
+	}); */
 	$(".cd-popup").on("click",function(event){		//绑定点击事件
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
 })
+//初始化县
+/* function initxian(){
+	$.ajax({
+		   url:"CityAction.do?method=selAll",
+		   type:"post",
+		   data:{
+			   wheresql:"cityparent='"+$("#city").val()+"'"
+		   },
+		   success:function(resp){
+			   var data = JSON.parse(resp).root;
+			   $("#xian option").remove();
+			   $.each(data,function(i,item){
+				   $("#xian").append('<option>'+item.cityname+'</option>');
+			   });
+		   },
+		   error: function(resp){
+				var respText = eval('('+resp+')'); 
+				alert(respText.msg);
+		   }
+	   });
+} */
+//绑定更换城市时的事件
+/* function cityChaEve(){
+	$("#city").change(function(){
+		 $.ajax({
+ 			   url:"CityAction.do?method=selAll",
+ 			   type:"post",
+ 			   data:{
+ 				   wheresql:"cityparent='"+$(this).val()+"'"
+ 			   },
+ 			   success:function(resp){
+ 				   var data = JSON.parse(resp).root;
+				   $("#xian option").remove();
+ 				   $.each(data,function(i,item){
+ 					   $("#xian").append('<option>'+item.cityname+'</option>');
+ 				   });
+ 			   },
+ 			   error: function(resp){
+ 					var respText = eval('('+resp+')'); 
+ 					alert(respText.msg);
+ 			   }
+ 		   });
+	});
+} */
 function doedit(){
 	var count = 0;
 	var alt;
-	$("input").each(function(i,item){
+	var strjson = '[{"customerid":"'+customer.customerid+'",';
+	$("input,select").each(function(i,item){
+		if($(item).attr("id") != "city"){
+			strjson += '"'+$(item).attr("name")+'":"'+$(item).val()+'",';
+		} else {
+			strjson += '"'+$(item).attr("name")+'":"'+$(item).children("option:selected").text()+'",';
+		}
 		if($(item).val() == null || $(item).val() == ''){
-			if($(item).attr("id") != "file_input"){
+			//if($(item).attr("id") != "file_input"){
 				count++;
 				alt=$(item).attr("placeholder");
 				return false;
-			}
+			//}
 		}
 	});
-	if(count > 0){
-		$(".meg").text(alt);		//修改弹窗信息
-		$(".cd-popup").addClass("is-visible");	//弹出窗口
+	strjson = strjson.substr(0, strjson.length - 1);
+	strjson += "}]";
+	var reg = /^[1][0-9]{10}$/;
+	//var reg = new RegExp('[0-9]{11}','g');
+	if(!reg.test($("[name='customerphone']").val())){
+		$(".meg").text('请填写正确的手机号码。');						//修改弹窗信息
+		$(".cd-popup").addClass("is-visible");							//弹出窗口
 		return;
 	}
-	//$(".meg").text("以保存修改");		//修改弹窗信息
-	//$(".cd-popup").addClass("is-visible");	//弹出窗口
-	document.forms[0].submit();
-}
-var result = document.getElementById("result");
-var input = document.getElementById("file_input");
-/*function alertMsg()
-  {
-  document.getElementById("result").innerHTML = "";
-  document.getElementById("clo").innerHTML = "点击上传";
-  }*/
-if(typeof FileReader === 'undefined'){
-	result.innerHTML = "抱歉，你的浏览器不支持 FileReader";
-	input.setAttribute('disabled','disabled');
-}else{
-	input.addEventListener('change',readFile,false);
-}
-			
-function readFile(){
-	var file = this.files[0];
-	if(!/image\/\w+/.test(file.type)){
-		alert("请确保文件为图像类型");
-		return false;
+	if(count > 0){
+		$(".meg").text(alt);															//修改弹窗信息
+		$(".cd-popup").addClass("is-visible");							//弹出窗口
+		return;
 	}
-	var reader = new FileReader();
-	reader.readAsDataURL(file);
-	reader.onload = function(e){
-		result.innerHTML = '<img src="'+this.result+'" alt=""/><div class="close" onclick="alertMsg()" style="display:none">×</div>'
-		document.getElementById("clo").innerHTML = "";
-	}
+	$.ajax({
+		url:"GLCustomerAction.do?method=updAll",
+		type:"post",
+		data:{
+			json:strjson,
+			customerxian: customer.customerxian
+		},
+		success:function(resp){
+			var data = eval('('+resp+')');
+			alert(data.msg);
+			history.go(-1);
+		},
+		error : function(resp2){
+			var respText2 = eval('('+resp2+')');
+			alert(respText2.msg);
+		}
+	});
 }
 </script>
 </body>

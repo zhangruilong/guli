@@ -86,6 +86,7 @@ var basePath = '<%=basePath%>';
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var type = '${param.type}';
 var dataStr = getQueryString('goods');
+var companyid = '';
 function lunbotu(){
 	var bullets = document.getElementById('position').getElementsByTagName('li');
 	var banner = Swipe(document.getElementById('mySwipe'), {
@@ -104,6 +105,7 @@ function lunbotu(){
 $(function(){
 	var data = JSON.parse(dataStr);
 	if(type == '商品'){
+		companyid = data.goodscompany;
 		comImage(data.goodscompany);									//广告图
 		var imgArr = data.goodsimage.split(',');
 		$.each(imgArr,function(i,item){									//商品图
@@ -133,6 +135,7 @@ $(function(){
 		$("#gdw_t_li2").append(' <span class="gdw_t_li3_cc"><input type="checkbox" id="'+data.goodsid+'checkbox" class="chk_1" '+data.goodsdetail+'>'+
 	     		'<label for="'+data.goodsid+'checkbox" onclick="checkedgoods(\''+data.goodsid+'\');"></label></span>');
 	} else if (type == '秒杀'){
+		companyid = data.bkgoodscompany;
 		var imgArr = data.bkgoodsimage.split(',');
 		$.each(imgArr,function(i,item){									//商品图
 			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
@@ -145,7 +148,10 @@ $(function(){
 		$.ajax({
 			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
-			data:{customerid:customer.customerid},
+			data:{
+				customerid:customer.customerid,
+				companyid: companyid
+			},
 			success : function(data2){
 				var cusOrder = JSON.parse(data2);
 				var dailySur = parseInt(data.bkgoodsnum);
@@ -184,6 +190,7 @@ $(function(){
 		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodstype);
 		
 	} else if(type == '买赠'){
+		companyid = data.bkgoodscompany;
 		var imgArr = data.bkgoodsimage.split(',');
 		$.each(imgArr,function(i,item){									//商品图
 			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
@@ -196,7 +203,10 @@ $(function(){
 		$.ajax({
 			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
-			data:{customerid:customer.customerid},
+			data:{
+				customerid:customer.customerid,
+				companyid: companyid
+			},
 			success : function(data2){
 				
 				var cusOrder = JSON.parse(data2);
@@ -234,6 +244,7 @@ $(function(){
 		$(".gd-lower-liebiao span:eq(1)").text(changeStr(data.bkgoodsbrand));
 		$(".gd-lower-liebiao span:eq(2)").text(data.bkgoodstype);
 	} else if(type == '年货' || type=='组合'){
+		companyid = data.bkgoodscompany;
 		var imgArr = data.bkgoodsimage.split(',');
 		$.each(imgArr,function(i,item){									//商品图
 			$('#gd-lunbo-box').append('<div><img class="img-responsive" src="../'+item+'"/></div>');
@@ -246,7 +257,10 @@ $(function(){
 		$.ajax({
 			url:"GLOrderdAction.do?method=selCusXGOrderd",
 			type:"post",
-			data:{customerid:customer.customerid},
+			data:{
+				customerid:customer.customerid,
+				companyid: companyid
+			},
 			success : function(data2){
 				var cusOrder = JSON.parse(data2);
 				var dailySur = parseInt(data.bkgoodsnum);
@@ -308,7 +322,8 @@ function comImage(comid){
 		url:"GLSystem_attachAction.do?method=selAll",
 		type:"post",
 		data:{
-			wheresql:"code='detail' and classify='经销商' and fid like '%"+comid+"%'"
+			wheresql:"code='detail' and classify='经销商' and fid like '%"+comid+"%'",
+			comid: comid
 		},
 		success:function(resp){
 			var data = eval('('+resp+')');
@@ -546,7 +561,8 @@ function checkedgoods(goodsid){
 	$.ajax({
 		url : url,
 		data : {
-			json : json
+			json : json,
+			comid: companyid
 		},
 		success : function(resp) {
 			var respText = eval('('+resp+')'); 

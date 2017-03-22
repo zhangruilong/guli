@@ -23,10 +23,10 @@
 </div>
 <div class="reg-wrapper reg-dianpu-info">
 	<ul>
-    	<li><span>所在城市</span> <select id="city">
+    	<!-- <li><span>所在城市</span> <select id="city">
 			</select><i></i></li>
         <li><span>所在区域</span> <select  id="xian">
-			</select><i></i></li>
+			</select><i></i></li> -->
         <li><span>详细地址</span> <input id="detaAddressa" type="text" placeholder="请输入详细地址"></li>
     </ul>
 </div>
@@ -41,14 +41,28 @@
 </div>
 <script src="../js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-var customer = JSON.parse(window.localStorage.getItem("customer"));
+var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 	function addAddress(){
-		var city = $("#city").text();
-		var xian = $("#xian").text();
 		var detaAddressa = $("#detaAddressa").val();
 		var addressture = "0";
 		if($("[name='addressture']:checkbox").get(0).checked){
 			addressture = '1';
+		}
+		if(!$("input[name='addressconnect']").val()){
+			alert("联系人名不能为空!");
+			return;
+		}
+		var reg = /^[1][0-9]{10}$/;
+		if(!$("input[name='addressphone']").val()){
+			alert("手机号不能为空!");
+			return;
+		} else if(!reg.test($("input[name='addressphone']").val())){
+			alert('请填写正确的手机号码。');
+			return;
+		}
+		if(!detaAddressa){
+			alert("详细地址不能为空!");
+			return;
 		}
 		$.ajax({
 			url:"GLAddressAction.do?method=insertCusAdd",
@@ -56,10 +70,11 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 			data:{
 				json:'[{"addressconnect":"'+$("input[name='addressconnect']").val()+
 				'","addressphone":"'+$("input[name='addressphone']").val()+
-				'","addressaddress":"'+city+xian+detaAddressa+
+				'","addressaddress":"'+detaAddressa+
 				'","addresscustomer":"'+customer.customerid+
 				'","addressture":"'+addressture+
-				'"}]'
+				'"}]',
+				customerxian: customer.customerxian
 			},
 			success:function(resp){
 				var respText = eval('('+resp+')');
@@ -70,50 +85,6 @@ var customer = JSON.parse(window.localStorage.getItem("customer"));
 				var respText2 = eval('('+resp2+')');
 				alert(respText2.msg);
 			}
-		});
-	}
-	$(function(){
-		$.ajax({
-			url:"GLCityAction.do?method=selAll",
-			type:"post",
-			data:{
-				wheresql:"cityparent='root'"
-			},
-			success:function(resp){
-				var data = JSON.parse(resp).root;
-				$("#city option").remove();
-				$.each(data,function(i,item){
-					$("#city").append('<option value="'+item.cityid+'">'+item.cityname+'</option>');
-				});
-				cityChaEve()
-			},
-			error: function(resp){
-				var respText = eval('('+resp+')'); 
-				alert(respText.msg);
-			}
-		});
-	})
-	//绑定更换城市时的事件
-	function cityChaEve(){
-		$("#city").change(function(){
-			 $.ajax({
-  			   url:"GLCityAction.do?method=selAll",
-  			   type:"post",
-  			   data:{
-  				   wheresql:"cityparent='"+$(this).val()+"'"
-  			   },
-  			   success:function(resp){
-  				   var data = JSON.parse(resp).root;
- 				   $("#xian option").remove();
-  				   $.each(data,function(i,item){
-  					   $("#xian").append('<option>'+item.cityname+'</option>');
-  				   });
-  			   },
-  			   error: function(resp){
-  					var respText = eval('('+resp+')'); 
-  					alert(respText.msg);
-  			   }
-  		   });
 		});
 	}
 </script>
