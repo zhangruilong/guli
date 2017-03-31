@@ -126,7 +126,7 @@ function initMiaoshaPage(resp){
 					if(item2.bkgoodsnum != -1){					//如果有每日限购
 						var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
-							if(item3.orderdtype == '秒杀' && item3.orderdgoods == item2.bkgoodsid ){
+							if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.bkgoodscode && item3.orderdunits == item2.bkgoodsunits){
 								itemGoodsCount += parseInt(item3.orderdclass);
 							}
 						});
@@ -191,7 +191,7 @@ function addnum(obj,pricesprice,goodsname,pricesunit,goodsunits,goodscode,goodsc
 		var num = parseInt(numt.val());
 		var cusMSOrderNum = parseInt($(obj).attr("name"));
 		
-		if((parseInt(cusMSOrderNum) - num) <= 0 && item.bkgoodsnum != -1){
+		if(item.bkgoodsnum!=-1 && (parseInt(cusMSOrderNum) - num) <= 0){
 			alert('您购买的商品超过了限购数量。');
 			return;
 		} else {

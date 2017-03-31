@@ -79,7 +79,7 @@ public class GLCustomerAction extends CustomerAction {
 		queryinfo.setQuery(getQuerysql(queryinfo.getQuery()));
 		queryinfo.setOrder(CustomerPoco.ORDER);
 		cuss = (ArrayList<Customer>) selAll(queryinfo);
-		if(cuss.size()==0){
+		if(cuss.size()==0 || "海盐县/平湖区/海宁市".indexOf(cuss.get(0).getCustomerxian()) != -1){
 			queryinfo.setDsname("msyql");
 			cuss = (ArrayList<Customer>) selAll(queryinfo);
 			if(cuss.size()==0){
@@ -127,11 +127,14 @@ public class GLCustomerAction extends CustomerAction {
 				String sqlAddress = getInsSingleSql(address);
 				sqlList.add(sqlAddress);
 				String[] sqls = sqlList.toArray(new String[0]);
-				//注册信息到Oracle
-				result = doAll(sqls, "oracle");
-				if(CommonConst.SUCCESS.equals(result)){
+				if("海盐县/平湖区/海宁市".indexOf(temp.getCustomerxian()) != -1 ){
 					//注册信息到MySQL
-					doAll(sqls, "mysql");
+					result = doAll(sqls, "mysql");
+				} else {
+					//注册信息到Oracle
+					result = doAll(sqls, "oracle");
+				}
+				if(CommonConst.SUCCESS.equals(result)){
 					ArrayList<Customer> retCust = new ArrayList<Customer>();
 					retCust.add(temp);
 					Pageinfo pageinfo = new Pageinfo(0, retCust);

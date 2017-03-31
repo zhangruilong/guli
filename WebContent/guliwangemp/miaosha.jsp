@@ -126,7 +126,7 @@ function initMiaoshaPage(resp){
 					if(item2.bkgoodsnum != -1){					//如果有每日限购
 						var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
-							if(item3.orderdtype == '秒杀' && item3.orderdgoods == item2.bkgoodsid ){
+							if(item3.orderdtype == '秒杀' && item3.orderdcode == item2.bkgoodscode && item3.orderdunits == item2.bkgoodsunits){
 								itemGoodsCount += parseInt(item3.orderdclass);
 							}
 						});

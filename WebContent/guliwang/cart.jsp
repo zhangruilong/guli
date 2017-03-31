@@ -179,7 +179,7 @@ function initDishes(data){
 		    		if(cusOrder.root && cusOrder.root.length > 0){
 		    			var itemGoodsCount = 0;
 						$.each(cusOrder.root,function(k,item3){
-							if(item.orderdtype == item3.orderdtype && item3.goodsid == item.goodsid ){
+							if(item.orderdtype == item3.orderdtype  && item3.orderdcode == item.goodscode && item3.orderdunits == item.goodsunits){
 								itemGoodsCount += parseInt(item3.orderdclass);				//orderdclass里面放的是订单数量
 							}
 						});
