@@ -77,8 +77,8 @@ public class GLSystem_attachAction extends System_attachAction {
 			quAreaSQL = quAreaSQL.substring(0, quAreaSQL.length()-3)+")";
 			Map<String, Object> resultMap = new HashMap<String, Object>();
 			resultMap.put("msg", "操作成功");
-			resultMap.put("images",selAll(System_attach.class, quImgSQL+" order by code"));		//图片
-			resultMap.put("area",selAll(Indexarea.class, quAreaSQL+" order by ia.indexareaorder"));	//首页区
+			resultMap.put("images",selAll(System_attach.class, quImgSQL+" order by code", dsName));		//图片
+			resultMap.put("area",selAll(Indexarea.class, quAreaSQL+" order by ia.indexareaorder", dsName));	//首页区
 			result = CommonConst.GSON.toJson(resultMap);
 		}
 		responsePW(response, result);
