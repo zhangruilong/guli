@@ -2,12 +2,12 @@ body { background-color: #f2f2f2; font-family: Helvetica }
 body, html { height: 100% }
 .font-grey { color: #999 }
 .font-oringe { color: #eb3c07 }
-.gl-box, .wrapper { width: 100%; overflow: hidden }
+.gl-box, .wrapper { width: 100%; overflow: hidden; }
 .ion-home:before { content: "\f144" }
 .ion-android-person:before { content: "\f3a0" }
 .ion-bag:before { content: "\f110" }
 .ion-clipboard:before { content: "\f127" }
-.ion-home:before, .ion-android-person:before, .ion-bag:before, .ion-clipboard:before,.login-bg .login-content li i:before,.reg-dianpu-info li i:after,.order-detail-user .info-icon:before,.cart-wrapper li .jia:before, .goods-wrapper .home-hot-commodity li .jia:before,.cart-wrapper li .jian:before,.goods-wrapper .home-hot-commodity li .jian:before,.reg-wrapper li i:after,.budan-page li a:after,.wapper-nav .goback:after{ font-family: "Ionicons"; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; text-rendering: auto; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
+.ion-home:before, .ion-android-person:before, .ion-bag:before, .ion-clipboard:before,.login-bg .login-content li i:before,.reg-dianpu-info li i:after,.order-detail-user .info-icon:before,.cart-wrapper li .jia:before, .goods-wrapper .home-hot-commodity li .jia:before,.cart-wrapper li .jian:before,.goods-wrapper .home-hot-commodity li .jian:before,.reg-wrapper li i:after,.budan-page li a:after,.wapper-nav .goback:after{font-family: "Ionicons"; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; text-rendering: auto; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
 /*login*/
 .login-bg{height:100%; background:url(../images/loginbg.jpg) center no-repeat; background-size: cover}
 .login-bg .logo{ text-align:center; padding-top:20%}
@@ -61,9 +61,11 @@ color:#fff !important;
 /*秒杀商品*/
 .ms-bottom .miaosha_li_price_div{float: left;margin: 8% 0% 0% 0%;}
 .ms-bottom .miaosha_stock-num { position: relative; width: 45%;margin: 7% 0% 0% 0%; float: right; }
-.ms-bottom{width: 71%;float: right;}
-.miaosha_li_price_div strong{color: #f64320}
-.miaosha_li_price_div em{ color: #666;font-style: normal; text-decoration: line-through; font-size: .6em }
+.ms-bottom{width: 71%;float: right; display: none;}
+.miaosha_li_price_div { float: left;}
+.miaosha_li_price_div strong{ color: #f64320;}
+.miaosha_li_price_div em{ color: #666;font-style: normal; text-decoration: line-through; font-size: .6em; }
+
 /*买赠商品*/
 .home-hot-commodity .block .givegoods_li_priceANDunit{float: left;}
 /*预购商品*/
@@ -125,15 +127,15 @@ color:#fff !important;
 .home-hot-wrap .home-hot-commodity li { overflow: hidden; margin-left: 4%; position:relative; border-bottom:solid 1px #eee }
 .home-hot-wrap .home-hot-commodity li a, .goods-wrapper .home-hot-commodity li a { display: block; padding: 4% 4% 4% 0; position: relative; overflow: hidden }
 .home-hot-wrap .home-hot-commodity li a h1, .goods-wrapper .home-hot-commodity li h1 { font-size: 1em; font-weight: normal; margin: 4% 0 }
-.home-hot-wrap .home-hot-commodity li a .fl img, .goods-wrapper .home-hot-commodity li .fl img { width: 90px; }
-.home-hot-wrap .home-hot-commodity li a span, .goods-wrapper .home-hot-commodity li span { color: #666; font-size: .6em }
+.home-hot-wrap .home-hot-commodity li a .fl img{ width: 90px; }
+.home-hot-wrap .home-hot-commodity li a span { color: #666; font-size: .6em }
 .goods-wrapper .home-hot-commodity li .miaosha-detail { color: #666; font-size: 16px;width: 68%;display: inline-block;margin: 8px 0px 8px 0px; }
 .home-hot-wrap .home-hot-commodity li a span.fl, .goods-wrapper .home-hot-commodity li span.fl { margin-right: 2%; margin-top: 4% }
 .home-hot-wrap .home-hot-commodity li a span.fl { margin-top: 0 }
 .home-hot-wrap .home-hot-commodity li a span strong, .goods-wrapper .home-hot-commodity li span strong { font-size: 1.6em; color: #f64320 }
 .home-hot-wrap .home-hot-commodity li a span em, .goods-wrapper .home-hot-commodity li span em { font-style: normal; margin: 0 4px; text-decoration: line-through; font-size: 1.2em }
 .home-hot-wrap .home-hot-commodity li a span font { color: #333; font-size: 1.2em }
-.home-hot-wrap .home-hot-commodity li:last-child, .goods-wrapper .home-hot-commodity li:last-child { margin-bottom: 24% }
+.home-hot-wrap .home-hot-commodity li:last-child { margin-bottom: 24% }
 .home-city-drop li { height: auto; border-bottom: solid 1px #eee; padding-left: 4%; background-color: #fff; overflow: hidden }
 .home-city-drop li a { width: 100%; display: block; height: auto; text-align: left; color: #737373; font-size: 1em; margin: 0; border: none; padding: 3% 0 3% 0 }
 /*下拉样式*/
@@ -208,7 +210,7 @@ color:#fff !important;
 .cart-wrapper .songda { width: 100%; padding: 0 2%; margin: 2% 0 2% 4%; border-left: solid 2px #f64320; color: #999; background-color: #fff; font-size: .6em }
 .cart-wrapper:last-child { margin-bottom: 18% }
 .cart-wrapper h1 { position: relative; padding: 2% 0 2% 4%; font-size: 1em; font-weight: normal; border-bottom:solid 1px #eee }
-.cart-wrapper li, .goods-wrapper .home-hot-commodity li { position: relative; overflow: hidden; margin-left: 4%; padding: 2% 0; border-bottom:solid 1px #eee }
+.cart-wrapper li { position: relative; overflow: hidden; margin-left: 4%; padding: 2% 0; border-bottom:solid 1px #eee }
 .cart-wrapper li em { float: left; width: 25%; margin-right: 4% }
 .cart-wrapper li h2 { font-size: 1em; font-weight: normal; padding: 4% 5% 4% 0 }
 .cart-wrapper li h2 span { float: right; color: #999 }
@@ -220,7 +222,7 @@ color:#fff !important;
 .cart-wrapper li .shuliang, .goods-wrapper .home-hot-commodity li .shuliang { position: relative; float: left; width: 30px; height: 24px; float: left; margin: 0; border: none; border-top: 1px #ccc solid; border-bottom: solid 1px #ccc; text-align: center; padding: 1px 0; background-color:#fff }
 /*商品*/
 .goods-wrapper .home-hot-commodity li h1 { margin: 2% 0 0% 0 }
-.stock-num { position: relative; margin: 0% 4% 0% 0%; float: right; width: 65% }
+.stock-num { display: none; }
 .block .regular-radio:checked + label { border: none; font-size: 1.4em }
 .block span { display: block }
 .block .regular-radio + label { border: none; box-shadow: none; background: url(../images/price-rd-dis.png) no-repeat; top: 60%; left: 0; margin: 0; background-position: 2% 50%; background-size: 10%; font-size: 1.4em }
@@ -242,6 +244,17 @@ color:#fff !important;
 .home-city-drop .fenlei-left li { margin-left: 4%; padding: 0 }
 .home-city-drop .fenlei-left .active a { color: #2c77e6 }
 .wrapper .fenlei-left li a img{ width:28px; height:28px; vertical-align:middle; margin:0}
+.goods-wrapper .home-hot-commodity { background-color: #eee;}
+.goods-wrapper .home-hot-commodity li { position: relative; overflow: hidden; margin: 0% 0% 0% 2%; 
+width: 48%; display: inline-table; background-color: white;}
+.goods-wrapper .home-hot-commodity li h1{ font-size:1.2em; float: left;}
+.goods-wrapper .home-hot-commodity li h1 font{ height: 1.2em; overflow: hidden; display: block;}
+.line-goodsprices{ float: left; width: 100%;}
+.goods-wrapper .home-hot-commodity li .fl img { }
+.goods-wrapper .home-hot-commodity li h1 span{ font-size:.8em; display: block; width: 100%}
+.goods-wrapper .home-hot-commodity li span { color: #666; font-size: .6em; float: left; overflow: hidden;}
+.goods-wrapper .home-hot-commodity li .give-info { float: left;}
+.goods-wrapper .home-hot-commodity li:last-child { margin-bottom: 24% }
 /*筛选*/
 .filter-wrapper { overflow: hidden; padding-bottom: 30% }
 .filter-wrapper li { margin-left: 4%; overflow: hidden; border-bottom: solid 1px #eee; padding: 4% 0 }
@@ -319,13 +332,13 @@ color:#fff !important;
 .add-admin a { font-size: .9em }
 .cart-wrapper .songda { font-size: .8em }
 .footer .jiesuan-foot-info{ padding-top:4%}
-.home-hot-wrap .home-hot-commodity li a h1 span,.goods-wrapper .home-hot-commodity li h1 span{ font-size:.8em}
+.home-hot-wrap .home-hot-commodity li a h1 span{ font-size:.8em}
 .budan-page li h2{ padding:3% 0}
 
 }
 @media screen and (min-width:414px) {
 .footer .jiesuan-foot-info { font-size: 1.2em }
-.home-hot-wrap .home-hot-commodity li a h1,.goods-wrapper .home-hot-commodity li h1{ font-size:1.2em}
+.home-hot-wrap .home-hot-commodity li a h1{ font-size:1.2em}
 
 }
 /*秒杀商品中的购物车*/

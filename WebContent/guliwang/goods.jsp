@@ -15,9 +15,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>谷粒网</title>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
-<link href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
+<link id="layout-list2" href="../css/layout.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+var goodsListStyle = window.localStorage.getItem('goodsListStyle');
+if(typeof(goodsListStyle)=='undefined' || !goodsListStyle){
+	window.localStorage.setItem('goodsListStyle','list');
+	goodsListStyle = 'list';
+}
+if(goodsListStyle=='block'){
+	$('#layout-list2').attr('href','../css/list2.css');
+} else {
+	$('#layout-list2').attr('href','../css/layout.css');
+}
+</script>
 <style type="text/css">
 .stock-num{float: left;width: 60%;}
 .goods-wrapper .home-hot-commodity li span{margin: 5% 0% 5% 0%;}
@@ -42,7 +55,7 @@
             </div>
         </div>
         <input id="searchdishes" type="text" placeholder="请输入商品名称" onkeydown="entersearch()"/>
-        <a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a>
+        <a onclick="changeStyle()" href="javascript:void(0)" class="gwc"><em id="totalnum">0</em></a>
     </div>
     <div class="goods-wrapper">
         <ul class="home-hot-commodity">
@@ -54,7 +67,9 @@
         	<li><a href="index.jsp">
         	<em class="icon-shouye1"></em>首页</a></li>
             <li class="active"><a href="goodsclass.jsp"><em class="icon-fenlei2"></em>商城</a></li>
-            <li><a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a></li>
+            <li>
+            	<a onclick="docart(this)" href="cart.jsp"><em class="icon-gwc1"></em>购物车</a>
+            </li>
             <li><a href="mine.jsp"><em class="icon-wode1"></em>我的</a></li>
         </ul>
     </div>
@@ -68,7 +83,6 @@
 		</div>
 	</div>
 </div>
-<script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
 <script> 
 var basePath = '<%=basePath%>';
@@ -107,6 +121,17 @@ $(function(){
 		$(this).removeClass("is-visible");	//移除'is-visible' class
 	});
 })
+//修改css样式
+function changeStyle(){
+	if($('#layout-list2').attr('href')=='../css/layout.css'){
+		$('#layout-list2').attr('href','../css/list2.css');
+		window.localStorage.setItem('goodsListStyle','block');
+	} else {
+		$('#layout-list2').attr('href','../css/layout.css');
+		window.localStorage.setItem('goodsListStyle','list');
+	}
+}
+
 function initCustomer(data){			//将customer(客户信息放入缓存)
 	if(data.root[0].customerstatue=='禁用'){
 		alert('您的账号已被禁用,请联系当地经销商。');
@@ -176,8 +201,8 @@ function initDishes(data){
  		$(".home-hot-commodity").append('<li>'+
  	         	'<span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\');" class="fl"><img src="../'+goodsimages[0]+
  	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span> '+
- 	         	'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');">'+item.goodsname+'<span>('+item.goodsunits+')</span></h1>'+
- 	           '  <div class="block"> '+
+ 	         	'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\');"><font>'+item.goodsname+'</font><span>('+item.goodsunits+')</span></h1>'+
+ 	           '  <div class="block line-goodsprices"> '+
  	               '  <span>'+
  	                   '  <input type="radio" id="'+item.goodsid+'radio2" name="'+item.goodsid+'radio" class="regular-radio" />'+
  	               '      <label for="'+item.goodsid+'radio2">套装价:<font class="font-oringe">￥'+item.pricesprice2+'</font>/'+item.pricesunit2+'</label>'+

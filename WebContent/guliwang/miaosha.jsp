@@ -10,9 +10,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>谷粒网</title>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
-<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link id="layout-list2" href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+var goodsListStyle = window.localStorage.getItem('goodsListStyle');
+if(typeof(goodsListStyle)=='undefined' || !goodsListStyle){
+	window.localStorage.setItem('goodsListStyle','list');
+	goodsListStyle = 'list';
+}
+if(goodsListStyle=='block'){
+	$('#layout-list2').attr('href','../css/list2.css');
+} else {
+	$('#layout-list2').attr('href','../css/layout.css');
+}
+</script>
 <style type="text/css">
 .goods-wrapper .home-hot-commodity li a{padding: 0;}
 .stock-num{width: 30%;margin: 9% 0% 0% 0%;}
@@ -23,7 +36,7 @@
 	<!-- <div class="home-search-wrapper"><a onclick='javascript:history.go(-1);' class='goback'></a>
 	<span>秒杀商品</span><a href="cart.jsp" class="gwc"><img src="images/gwc.png" ><em id="totalnum">0</em></a></div> -->
     <div class="wapper-nav"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	秒杀商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
+	秒杀商品<a onclick="changeStyle()" href="javascript:void(0)" class="gwc"><em id="totalnum">0</em></a></div>
     <div class="goods-wrapper">
         <ul class="home-hot-commodity">
         </ul>
@@ -39,7 +52,6 @@
 		</div>
 	</div>
 </div>
-<script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
 <script src="../js/base.js"></script>
 <script type="text/javascript">
@@ -86,6 +98,18 @@ $(function(){
 		}
 	});
 });
+
+//修改css样式
+function changeStyle(){
+	if($('#layout-list2').attr('href')=='../css/layout.css'){
+		$('#layout-list2').attr('href','../css/list2.css');
+		window.localStorage.setItem('goodsListStyle','block');
+	} else {
+		$('#layout-list2').attr('href','../css/layout.css');
+		window.localStorage.setItem('goodsListStyle','list');
+	}
+}
+
 //到商品详情页
 function gotogoodsDetail(jsonitem){
 	window.location.href = 'goodsDetail.jsp?type=秒杀&goods='+jsonitem;
@@ -119,9 +143,9 @@ function initMiaoshaPage(resp){
 		 		}
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')" class="fl"> <img src="../'+bkgoodsimages[0]+
 	         	'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
-				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">'+item2.bkgoodsname+
-					'<span>（'+item2.bkgoodsunits+'）</span>'+
-				'</h1> <span style="" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
+				'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')"><font>'+item2.bkgoodsname+
+					'</font><span>（'+item2.bkgoodsunits+'）</span>'+
+				'</h1> <span style="height: 15px" onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+'\')">';
 				if(cusOrder && cusOrder.root && cusOrder.root.length >0){
 					if(item2.bkgoodsnum != -1){					//如果有每日限购
 						var itemGoodsCount = 0;
@@ -146,13 +170,13 @@ function initMiaoshaPage(resp){
 				}
 				liObj+='</span><br><span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="miaosha-detail" >'
 				+changeStr(item2.bkgoodsdetail)+'</span>'
-				+ '<div class="ms-bottom"><div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>';
+				+ '<div class="miaosha_li_price_div"><strong>￥'+item2.bkgoodsorgprice+'/'+item2.bkgoodsunit+'</strong>';
 				//判断是否有原价
 				if(typeof(item2.bkgoodsprice)!='undefined' && item2.bkgoodsprice && item2.bkgoodsprice!=0) {
 					liObj += ' <em>￥'+item2.bkgoodsprice+'</em>';
 				}
 				liObj += '</div>'+
-					'<div class="miaosha_stock-num" name="'+item2.bkgoodsid+'">'+
+					'<div class="ms-bottom"><div class="miaosha_stock-num" name="'+item2.bkgoodsid+'">'+
 		            '<span class="jian min"  onclick="subnum(this,\''+item2.bkgoodsorgprice+'\',\''+item2.bkgoodsclass+'\')"></span>'+
 		            '<input readonly="readonly" class="text_box shuliang" name="miaosha" type="text" value="'+
 		             getcurrennumdanpin(item2.bkgoodsid)+'"> '+

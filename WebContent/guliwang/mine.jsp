@@ -29,7 +29,6 @@ input:focus{ outline:none}
 <body>
 <div class="gl-box">
 	<div class="wapper-nav">我的</div>
-	<form action="GLSystem_attachAction.do?other=getch&method=upload">
 	<input type="hidden" name="json" id="json" value="">
     <div style="width:100%; padding-top:2%; color:#fff; background:url(../images/minebg.jpg);">
     	<div id="uploadImg" style="margin:0 41% auto;">
@@ -39,7 +38,6 @@ input:focus{ outline:none}
             </div>
         <p id="myshopname" style="text-align: center;"></p>
     </div>
-    </form>
 	<div class="personal-center">
         <a id="a_myshop" onclick="acpage('myshop.jsp')" >我的店铺 <span class="sign"></span></a>
         <a id="a_mycollect" onclick="acpage('order.jsp')" >我的订单 <span class="sign"></span></a>

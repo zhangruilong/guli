@@ -86,7 +86,6 @@ public class GLSystem_attachAction extends System_attachAction {
 	
 	//上传文件
 	public void uploadImg(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("==============================================upload===============================================================");
 		//System_user user = getCurrentUser(request);
 		//if(CommonUtil.isNotEmpty(user)){
 			String customerxian = request.getParameter("customerxian");

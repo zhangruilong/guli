@@ -10,9 +10,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>谷粒网</title>
+<script src="../js/jquery-2.1.4.min.js"></script>
 <link href="../css/base.css" type="text/css" rel="stylesheet">
-<link href="../css/layout.css" type="text/css" rel="stylesheet">
+<link id="layout-list2" href="../css/layout.css" type="text/css" rel="stylesheet">
 <link href="../css/dig.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+var goodsListStyle = window.localStorage.getItem('goodsListStyle');
+if(typeof(goodsListStyle)=='undefined' || !goodsListStyle){
+	window.localStorage.setItem('goodsListStyle','list');
+	goodsListStyle = 'list';
+}
+if(goodsListStyle=='block'){
+	$('#layout-list2').attr('href','../css/list2.css');
+} else {
+	$('#layout-list2').attr('href','../css/layout.css');
+}
+</script>
 <style type="text/css">
 .goods-wrapper .home-hot-commodity li a{padding: 0;}
 .stock-num{width: 90px;}
@@ -21,7 +34,7 @@
 <body>
 <div class="gl-box">
     <div class="wapper-nav"><a onclick='javascript:history.go(-1);' class='goback'></a>
-	买赠商品<a onclick="docart(this)" href="cart.jsp" class="gwc"><em id="totalnum">0</em></a></div>
+	买赠商品<a onclick="changeStyle()" href="javascript:void(0)" class="gwc"><em id="totalnum">0</em></a></div>
     <div class="goods-wrapper">
         <ul class="home-hot-commodity">
         </ul>
@@ -37,7 +50,6 @@
 		</div>
 	</div>
 </div>
-<script src="../js/jquery-2.1.4.min.js"></script>
 <script src="../js/jquery-dropdown.js"></script>
 <script type="text/javascript">
 var customer = JSON.parse(window.localStorage.getItem("customer"));
@@ -81,10 +93,23 @@ $(function(){
 		}
 	});
 });
+
+//修改css样式
+function changeStyle(){
+	if($('#layout-list2').attr('href')=='../css/layout.css'){
+		$('#layout-list2').attr('href','../css/list2.css');
+		window.localStorage.setItem('goodsListStyle','block');
+	} else {
+		$('#layout-list2').attr('href','../css/layout.css');
+		window.localStorage.setItem('goodsListStyle','list');
+	}
+}
+
 //到商品详情页
 function gotogoodsDetail(jsonitem,dailySur){
 	window.location.href = 'goodsDetail.jsp?type=买赠&goods='+jsonitem;
 }
+
 //初始化页面
 function initMaizengPage(resp){
 	var data = eval('('+resp+')');														//将返回的字符串转换为json
@@ -115,10 +140,11 @@ function initMaizengPage(resp){
 		 			bkgoodsimages[0] = 'images/default.jpg';
 		 		}
 				var liObj = '<li><span onclick="gotogoodsDetail(\''+ encodeURI(jsonitem)+ '\',\''+dailySur+'\');" class="fl"> <img src="../'
-					+bkgoodsimages[0]+'" alt="" onerror="javascript:this.src=\'images/default.jpg\'"/></span>'+
-					'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');">'+item1.bkgoodsname+
-						'<span>（'+item1.bkgoodsunits+'）</span>'+
-					'</h1><div class="block"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');" style="font-size: 16px;">'
+					+bkgoodsimages[0]+'" alt="" onerror="javascript:this.src=\'../images/default.jpg\'"/></span>'+
+					'<h1 onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+'\');"><font>'+item1.bkgoodsname+
+						'</font><span>（'+item1.bkgoodsunits+'）</span>'+
+					'</h1><div class="block give-info"> <span onclick="gotogoodsDetail(\''+encodeURI(jsonitem)+ '\',\''+dailySur+
+							'\');" style="font-size: 16px;margin: 8px 0px 8px 0px; height: 17px">'
 					+item1.bkgoodsdetail+'</span><br> <span class="bkgoods_li_priceANDunit"> <strong>￥'+item1.bkgoodsorgprice+'/'+item1.bkgoodsunit+
 					'</strong> ';
 				if(cusOrder && cusOrder.root && cusOrder.root.length >0 && parseInt(item1.bkgoodsnum) != -1){

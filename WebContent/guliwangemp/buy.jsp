@@ -79,7 +79,8 @@
 
 <script type="text/javascript" src="../js/buy3.js"></script>
 <script type="text/javascript" src="../js/base.js"></script>
-<script> 
+<script>
+var emp = JSON.parse(window.localStorage.getItem("emp"));
 var customer = JSON.parse(window.localStorage.getItem("customeremp"));
 var companyid = '';
 jQuery(document).ready(function($){
@@ -228,7 +229,7 @@ function buy(){
 		var ordermjson = '[{"ordermcustomer":"' + customer.customerid
 				+ '","ordermcompany":"' + mcompany.ordermcompany 
 				+ '","ordermnum":"' + mcompany.ordermnum
-				+ '","ordermemp":"补单'
+				+ '","ordermemp":"补单('+emp.empcode+')'
 				+ '","ordermmoney":"' + mcompany.ordermmoney
 				+ '","ordermcustype":"' + customer.customertype
 				+ '","ordermcuslevel":"' + customer.customerlevel
