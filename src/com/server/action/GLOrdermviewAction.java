@@ -62,22 +62,22 @@ public class GLOrdermviewAction extends OrdermviewAction {
 			dsName = "mysql";
 		}
 		String wheresql = "openid='"+openid+"' and ordermstatue!='已删除'";
-		if(CommonUtil.isNotNull(begindate)){
+		if(!CommonUtil.isNull(begindate)){
 			wheresql += " and ordermtime>='"+begindate+"'";
 		}
-		if(CommonUtil.isNotNull(enddate)){
+		if(!CommonUtil.isNull(enddate)){
 			wheresql += " and ordermtime<='"+enddate+" 24'";
 		}
-		if(CommonUtil.isNotNull(beginmoney)){
+		if(!CommonUtil.isNull(beginmoney)){
 			wheresql += " and ordermmoney>='"+beginmoney+"'";
 		}
-		if(CommonUtil.isNotNull(endmoney)){
+		if(!CommonUtil.isNull(endmoney)){
 			wheresql += " and ordermmoney<='"+endmoney+"'";
 		}
-		if(CommonUtil.isNotNull(companyname)){
+		if(!CommonUtil.isNull(companyname)){
 			wheresql += " and companyshop like '%"+companyname+"%'";
 		}
-//		if(CommonUtil.isNotNull(wheresql)){
+//		if(!CommonUtil.isNull(wheresql)){
 //			wheresql = wheresql.substring(5,wheresql.length());
 //		}
 		queryinfo.setDsname(dsName);

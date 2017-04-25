@@ -64,7 +64,7 @@ public class GLOrderdAction extends OrderdAction {
 	public void json2cuss(HttpServletRequest request){
 		String json = request.getParameter("json");
 		System.out.println("json : " + json);
-		if(CommonUtil.isNotEmpty(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
+		if(!CommonUtil.isNull(json)) cuss = CommonConst.GSON.fromJson(json, TYPE);
 	}
 	//查询客户今天购买的秒杀商品数量
 	public void selCusXGOrderd(HttpServletRequest request, HttpServletResponse response){
@@ -218,7 +218,7 @@ public class GLOrderdAction extends OrderdAction {
 			customerlevel = cusLi.get(0).getCustomerlevel().toString();
 			System.out.println("json : " + json);
 			List<SdishesVO> svoList = null;
-			if(CommonUtil.isNotEmpty(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<SdishesVO>>() {}.getType());
+			if(!CommonUtil.isNull(json)) svoList = CommonConst.GSON.fromJson(json, new com.google.gson.reflect.TypeToken<ArrayList<SdishesVO>>() {}.getType());
 			infoMap.put("svoList", svoList);
 			infoMap = checkXJ(infoMap, customertype, customerlevel, dsName);				//检查商品是否下架
 			infoMap = checkSurplus(customerid,infoMap, dsName);								//检查剩余限量是否足够 并修改
@@ -267,7 +267,7 @@ public class GLOrderdAction extends OrderdAction {
 				}
 			}
 		}
-		if(CommonUtil.isNotEmpty(xjGoodsMsg)){
+		if(!CommonUtil.isNull(xjGoodsMsg)){
 			infoMap.put("xjGoodsMsg", xjGoodsMsg+" 商品已下架。");
 		}
 		svoList.removeAll(svoListremove);
@@ -313,7 +313,7 @@ public class GLOrderdAction extends OrderdAction {
 			//检查组合商品的剩余数量
 			if(svo.getOrderdtype().equals("组合商品") || svo.getOrderdtype().equals("秒杀")){
 				List<Bkgoods> tgList = selAll(Bkgoods.class, "select * from bkgoods bkg where bkg.bkgoodsid = '"+svo.getGoodsid()+"'", dsName);
-				if(CommonUtil.isNotEmpty(tgList)){
+				if(!CommonUtil.isNull(tgList)){
 					Integer surnum = tgList.get(0).getBkgoodssurplus();			//剩余数量
 					if(odNum != -1 && tgList.get(0).getBkgoodsallnum() > 0){						//如果有设置总限购，并且订单商品没有被删除。
 						if(surnum <= 0){									//判断剩余数量
@@ -331,10 +331,10 @@ public class GLOrderdAction extends OrderdAction {
 			}
 		}
 		svoList.removeAll(svoListremove);
-		if(CommonUtil.isNotEmpty(editNumMsg)){
+		if(!CommonUtil.isNull(editNumMsg)){
 			infoMap.put("editNumMsg", editNumMsg+" 超过限购数量已调整。");
 		}
-		if(CommonUtil.isNotEmpty(deleGoodsMsg)){
+		if(!CommonUtil.isNull(deleGoodsMsg)){
 			infoMap.put("deleGoodsMsg", deleGoodsMsg+ " 超过限购数量已去除。");
 		}
 		infoMap.put("svoList", svoList);

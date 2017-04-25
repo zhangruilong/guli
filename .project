@@ -31,12 +31,12 @@
 		<link>
 			<name>adminsrc</name>
 			<type>2</type>
-			<location>/Users/zhangruilong/Documents/develop/j2eeworkspace/guliadmin/src</location>
+			<location>/Users/zhangruilong/Documents/j2eeworkspace/guliadmin/src</location>
 		</link>
 		<link>
 			<name>zrlextsrc</name>
 			<type>2</type>
-			<location>/Users/zhangruilong/Documents/develop/j2eeworkspace/zrlext/src</location>
+			<location>/Users/zhangruilong/Documents/j2eeworkspace/zrlext/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

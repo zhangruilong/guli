@@ -145,6 +145,7 @@ $("#xianList").css("top",xianListTop + "px");
 	}
 	//注册
 	function reg(){
+		alert("您在谷粒网的唯一标识码为："+window.localStorage.getItem("openid")+" 您不必记住它。");
 		$('.confirm-reg-btn').attr('onclick','');						//禁用按钮
 		var count = 0;
 		var alt;
