@@ -92,8 +92,7 @@ public class GLOrdermAction extends OrdermAction {
 				String sqlOrderd = getInsSingleSql(mOrderd);
 				sqls.add(sqlOrderd);
 			}
-			String[] ss = sqls.toArray(new String[0]);
-			result = doAll(ss, dsName);
+			result = doAll(sqls, dsName);
 		}
 		if(result.equals(CommonConst.FAILURE)){
 			result = "{success:false,msg:'操作失败'}";

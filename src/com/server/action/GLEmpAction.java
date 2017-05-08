@@ -48,7 +48,8 @@ public class GLEmpAction extends EmpAction {
 		String password = request.getParameter("password");
 		String wheresql = "empstatue = '启用' and loginname = '" + username
 				+ "' and password = '" + password + "'";
-		Queryinfo queryinfo = getQueryinfo(Emp.class, null, null, null);
+		Queryinfo queryinfo = new Queryinfo();
+		queryinfo.setType(Emp.class);
 		queryinfo.setWheresql(wheresql);
 		cuss = (ArrayList<Emp>) selAll(queryinfo);
 		if(cuss.size()==0){

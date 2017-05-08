@@ -52,11 +52,7 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 			//非业务员补单
 			List<Customer> cusli = selAll(Customer.class, "select * from customer where customerid='"+cusid+"'", dsName);
 			if(cusli.size() == 1){
-				Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
-				Ccustomerqueryinfo.setType(Ccustomer.class);
-				Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+cusid+"'");
-				Ccustomerqueryinfo.setDsname(dsName);
-				List<Ccustomer> Ccustomercuss = selAll(Ccustomerqueryinfo);
+				List<Ccustomer> Ccustomercuss = selAll(Ccustomer.class,"select * from Ccustomer where Ccustomercustomer='"+cusid+"'",dsName);
 				if(Ccustomercuss.size()!=0){
 					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodstype='"+
 							bkgoodsclass+"' and (";

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 	<bean id="404" class="com.system.tools.base.HandlerFor404" />
-	<bean id="BaseAction" class="com.system.tools.base.BaseAction" />
 	<bean id="GLAddressAction" class="com.server.action.GLAddressAction" />
 	<bean id="GLBkgoodsviewAction" class="com.server.action.GLBkgoodsviewAction" />
 	<bean id="GLCcustomerAction" class="com.server.action.GLCcustomerAction" />

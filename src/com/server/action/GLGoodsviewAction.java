@@ -44,7 +44,8 @@ public class GLGoodsviewAction extends GoodsviewAction {
 		queryinfo.setOrder(GoodsviewPoco.ORDER);
 		cuss = (ArrayList<Goodsview>) selQuery(queryinfo);
 		
-		Queryinfo collectqueryinfo = getQueryinfo(Collect.class, null, null, null);
+		Queryinfo collectqueryinfo = new Queryinfo();;
+		collectqueryinfo.setType(Collect.class);
 		ArrayList<Collect> cussCollect = (ArrayList<Collect>) selQuery(collectqueryinfo);
 		for(Goodsview mGoodsview:cuss){
 			for(Collect mCollect:cussCollect){
@@ -72,7 +73,8 @@ public class GLGoodsviewAction extends GoodsviewAction {
 			dsName = "mysql";
 		}
 		//查询该客户的供应商关系表
-		Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
+		Queryinfo Ccustomerqueryinfo = new Queryinfo();
+		Ccustomerqueryinfo.setType(Ccustomer.class);
 		Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
 		Ccustomerqueryinfo.setDsname(dsName);
 		List<Ccustomer> Ccustomercuss = selAll(Ccustomerqueryinfo);
@@ -104,7 +106,8 @@ public class GLGoodsviewAction extends GoodsviewAction {
 			queryinfo.setDsname(dsName);
 			cuss = (ArrayList<Goodsview>) selAll(queryinfo);
 			
-			Queryinfo collectqueryinfo = getQueryinfo(Collect.class, null, null, null);
+			Queryinfo collectqueryinfo = new Queryinfo();
+			collectqueryinfo.setType(Collect.class);
 			collectqueryinfo.setWheresql("collectcustomer='"+customerid+"'");
 			collectqueryinfo.setDsname(dsName);
 			List<Collect> cussCollect = selAll(collectqueryinfo);

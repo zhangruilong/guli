@@ -45,7 +45,7 @@ public class GLGivegoodsviewAction extends GivegoodsviewAction {
 		String dsName = null;
 		if(CommonUtil.isEmpty(companyid)){
 			//如果不是业务员补单
-			Queryinfo Ccustomerqueryinfo = getQueryinfo(Ccustomer.class, null, null, null);
+			Queryinfo Ccustomerqueryinfo = new Queryinfo();
 			Ccustomerqueryinfo.setType(Ccustomer.class);
 			Ccustomerqueryinfo.setWheresql("Ccustomercustomer='"+customerid+"'");
 			List<Ccustomer> Ccustomercuss = selAll(Ccustomerqueryinfo);

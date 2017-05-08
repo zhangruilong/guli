@@ -1,5 +1,6 @@
 package com.server.action;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,10 +83,10 @@ public class GLAddressAction extends AddressAction {
 			String updSQL = getUpdSingleSql(editAdd, AddressPoco.KEYCOLUMN);
 			if(editAdd.getAddressture() == 1){
 				String sql2 = "update address set addressture=0 where addressid!='"+editAdd.getAddressid()+"' and addresscustomer='"+editAdd.getAddresscustomer()+"'";
-				String[] sqls = {updSQL,sql2};
+				List<String> sqls = Arrays.asList(updSQL,sql2);
 				result = doAll(sqls,dsName);
 			} else {
-				String[] sqls = {updSQL};
+				List<String> sqls = Arrays.asList(updSQL);
 				result = doAll(sqls,dsName);
 			}
 		}
@@ -105,10 +106,10 @@ public class GLAddressAction extends AddressAction {
 			String insSql = getInsSingleSql(temp);
 			if(temp.getAddressture() == 1){
 				String sql2 = "update address set addressture=0 where addressid!='"+temp.getAddressid()+"' and addresscustomer='"+temp.getAddresscustomer()+"'";
-				String[] sqls = {insSql,sql2};
+				List<String> sqls = Arrays.asList(insSql,sql2);
 				result = doAll(sqls,dsName);
 			} else {
-				String[] sqls = {insSql};
+				List<String> sqls = Arrays.asList(insSql);
 				result = doAll(sqls,dsName);
 			}
 		}

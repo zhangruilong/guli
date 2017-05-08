@@ -139,13 +139,14 @@ $("#xianList").css("top",xianListTop + "px");
 				alert(respText.msg);
 			}
 		});
+		$(".meg").text("您在谷粒网的唯一标识码为："+window.localStorage.getItem("openid")+" 您不必记住它。");			//修改弹窗信息
+		$(".cd-popup").addClass("is-visible");	//弹出窗口
 	})
 	function input_sele_city(){
 		$("#city").trigger("change");
 	}
 	//注册
 	function reg(){
-		alert("您在谷粒网的唯一标识码为："+window.localStorage.getItem("openid")+" 您不必记住它。");
 		$('.confirm-reg-btn').attr('onclick','');						//禁用按钮
 		var count = 0;
 		var alt;
@@ -164,6 +165,7 @@ $("#xianList").css("top",xianListTop + "px");
 		}
 		var reg = /^[1][0-9]{10}$/;
 		//var reg = new RegExp('[0-9]{11}','g');
+			
 		if(!reg.test($("#customerphone").val())){
 			$(".meg").text('请填写正确的手机号码。');			//修改弹窗信息
 			$(".cd-popup").addClass("is-visible");	//弹出窗口
