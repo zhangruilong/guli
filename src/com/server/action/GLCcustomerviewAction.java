@@ -19,8 +19,11 @@ public class GLCcustomerviewAction extends CcustomerviewAction {
 	public void selAll(HttpServletRequest request, HttpServletResponse response){
 		Queryinfo queryinfo = getQueryinfo(request, Ccustomerview.class, CcustomerviewPoco.QUERYFIELDNAME, CcustomerviewPoco.ORDER, TYPE);
 		String comid = request.getParameter("comid");
+		System.out.println("comid : " + comid);
 		if(comid.equals("1")){
 			queryinfo.setDsname("mysql");
+		}else{
+			queryinfo.setDsname("oracle");
 		}
 		Pageinfo pageinfo = new Pageinfo(0, selAll(queryinfo));
 		result = CommonConst.GSON.toJson(pageinfo);
