@@ -54,7 +54,7 @@ public class GLBkgoodsviewAction extends BkgoodsviewAction {
 			if(cusli.size() == 1){
 				List<Ccustomer> Ccustomercuss = selAll(Ccustomer.class,"select * from Ccustomer where Ccustomercustomer='"+cusid+"'",dsName);
 				if(Ccustomercuss.size()!=0){
-					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodstype='"+
+					wheresql = "bkgoodsstatue='启用' and bkgoodsscope like '%"+cusli.get(0).getCustomertype()+"%' and bkgoodsclass='"+
 							bkgoodsclass+"' and (";
 					for (Ccustomer ccustomer : Ccustomercuss) {
 						wheresql += "bkgoodscompany='"+ccustomer.getCcustomercompany()+"' or ";
